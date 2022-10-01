@@ -11,7 +11,8 @@ public class WordsManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance == null){
+        if (Instance == null)
+		{
             Instance = this;
         }
 
@@ -52,8 +53,6 @@ public class WordsManager : MonoBehaviour
         int randomNum = Random.Range(0,odds.Count);
         int numLetters = odds[randomNum];
         return numLetters;
-
-
     }
 
     private string GetRandomWord()
@@ -61,7 +60,8 @@ public class WordsManager : MonoBehaviour
         int numLetters = GetNumOfLetters();
 
         List<string> aList;
-        switch(numLetters){
+        switch(numLetters)
+		{
             case 3:
                 aList = Constants.ThreeLetterList;
                 break;
