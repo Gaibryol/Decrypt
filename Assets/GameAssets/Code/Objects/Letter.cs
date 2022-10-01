@@ -9,10 +9,7 @@ public class Letter : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 {
 	public string Character;
 
-	[SerializeField, Header("Images")] private Image image;
-	[SerializeField] private Sprite incorrectImage;
-	[SerializeField] private Sprite correctImage;
-
+	private Image image;
 	private RectTransform rectTransform;
 	private Word word;
 	private bool isDown;
@@ -22,6 +19,7 @@ public class Letter : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 
 	private void Awake()
 	{
+		image = GetComponent<Image>();
 		word = transform.parent.GetComponent<Word>();
 		rectTransform = GetComponent<RectTransform>();
 		isDown = true;
@@ -39,8 +37,7 @@ public class Letter : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 	{
 		Character = letter;
 
-		// TEMPORARY - NEED TO LOAD THE SPRITES OFF OF CONSTANTS OR SOMETHING
-		rectTransform.GetChild(0).GetComponent<TextMeshProUGUI>().text = letter;
+		image.sprite = LettersManager.Instance.GetSprite(Constants.LetterColors.Orange, letter);
 	}
 
 	public void OnBeginDrag(PointerEventData eventData)

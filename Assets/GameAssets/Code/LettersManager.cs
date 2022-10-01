@@ -6,6 +6,20 @@ public class LettersManager : MonoBehaviour
 {
 	public static LettersManager Instance { get; private set; }
 
+	[SerializeField, Header("Blue")] private List<Sprite> blue;
+
+	[SerializeField, Header("Green")] private List<Sprite> green;
+
+	[SerializeField, Header("Orange")] private List<Sprite> orange;
+
+	[SerializeField, Header("Pink")] private List<Sprite> pink;
+
+	[SerializeField, Header("Purple")] private List<Sprite> purple;
+
+	[SerializeField, Header("Red")] private List<Sprite> red;
+
+	[SerializeField, Header("Yellow")] private List<Sprite> yellow;
+
 	private void Awake()
 	{
 		if (Instance != null && Instance != this)
@@ -16,6 +30,27 @@ public class LettersManager : MonoBehaviour
 		{
 			Instance = this;
 		}
+	}
 
+	public Sprite GetSprite(Constants.LetterColors color, string letter)
+	{
+		int index = char.Parse(letter.ToUpper()) - 64;
+
+		switch (color)
+		{
+			case Constants.LetterColors.Orange:
+				return orange[index - 1];
+
+			case Constants.LetterColors.Green:
+				return green[index - 1];
+
+			case Constants.LetterColors.Blue:
+				return blue[index - 1];
+
+			case Constants.LetterColors.Pink:
+				return pink[index - 1];
+		}
+
+		return null;
 	}
 }
