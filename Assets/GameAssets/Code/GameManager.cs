@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
 {
 	public static GameManager Instance { get; private set; }
 
+	public Canvas Canvas;
 	public Constants.GameStates GameState;
 
 	private void Awake()
