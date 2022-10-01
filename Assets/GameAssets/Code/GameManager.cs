@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
 	public Canvas Canvas;
 	public Constants.GameStates GameState;
 
+	public GameObject WordPrefab;
+
 	private void Awake()
 	{
 		if (Instance != null && Instance != this)
@@ -21,5 +23,13 @@ public class GameManager : MonoBehaviour
 		}
 
 		GameState = Constants.GameStates.MainMenu;
+	}
+
+	private void Start()
+	{
+		List<string> words = WordsManager.Instance.GetScrambledWord();
+
+		GameObject newWord = Instantiate(WordPrefab, Canvas.transform);
+		newWord.GetComponent<Word>().SpawnWord(words[0], words[1]);
 	}
 }

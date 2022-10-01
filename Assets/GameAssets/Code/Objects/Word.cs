@@ -2,10 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class Word : MonoBehaviour
 {
-	public List<Letter> Letters;
+	[SerializeField] public GameObject letterPrefab;
+
+	public string realWord;
+	public string scrambledWord;
+
+	public void SpawnWord(string word, string scrambled)
+	{
+		realWord = word;
+		scrambledWord = scrambled;
+
+		for(int i = 0; i < scrambledWord.Length; i++)
+		{
+			GameObject newObj = Instantiate(letterPrefab, transform);
+			Letter lScript = newObj.GetComponent<Letter>();
+
+			lScript.Construct(scrambledWord[i].ToString());
+		}
+	}
 
 	public int GetIndex(GameObject letter)
 	{
@@ -18,5 +36,20 @@ public class Word : MonoBehaviour
 		}
 
 		return -1;
+	}
+
+	public void CheckIsCorrect()
+	{
+		string letters = "";
+
+		foreach(Transform obj in transform)
+		{
+			letters += obj.GetComponent<Letter>().Character;
+		}
+
+		if (letters == realWord)
+		{
+			Debug.Log("Correct!");
+		}
 	}
 }

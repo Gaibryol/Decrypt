@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using TMPro;
 
 public class Letter : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
@@ -32,6 +33,14 @@ public class Letter : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		{
 			transform.position = new Vector3(Input.mousePosition.x, transform.position.y, 0);
 		}
+	}
+
+	public void Construct(string letter)
+	{
+		Character = letter;
+
+		// TEMPORARY - NEED TO LOAD THE SPRITES OFF OF CONSTANTS OR SOMETHING
+		rectTransform.GetChild(0).GetComponent<TextMeshProUGUI>().text = letter;
 	}
 
 	public void OnPointerDown(PointerEventData eventData)
@@ -88,5 +97,7 @@ public class Letter : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 			rectTransform.SetSiblingIndex(originalIndex);
 		}
 		isDown = true;
+
+		word.CheckIsCorrect();
 	}
 }
