@@ -97,7 +97,7 @@ public class WordsManager : MonoBehaviour
 
     private string Shuffle(string word)
     {
-        char[] characters= word.ToCharArray();
+        char[] characters = word.ToCharArray();
         char tempCharacter;
 
         for(int i = 0; i < characters.Length - 1; i++)
@@ -116,9 +116,10 @@ public class WordsManager : MonoBehaviour
         string randomWord = GetRandomWord();
         string shuffledWord = Shuffle(randomWord);
 
-        while (IsCorrect(shuffledWord))
+        while (shuffledWord == randomWord)
         {
             shuffledWord = Shuffle(randomWord);
+			shuffledWord = Shuffle(shuffledWord);
         }
         
         return new List<string>(){randomWord,shuffledWord};
@@ -127,24 +128,5 @@ public class WordsManager : MonoBehaviour
     public void ChangePossibleWordLength(string list)
 	{
         possibleWordLengths = list;
-    }
-
-    public bool IsCorrect(string word)
-    {
-        switch(word.Length)
-        {
-            case 3:
-                return Constants.ThreeLetterList.Contains(word);
-            case 4:
-                return Constants.FourLetterList.Contains(word);
-            case 5:
-                return Constants.FiveLetterList.Contains(word);
-            case 6:
-                return Constants.SixLetterList.Contains(word);
-            case 7:
-                return Constants.SevenLetterList.Contains(word);
-            default:
-                return Constants.EightLetterList.Contains(word);
-        }
     }
 }

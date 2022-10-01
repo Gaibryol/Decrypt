@@ -31,5 +31,6 @@ public class GameManager : MonoBehaviour
 
 		GameObject newWord = Instantiate(WordPrefab, Canvas.transform);
 		newWord.GetComponent<Word>().SpawnWord(words[0], words[1]);
+		newWord.transform.position = new Vector3(newWord.transform.position.x - (37.5f * words[0].Length), newWord.transform.position.y);
 	}
 }
