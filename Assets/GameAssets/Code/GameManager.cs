@@ -11,6 +11,15 @@ public class GameManager : MonoBehaviour
 
 	public GameObject WordPrefab;
 
+	private void SpawnWord()
+	{
+		List<string> words = WordsManager.Instance.GetScrambledWord();
+
+		GameObject newWord = Instantiate(WordPrefab, Canvas.transform);
+		newWord.GetComponent<Word>().SpawnWord(words[0], words[1]);
+		newWord.transform.position = new Vector3(newWord.transform.position.x - (37.5f * words[0].Length), newWord.transform.position.y);
+	}
+
 	private void Awake()
 	{
 		if (Instance != null && Instance != this)
@@ -27,10 +36,6 @@ public class GameManager : MonoBehaviour
 
 	private void Start()
 	{
-		List<string> words = WordsManager.Instance.GetScrambledWord();
-
-		GameObject newWord = Instantiate(WordPrefab, Canvas.transform);
-		newWord.GetComponent<Word>().SpawnWord(words[0], words[1]);
-		newWord.transform.position = new Vector3(newWord.transform.position.x - (37.5f * words[0].Length), newWord.transform.position.y);
+		SpawnWord();
 	}
 }

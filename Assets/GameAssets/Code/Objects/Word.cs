@@ -11,6 +11,8 @@ public class Word : MonoBehaviour
 	public string realWord;
 	public string scrambledWord;
 
+	private HorizontalLayoutGroup horizontalLayoutGroup;
+
 	public void SpawnWord(string word, string scrambled)
 	{
 		realWord = word;
@@ -23,6 +25,8 @@ public class Word : MonoBehaviour
 
 			lScript.Construct(scrambledWord[i].ToString());
 		}
+
+		horizontalLayoutGroup = GetComponent<HorizontalLayoutGroup>();
 	}
 
 	public int GetIndex(GameObject letter)
@@ -51,5 +55,15 @@ public class Word : MonoBehaviour
 		{
 			Debug.Log("Correct!");
 		}
+	}
+
+	public void OnPickUpLetter()
+	{
+		horizontalLayoutGroup.enabled = false;
+	}
+
+	public void OnPutDownLetter()
+	{
+		horizontalLayoutGroup.enabled = true;
 	}
 }

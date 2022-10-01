@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
 
-public class Letter : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
+public class Letter : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler
 {
 	public string Character;
 
@@ -43,16 +43,19 @@ public class Letter : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		rectTransform.GetChild(0).GetComponent<TextMeshProUGUI>().text = letter;
 	}
 
-	public void OnPointerDown(PointerEventData eventData)
+	public void OnBeginDrag(PointerEventData eventData)
 	{
+		word.OnPickUpLetter();
+
 		originalIndex = word.GetIndex(this.gameObject);
 		originalX = rectTransform.position.x;
 		transform.SetParent(GameManager.Instance.Canvas.transform);
 		isDown = false;
 	}
 
-	public void OnPointerUp(PointerEventData eventData)
+	public void OnEndDrag(PointerEventData eventData)
 	{
+		word.OnPutDownLetter();
 		rectTransform.SetParent(word.transform);
 
 		float diff = Mathf.Abs(originalX - eventData.position.x);
@@ -99,5 +102,10 @@ public class Letter : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		isDown = true;
 
 		word.CheckIsCorrect();
+	}
+
+	public void OnDrag(PointerEventData eventData)
+	{
+		
 	}
 }
