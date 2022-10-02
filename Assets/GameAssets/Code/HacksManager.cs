@@ -41,7 +41,7 @@ public class HacksManager : MonoBehaviour
                 }
                 possibleEarlyHacks.Remove("B");
                 ActivatedA = true;
-                //UIManager.Instance.CoverWords(7);
+                UIManager.Instance.CoverWords(7);
                 break;
             case Constants.HackB://Finished
                 if(possibleEarlyHacks.Contains("D"))
