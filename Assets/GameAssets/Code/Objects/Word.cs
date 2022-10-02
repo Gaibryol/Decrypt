@@ -10,16 +10,19 @@ public class Word : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
 	public string realWord;
 	public string scrambledWord;
+	public bool IsMoving;
 	
 	private HorizontalLayoutGroup horizontalLayoutGroup;
 
 	private GameController gameController;
+
 
 	public void SpawnWord(GameController controller, string word, string scrambled)
 	{
 		gameController = controller;
 		realWord = word;
 		scrambledWord = scrambled;
+		IsMoving = true;
 		int randomNumber = Random.Range(0,realWord.Length);
 
 		for(int i = 0; i < scrambledWord.Length; i++)
@@ -82,11 +85,16 @@ public class Word : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
 	public void OnPointerEnter(PointerEventData eventData)
 	{
+		if(IsMoving) return;
+
 		gameController.OnWordHover(transform.localPosition.y);
+
 	}
 
 	public void OnPointerExit(PointerEventData eventData)
 	{
+		if(IsMoving) return;
+
 		gameController.OnWordExit();
 	}
 

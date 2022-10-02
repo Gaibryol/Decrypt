@@ -55,11 +55,14 @@ public class GameController : MonoBehaviour
 		List<string> words = WordsManager.Instance.GetScrambledWord();
 
 		GameObject newWord = Instantiate(WordPrefab, Canvas.transform);
+		newWord.transform.SetParent(Canvas.transform.Find("GameScreen").transform);
+		newWord.transform.localPosition = spawnPos;
 
 		newWord.GetComponent<Word>().SpawnWord(this, words[0], words[1]);
+	
+		// newWord.transform.localPosition = new Vector3(bottomLinePos.x, bottomLinePos.y + ((newWord.GetComponent<RectTransform>().rect.height + wordsYOffset) * lines.Count));
 
-		newWord.transform.localPosition = new Vector3(bottomLinePos.x, bottomLinePos.y + ((newWord.GetComponent<RectTransform>().rect.height + wordsYOffset) * lines.Count));
-
+		StartCoroutine(MoveWord(newWord));
 		lines.Add(newWord);
 
 		gameUI.OnSpawnWord();
@@ -74,6 +77,16 @@ public class GameController : MonoBehaviour
 			gameUI.DisplayWarning(true);
 		}
 	}
+	public IEnumerator MoveWord(GameObject newWord){
+
+		Vector3 newPos = new Vector3(bottomLinePos.x, bottomLinePos.y + ((newWord.GetComponent<RectTransform>().rect.height + wordsYOffset) * lines.Count));
+		while(newWord.transform.localPosition != newPos){
+			newWord.transform.localPosition = Vector3.MoveTowards(newWord.transform.localPosition, newPos, 0.5f);
+			yield return null;
+		}
+		newWord.GetComponent<Word>().IsMoving = false;
+	}
+	
 
 	public void OnWordHover(float y)
 	{
