@@ -28,6 +28,8 @@ public class GameManager : MonoBehaviour
 		newWord.transform.localPosition = new Vector3(bottomLinePos.x, bottomLinePos.y + ((newWord.GetComponent<RectTransform>().rect.height + wordsYOffset) * lines.Count));
 
 		lines.Add(newWord);
+
+		UIManager.Instance.OnSpawnWord();
 	}
 
 	public void CorrectWord(GameObject word)
@@ -39,8 +41,13 @@ public class GameManager : MonoBehaviour
 			// Need to bump all the other words down
 			foreach (GameObject obj in lines)
 			{
-				obj.transform.localPosition = new Vector3(obj.transform.position.x, obj.transform.position.y - word.GetComponent<RectTransform>().rect.height);
+				obj.transform.localPosition = new Vector3(obj.transform.localPosition.x, obj.transform.localPosition.y - word.GetComponent<RectTransform>().rect.height - wordsYOffset);
 			}
+		}
+
+		if (lines.Count == 0)
+		{
+			UIManager.Instance.OnWordExit();
 		}
 
 		Destroy(word);
@@ -63,8 +70,6 @@ public class GameManager : MonoBehaviour
 	private void Start()
 	{
 		lines = new List<GameObject>();
-
-		bottomLinePos = Camera.main.WorldToViewportPoint(bottomLinePos);
 
 		SpawnWord();
 	}

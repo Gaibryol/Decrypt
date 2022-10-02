@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using TMPro;
 
-public class Word : MonoBehaviour
+public class Word : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
 	[SerializeField] public GameObject letterPrefab;
 
@@ -23,7 +24,7 @@ public class Word : MonoBehaviour
 			GameObject newObj = Instantiate(letterPrefab, transform);
 			Letter lScript = newObj.GetComponent<Letter>();
 
-			lScript.Construct(scrambledWord[i].ToString());
+			lScript.Construct(scrambledWord[i].ToString(), false, true);
 		}
 
 		horizontalLayoutGroup = GetComponent<HorizontalLayoutGroup>();
@@ -65,5 +66,15 @@ public class Word : MonoBehaviour
 	public void OnPutDownLetter()
 	{
 		horizontalLayoutGroup.enabled = true;
+	}
+
+	public void OnPointerEnter(PointerEventData eventData)
+	{
+		UIManager.Instance.OnWordHover(transform.localPosition.y);
+	}
+
+	public void OnPointerExit(PointerEventData eventData)
+	{
+		UIManager.Instance.OnWordExit();
 	}
 }

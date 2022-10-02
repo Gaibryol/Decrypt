@@ -17,12 +17,17 @@ public class Letter : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 	private int originalIndex;
 	private float originalX;
 
+	private bool isCovered;
+	private bool canMove;
+
 	private void Awake()
 	{
 		image = GetComponent<Image>();
 		word = transform.parent.GetComponent<Word>();
 		rectTransform = GetComponent<RectTransform>();
 		isDown = true;
+
+		isCovered = false;
 	}
 
 	private void Update()
@@ -33,15 +38,28 @@ public class Letter : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 		}
 	}
 
-	public void Construct(string letter)
+	public void Construct(string letter, bool covered, bool move)
 	{
 		Character = letter;
 
-		image.sprite = LettersManager.Instance.GetSprite(Constants.LetterColors.Orange, letter);
+		isCovered = covered;
+		canMove = move;
+
+		Debug.Log("cover: " + isCovered + " - move: " + canMove);
+		if (!isCovered)
+		{
+			image.sprite = LettersManager.Instance.GetSprite(Constants.LetterColors.Orange, letter);
+		}
+		else
+		{
+			image.sprite = LettersManager.Instance.GetSprite(Constants.LetterColors.Orange, "z");
+		}
 	}
 
 	public void OnBeginDrag(PointerEventData eventData)
 	{
+		if (!canMove) return;
+
 		word.OnPickUpLetter();
 
 		originalIndex = word.GetIndex(this.gameObject);
@@ -52,6 +70,8 @@ public class Letter : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 
 	public void OnEndDrag(PointerEventData eventData)
 	{
+		if (!canMove) return;
+
 		word.OnPutDownLetter();
 		rectTransform.SetParent(word.transform);
 
