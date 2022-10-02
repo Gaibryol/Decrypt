@@ -93,7 +93,7 @@ public class GameController : MonoBehaviour
 		Vector3 newPos = new Vector3(bottomLinePos.x, bottomLinePos.y + ((newWord.GetComponent<RectTransform>().rect.height + wordsYOffset) * lines.Count));
 		while(newWord.transform.localPosition != newPos){
 			if(subState != Constants.SubState.Pause)
-				newWord.transform.localPosition = Vector3.MoveTowards(newWord.transform.localPosition, newPos, 0.3f);
+				newWord.transform.localPosition = Vector3.MoveTowards(newWord.transform.localPosition, newPos, 0.5f);
 			yield return null;
 		}
 		newWord.GetComponent<Word>().IsMoving = false;
@@ -105,7 +105,8 @@ public class GameController : MonoBehaviour
 			case(Constants.SubState.Playing):
 				subState = state;
 				for(int i = 0; i<lines.Count;i++){
-					lines[i].GetComponent<Word>().IsInteractable = true;
+					if(lines[i].GetComponent<Word>().IsMoving!= true)
+						lines[i].GetComponent<Word>().IsInteractable = true;
 				}
 				break;
 			case(Constants.SubState.Pause):
@@ -239,6 +240,7 @@ public class GameController : MonoBehaviour
 			{
 				SpawnWord();
 			}
+			gameUI.ResetTimer();
 		}
 
 		if (decryptTime <= 0)

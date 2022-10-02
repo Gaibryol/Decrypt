@@ -14,11 +14,13 @@ public class GameUIController : MonoBehaviour
 	[SerializeField] private TMP_Text stage;
 	[SerializeField] private GameObject cover;
 	[SerializeField] private GameObject warning;
+	[SerializeField] private GameObject pause;
 
 	[SerializeField, Header("Indicator Animations")] private Animator indicatorAnim;
 
 	[SerializeField, Header("Buttons")] private Toggle helpButton;
 	[SerializeField] private Toggle pauseButton;
+	[SerializeField] private Animator timer;
 	private GameController gameController;
 
 	public void StartGame()
@@ -85,9 +87,29 @@ public class GameUIController : MonoBehaviour
 		if(pauseButton.isOn)
 		{
 			gameController.ChangeSubState(Constants.SubState.Pause);
+			pause.transform.SetAsLastSibling();
+			pause.SetActive(true);
+			timer.enabled = false;
 		}
 		else{
 			gameController.ChangeSubState(Constants.SubState.Playing);
+			pause.SetActive(false);
+			timer.enabled = true;
 		}
+	}
+	public void ResetTimer(){
+		timer.Rebind();
+		timer.Update(0f);
+	}
+	public void ResumeGame(){
+		pauseButton.isOn = false;
+	}
+	public void RestartGame(){
+		pauseButton.isOn = false;
+		gameController.StartGame();
+	}
+	public void ToMainMenu(){
+		pauseButton.isOn = false;
+		GameManager.Instance.ChangeState(Constants.GameStates.MainMenu);
 	}
 }
