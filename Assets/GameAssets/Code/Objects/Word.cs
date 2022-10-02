@@ -64,7 +64,7 @@ public class Word : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 			letters += obj.GetComponent<Letter>().Character;
 		}
 
-		if (letters == realWord)
+		if (Contains.Instance.IfContains(letters) || letters == realWord)
 		{
 			gameController.CorrectWord(this.gameObject);
 		}

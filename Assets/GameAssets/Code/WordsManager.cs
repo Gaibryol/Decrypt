@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class WordsManager : MonoBehaviour
 {
-    public static WordsManager Instance;
+    public static WordsManager Instance { get; private set; }
 	private string possibleWordLengths;
     private List<int> odds;
 	private List<string> spawnedList;
