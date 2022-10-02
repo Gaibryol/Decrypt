@@ -53,18 +53,13 @@ public class GameManager : MonoBehaviour
 		// Need to bump all the other words down
 		for(; i < lines.Count;i++)
 		{
-			
 			lines[i].transform.localPosition = new Vector3(lines[i].transform.localPosition.x, lines[i].transform.localPosition.y - word.GetComponent<RectTransform>().rect.height - wordsYOffset);
-		}
-
-		if (lines.Count == 0)
-		{
-			UIManager.Instance.OnWordExit();
 		}
 
 		completedLines += 1;
 		playerPoints += word.GetComponent<Word>().realWord.Length * Constants.PointsPerLetter * pointsMultiplier;
-    
+
+		UIManager.Instance.OnWordExit();
 		UIManager.Instance.OnWordSolved(1000);
 		Destroy(word);
 	}

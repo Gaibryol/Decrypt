@@ -4,15 +4,33 @@ using UnityEngine;
 
 public class SettingsManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+	public static SettingsManager Instance { get; private set; }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+	private bool musicState;
+	private bool soundState;
+
+	private void Awake()
+	{
+		if (Instance != null && Instance != this)
+		{
+			Destroy(this.gameObject);
+		}
+		else
+		{
+			Instance = this;
+		}
+
+		musicState = true;
+		soundState = true;
+	}
+
+	public void ToggleMusic(bool isOn)
+	{
+		musicState = isOn;
+	}
+
+	public void ToggleSound(bool isOn)
+	{
+		soundState = isOn;
+	}
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class UIManager : MonoBehaviour
@@ -16,6 +17,11 @@ public class UIManager : MonoBehaviour
 	[SerializeField] private GameObject cover;
 
 	[SerializeField, Header("Indicator Animations")] private Animator indicatorAnim;
+
+	[SerializeField, Header("Buttons")] private Toggle musicToggle;
+	[SerializeField] private Toggle soundToggle;
+	[SerializeField] private Button helpButton;
+	[SerializeField] private Button pauseButton;
 
 	private void Awake()
 	{
@@ -33,6 +39,9 @@ public class UIManager : MonoBehaviour
 
 		score.text = "0";
 		stage.text = "01";
+
+		musicToggle.onValueChanged.AddListener((isOn) => SettingsManager.Instance.ToggleMusic(isOn));
+		soundToggle.onValueChanged.AddListener((isOn) => SettingsManager.Instance.ToggleSound(isOn));
 	}
 
 	public void OnWordHover(float y)
