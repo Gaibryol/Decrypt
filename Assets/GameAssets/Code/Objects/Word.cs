@@ -53,7 +53,7 @@ public class Word : MonoBehaviour
 
 		if (letters == realWord)
 		{
-			Debug.Log("Correct!");
+			GameManager.Instance.CorrectWord(this.gameObject);
 		}
 	}
 

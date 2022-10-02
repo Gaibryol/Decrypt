@@ -11,13 +11,39 @@ public class GameManager : MonoBehaviour
 
 	public GameObject WordPrefab;
 
+	private List<GameObject> lines;
+
+	[SerializeField] private float wordsYOffset;
+	[SerializeField] private Vector3 bottomLinePos;
+	[SerializeField] private Vector3 spawnPos;
+
 	private void SpawnWord()
 	{
 		List<string> words = WordsManager.Instance.GetScrambledWord();
 
 		GameObject newWord = Instantiate(WordPrefab, Canvas.transform);
+
 		newWord.GetComponent<Word>().SpawnWord(words[0], words[1]);
-		newWord.transform.position = new Vector3(newWord.transform.position.x - (37.5f * words[0].Length), newWord.transform.position.y);
+
+		newWord.transform.localPosition = new Vector3(bottomLinePos.x, bottomLinePos.y + ((newWord.GetComponent<RectTransform>().rect.height + wordsYOffset) * lines.Count));
+
+		lines.Add(newWord);
+	}
+
+	public void CorrectWord(GameObject word)
+	{
+		if (lines.IndexOf(word) == 0)
+		{
+			lines.Remove(word);
+
+			// Need to bump all the other words down
+			foreach (GameObject obj in lines)
+			{
+				obj.transform.localPosition = new Vector3(obj.transform.position.x, obj.transform.position.y - word.GetComponent<RectTransform>().rect.height);
+			}
+		}
+
+		Destroy(word);
 	}
 
 	private void Awake()
@@ -36,6 +62,18 @@ public class GameManager : MonoBehaviour
 
 	private void Start()
 	{
+		lines = new List<GameObject>();
+
+		bottomLinePos = Camera.main.WorldToViewportPoint(bottomLinePos);
+
 		SpawnWord();
+	}
+
+	private void Update()
+	{
+		if (Input.GetKeyDown(KeyCode.Space))
+		{
+			SpawnWord();
+		}
 	}
 }

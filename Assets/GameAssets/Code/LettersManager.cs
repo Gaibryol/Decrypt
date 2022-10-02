@@ -38,17 +38,26 @@ public class LettersManager : MonoBehaviour
 
 		switch (color)
 		{
-			case Constants.LetterColors.Orange:
-				return orange[index - 1];
+			case Constants.LetterColors.Blue:
+				return blue[index - 1];
 
 			case Constants.LetterColors.Green:
 				return green[index - 1];
 
-			case Constants.LetterColors.Blue:
-				return blue[index - 1];
+			case Constants.LetterColors.Orange:
+				return orange[index - 1];
 
 			case Constants.LetterColors.Pink:
 				return pink[index - 1];
+
+			case Constants.LetterColors.Purple:
+				return purple[index - 1];
+
+			case Constants.LetterColors.Red:
+				return red[index - 1];
+
+			case Constants.LetterColors.Yellow:
+				return yellow[index - 1];
 		}
 
 		return null;
