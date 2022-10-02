@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -50,6 +51,7 @@ public class GameManager : MonoBehaviour
 		int i = 0;
 		i = lines.IndexOf(word);
 		lines.Remove(word);
+    
 		// Need to bump all the other words down
 		for(; i < lines.Count;i++)
 		{
@@ -64,6 +66,8 @@ public class GameManager : MonoBehaviour
 
 		completedLines += 1;
 		playerPoints += word.GetComponent<Word>().realWord.Length * Constants.PointsPerLetter * pointsMultiplier;
+    
+		UIManager.Instance.OnWordSolved(1000);
 		Destroy(word);
 	}
 
@@ -71,6 +75,7 @@ public class GameManager : MonoBehaviour
 	{
 		pointsMultiplier = multiplier;
 	}
+  
 	public void DecryptWord(GameObject word)
 	{
 		if(abilityUsages > 0)
@@ -79,13 +84,16 @@ public class GameManager : MonoBehaviour
 			abilityUsages -=1;
 		}
 	}
+  
 	public void DecryptList()
 	{
 		if(abilityUsages > 0)
 		{
-			for(int i = lines.Count-1; i >= 0 ;i--){
+			for(int i = lines.Count-1; i >= 0 ;i--)
+      {
 				CorrectWord(lines[i]);
 			}
+      
 			abilityUsages -=1;
 		}
 	}
@@ -102,19 +110,22 @@ public class GameManager : MonoBehaviour
 		foreach(GameObject word in lines)
 		{
 			int wordLength = word.GetComponent<Word>().GetWordLength();
-			if(wordLength > maxLength){
+			if(wordLength > maxLength)
+      {
 				maxLength = wordLength;
 				longestWord = word;
 			}
 		}
 		return longestWord;
 	}
+  
 	IEnumerator SpawnTwoWords()
     {
-		SpawnWord();
-		yield return new WaitForSeconds(0.5f);
-		SpawnWord();
+		  SpawnWord();
+		  yield return new WaitForSeconds(0.5f);
+		  SpawnWord();
     }
+    
 	public void ChangeMaxLife(int num){
 		maximumNumLines += num;
 	}
@@ -144,6 +155,7 @@ public class GameManager : MonoBehaviour
 	{	
 		decryptTime -= Time.deltaTime;
 		countDownTime -= Time.deltaTime;
+    
 		if(countDownTime <= 0)
 		{
 			if(HacksManager.Instance.ActivatedH){
@@ -153,24 +165,28 @@ public class GameManager : MonoBehaviour
 			}
 			countDownTime = Constants.MaxTime;
 		}
+    
 		if(decryptTime <= 0)
 		{
 			decryptTime = Constants.DecryptTime;
 			if(HacksManager.Instance.ActivatedC)
 			{
 				GameObject longestWord = GetLongestWord();
-				if(longestWord != null){
+				if(longestWord != null)
+        {
 					CorrectWord(longestWord);
 				}
 			}
 			else if(HacksManager.Instance.ActivatedH)
 			{
-				if(lines.Count != 0){
+				if(lines.Count != 0)
+        {
 					GameObject randomWord = lines[Random.Range(0,lines.Count)];
 					CorrectWord(randomWord);
 				}
 			}
 		}
+    
 		if (Input.GetKeyDown(KeyCode.Space))
 		{
 			SpawnWord();
