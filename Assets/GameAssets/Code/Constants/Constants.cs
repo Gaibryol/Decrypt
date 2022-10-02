@@ -3,6 +3,9 @@ using System.Collections.Generic;
 public static class Constants
 {
     public enum GameStates { MainMenu = 0, Credits = 1, Settings = 2, Game = 3, }
+
+	public enum SubState{Playing = 0,Pause = 1, Help = 2, Hack = 3}
+
 	public enum LetterColors { Blue = 0, Green = 1, Orange = 2, Pink = 3, Purple = 4, Red = 5, Yellow = 6 }
 
 	public static readonly List<string> ThreeLetterList = new List<string>() {"abs", "ace", "act", "add", "age", "aid", "aim", "air", "ale", "all", "alt", "amp", "and", "ant", "any", "ape", "app", "arc", "are", "ark", "arm", "art", "ash", "ask", "ate", "awe", "axe", "bad", "bag", "ban", "bar", "bat", "bay", "bed", "bee", "beg", "bet", "bid", "big", "bin", "bio", "bit", "boo", "bow", "box", "boy", "bra", "bud", "bug", "bum", "bun", "bus", "but", "buy", "bye", "cab", "can", "cap", "car", "cat", "cob", "cod", "con", "cop", "cot", "cow", "cry", "cub", "cue", "cup", "cut", "dab", "dad", "dam", "day", "den", "dew", "did", "die", "dig", "dim", "dip", "doc", "doe", "dog", "dot", "dry", "dub", "due", "dug", "duo", "dye", "ear", "eat", "egg", "ego", "elf", "emu", "end", "era", "eve", "eye", "fan", "far", "fat", "fax", "fed", "fee", "few", "fig", "fin", "fir", "fit", "fix", "flu", "fly", "foe", "fog", "for", "fox", "fry", "fun", "fur", "gag", "gal", "gap", "gas", "gay", "gel", "gem", "get", "gig", "gin", "god", "got", "gum", "gun", "gut", "guy", "gym", "had", "ham", "has", "hat", "hay", "hem", "hen", "her", "hey", "hid", "him", "hip", "his", "hit", "hog", "hop", "hot", "how", "hub", "hue", "hug", "huh", "hum", "hut", "ice", "icy", "ill", "imp", "ink", "inn", "ion", "ivy", "jam", "jar", "jaw", "jay", "jet", "jew", "job", "joe", "jog", "joy", "jug", "key", "kid", "kin", "kit", "lab", "lag", "lap", "law", "lay", "led", "leg", "let", "lid", "lie", "lip", "lit", "log", "lot", "low", "mad", "man", "map", "mat", "max", "may", "men", "met", "mid", "mix", "mob", "mod", "mom", "mop",
@@ -80,6 +83,7 @@ public static class Constants
 	public const float DecryptTime = 30f;
 
 	public const int WarningLimit = 1;
+
 
 
     //H(Destroy a word every 25 seconds - Two words come down every 10 seconds)
