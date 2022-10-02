@@ -25,7 +25,10 @@ public class GameController : MonoBehaviour
 	private int warningLimit;
 	private float pointsMultiplier;
 
+
 	private Constants.SubState subState;
+	private int currentStage;
+
 
 	public void StartGame()
 	{
@@ -45,6 +48,8 @@ public class GameController : MonoBehaviour
 		completedLines = 0;
 		countDownTime = Constants.MaxTime;
 		decryptTime = Constants.DecryptTime;
+
+		currentStage = 0;
 
 		warningLimit = Constants.WarningLimit;
 		pointsMultiplier = 1f;
@@ -78,6 +83,7 @@ public class GameController : MonoBehaviour
 			gameUI.DisplayWarning(true);
 		}
 	}
+
 	public IEnumerator MoveWord(GameObject newWord){
 
 		Vector3 newPos = new Vector3(bottomLinePos.x, bottomLinePos.y + ((newWord.GetComponent<RectTransform>().rect.height + wordsYOffset) * lines.Count));
@@ -113,7 +119,6 @@ public class GameController : MonoBehaviour
 		}
 	}
 	
-
 	public void OnWordHover(float y)
 	{
 		gameUI.OnWordHover(y);
