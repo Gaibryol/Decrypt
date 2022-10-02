@@ -181,7 +181,7 @@ public class GameManager : MonoBehaviour
 			{
 				if(lines.Count != 0)
         {
-					GameObject randomWord = lines[Random.Range(0,lines.Count)];
+					GameObject randomWord = lines[UnityEngine.Random.Range(0,lines.Count)];
 					CorrectWord(randomWord);
 				}
 			}

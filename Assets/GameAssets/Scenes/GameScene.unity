@@ -270,6 +270,7 @@ MonoBehaviour:
   score: {fileID: 1583605828}
   stage: {fileID: 680118129}
   cover: {fileID: 879944823}
+  indicatorAnim: {fileID: 19274372}
 --- !u!1 &160777404
 GameObject:
   m_ObjectHideFlags: 0
