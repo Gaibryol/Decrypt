@@ -7,7 +7,7 @@ public class HacksManager : MonoBehaviour
     public List<string> possibleEarlyHacks = new List<string>(){"A","B","C","D","E","F","G","H","I"};
     public List<string> possibleLateHacks = new List<string>(){"J","K","L","M","N","O","P",};
     public List<string> ActivatedHacks = new List<string>();
-    public static HacksManager Instance;
+    public static HacksManager Instance { get; private set; }
 
 	[SerializeField] private GameController gameController;
 	[SerializeField] private GameUIController gameUIController;
