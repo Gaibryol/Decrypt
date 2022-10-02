@@ -13,6 +13,19 @@ public class GameManager : MonoBehaviour
 
 	private List<GameObject> lines;
 
+
+
+	#region Game Variables
+	private int abilityUsages = 1;
+	private int maximumNumLines = 6;
+	private float playerPoints = 0f;
+	private int completedLines = 0;
+	private float countDownTime = Constants.MaxTime;
+	private float decryptTime = Constants.DecryptTime;
+	private float pointsMultiplier = 0f;
+	#endregion
+	
+
 	[SerializeField] private float wordsYOffset;
 	[SerializeField] private Vector3 bottomLinePos;
 	[SerializeField] private Vector3 spawnPos;
@@ -34,15 +47,14 @@ public class GameManager : MonoBehaviour
 
 	public void CorrectWord(GameObject word)
 	{
-		if (lines.IndexOf(word) == 0)
+		int i = 0;
+		i = lines.IndexOf(word);
+		lines.Remove(word);
+		// Need to bump all the other words down
+		for(; i < lines.Count;i++)
 		{
-			lines.Remove(word);
-
-			// Need to bump all the other words down
-			foreach (GameObject obj in lines)
-			{
-				obj.transform.localPosition = new Vector3(obj.transform.localPosition.x, obj.transform.localPosition.y - word.GetComponent<RectTransform>().rect.height - wordsYOffset);
-			}
+			
+			lines[i].transform.localPosition = new Vector3(lines[i].transform.localPosition.x, lines[i].transform.localPosition.y - word.GetComponent<RectTransform>().rect.height - wordsYOffset);
 		}
 
 		if (lines.Count == 0)
@@ -50,7 +62,61 @@ public class GameManager : MonoBehaviour
 			UIManager.Instance.OnWordExit();
 		}
 
+		completedLines += 1;
+		playerPoints += word.GetComponent<Word>().realWord.Length * Constants.PointsPerLetter * pointsMultiplier;
 		Destroy(word);
+	}
+
+	public void SetMultiplier(float multiplier)
+	{
+		pointsMultiplier = multiplier;
+	}
+	public void DecryptWord(GameObject word)
+	{
+		if(abilityUsages > 0)
+		{
+			CorrectWord(word);
+			abilityUsages -=1;
+		}
+	}
+	public void DecryptList()
+	{
+		if(abilityUsages > 0)
+		{
+			for(int i = lines.Count-1; i >= 0 ;i--){
+				CorrectWord(lines[i]);
+			}
+			abilityUsages -=1;
+		}
+	}
+
+	public void SetDecryptAmount(int amount)
+	{
+		abilityUsages = amount;
+	}
+
+	private GameObject GetLongestWord()
+	{
+		int maxLength = 0;
+		GameObject longestWord = null;
+		foreach(GameObject word in lines)
+		{
+			int wordLength = word.GetComponent<Word>().GetWordLength();
+			if(wordLength > maxLength){
+				maxLength = wordLength;
+				longestWord = word;
+			}
+		}
+		return longestWord;
+	}
+	IEnumerator SpawnTwoWords()
+    {
+		SpawnWord();
+		yield return new WaitForSeconds(0.5f);
+		SpawnWord();
+    }
+	public void ChangeMaxLife(int num){
+		maximumNumLines += num;
 	}
 
 	private void Awake()
@@ -75,10 +141,42 @@ public class GameManager : MonoBehaviour
 	}
 
 	private void Update()
-	{
+	{	
+		decryptTime -= Time.deltaTime;
+		countDownTime -= Time.deltaTime;
+		if(countDownTime <= 0)
+		{
+			if(HacksManager.Instance.ActivatedH){
+				StartCoroutine(SpawnTwoWords());
+			}else{
+				SpawnWord();
+			}
+			countDownTime = Constants.MaxTime;
+		}
+		if(decryptTime <= 0)
+		{
+			decryptTime = Constants.DecryptTime;
+			if(HacksManager.Instance.ActivatedC)
+			{
+				GameObject longestWord = GetLongestWord();
+				if(longestWord != null){
+					CorrectWord(longestWord);
+				}
+			}
+			else if(HacksManager.Instance.ActivatedH)
+			{
+				if(lines.Count != 0){
+					GameObject randomWord = lines[Random.Range(0,lines.Count)];
+					CorrectWord(randomWord);
+				}
+			}
+		}
 		if (Input.GetKeyDown(KeyCode.Space))
 		{
 			SpawnWord();
 		}
 	}
+	
+
+
 }

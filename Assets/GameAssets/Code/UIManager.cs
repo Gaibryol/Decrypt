@@ -13,6 +13,7 @@ public class UIManager : MonoBehaviour
 
 	[SerializeField, Header("Text")] private TMP_Text score;
 	[SerializeField] private TMP_Text stage;
+	[SerializeField] private GameObject cover;
 
 	private void Awake()
 	{
@@ -49,6 +50,7 @@ public class UIManager : MonoBehaviour
 
 	public void OnSpawnWord()
 	{
+		cover.transform.SetAsLastSibling();
 		topBanner.transform.SetAsLastSibling();
 	}
 
@@ -61,5 +63,10 @@ public class UIManager : MonoBehaviour
 	{
 		int newScore = int.Parse(score.text) + amount;
 		score.text = newScore.ToString();
+	}
+	public void CoverWords(int amount)
+	{
+		RectTransform rt = cover.GetComponent<RectTransform>();
+		rt.sizeDelta = new Vector2(rt.sizeDelta.x, rt.sizeDelta.y +(amount*100));
 	}
 }

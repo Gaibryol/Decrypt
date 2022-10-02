@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
 
-public class Letter : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler
+public class Letter : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler, IPointerEnterHandler, IPointerExitHandler
 {
 	public string Character;
 
@@ -41,18 +41,15 @@ public class Letter : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 	public void Construct(string letter, bool covered, bool move)
 	{
 		Character = letter;
-
 		isCovered = covered;
 		canMove = move;
-
-		Debug.Log("cover: " + isCovered + " - move: " + canMove);
 		if (!isCovered)
 		{
 			image.sprite = LettersManager.Instance.GetSprite(Constants.LetterColors.Orange, letter);
 		}
 		else
 		{
-			image.sprite = LettersManager.Instance.GetSprite(Constants.LetterColors.Orange, "z");
+			image.sprite = LettersManager.Instance.GetTileCoverSprite();;
 		}
 	}
 
@@ -125,4 +122,18 @@ public class Letter : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 	{
 		
 	}
+	public void OnPointerEnter(PointerEventData eventData)
+	{
+		if(HacksManager.Instance.ActivatedE){
+			image.sprite = LettersManager.Instance.GetSprite(Constants.LetterColors.Orange, Character);
+		}
+	}
+
+	public void OnPointerExit(PointerEventData eventData)
+	{
+		if(HacksManager.Instance.ActivatedE){
+			image.sprite = LettersManager.Instance.GetTileCoverSprite();
+		}
+	}
+	
 }
