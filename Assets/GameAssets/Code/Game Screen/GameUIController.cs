@@ -17,10 +17,8 @@ public class GameUIController : MonoBehaviour
 
 	[SerializeField, Header("Indicator Animations")] private Animator indicatorAnim;
 
-	[SerializeField, Header("Buttons")] private Toggle musicToggle;
-	[SerializeField] private Toggle soundToggle;
-	[SerializeField] private Button helpButton;
-	[SerializeField] private Button pauseButton;
+	[SerializeField, Header("Buttons")] private Toggle helpButton;
+	[SerializeField] private Toggle pauseButton;
 
 	public void StartGame()
 	{
@@ -36,9 +34,6 @@ public class GameUIController : MonoBehaviour
 
 		score.text = "0";
 		stage.text = "01";
-
-		musicToggle.onValueChanged.AddListener((isOn) => SettingsManager.Instance.ToggleMusic(isOn));
-		soundToggle.onValueChanged.AddListener((isOn) => SettingsManager.Instance.ToggleSound(isOn));
 	}
 
 	public void OnWordHover(float y)

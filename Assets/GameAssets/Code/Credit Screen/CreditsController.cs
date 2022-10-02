@@ -7,9 +7,6 @@ public class CreditsController : MonoBehaviour
 {
 	[SerializeField] private Button returnButton;
 
-	[SerializeField] private Toggle musicToggle;
-	[SerializeField] private Toggle soundToggle;
-
 	private void OnReturnPressed()
 	{
 		GameManager.Instance.ChangeState(Constants.GameStates.MainMenu);
@@ -18,16 +15,10 @@ public class CreditsController : MonoBehaviour
 	private void OnEnable()
 	{
 		returnButton.onClick.AddListener(OnReturnPressed);
-
-		musicToggle.onValueChanged.AddListener((isOn) => SettingsManager.Instance.ToggleMusic(isOn));
-		soundToggle.onValueChanged.AddListener((isOn) => SettingsManager.Instance.ToggleSound(isOn));
 	}
 
 	private void OnDisable()
 	{
 		returnButton.onClick.RemoveListener(OnReturnPressed);
-
-		musicToggle.onValueChanged.RemoveListener((isOn) => SettingsManager.Instance.ToggleMusic(isOn));
-		soundToggle.onValueChanged.RemoveListener((isOn) => SettingsManager.Instance.ToggleSound(isOn));
 	}
 }

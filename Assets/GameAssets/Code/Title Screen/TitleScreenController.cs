@@ -16,7 +16,6 @@ public class TitleScreenController : MonoBehaviour
 
 	private void StartGame()
 	{
-		Debug.Log("Start Game");
 		GameManager.Instance.ChangeState(Constants.GameStates.Game);
 	}
 
@@ -27,7 +26,7 @@ public class TitleScreenController : MonoBehaviour
 
 	private void ExitGame()
 	{
-
+		Debug.Log("Exit Game");
 	}
 
 	public void OnHoverEnter(GameObject obj)
