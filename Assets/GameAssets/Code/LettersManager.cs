@@ -20,6 +20,8 @@ public class LettersManager : MonoBehaviour
 
 	[SerializeField, Header("Yellow")] private List<Sprite> yellow;
 
+	[SerializeField] Sprite tileCover;
+
 	private void Awake()
 	{
 		if (Instance != null && Instance != this)
@@ -61,5 +63,8 @@ public class LettersManager : MonoBehaviour
 		}
 
 		return null;
+	}
+	public Sprite GetTileCoverSprite(){
+		return tileCover;
 	}
 }

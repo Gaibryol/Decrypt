@@ -4,7 +4,6 @@ using System.Collections.Generic;
 public class WordsManager : MonoBehaviour
 {
     public static WordsManager Instance;
-
 	private string possibleWordLengths;
     private List<int> odds;
 	private List<string> spawnedList;
@@ -24,29 +23,35 @@ public class WordsManager : MonoBehaviour
     {
         switch (possibleWordLengths)
 		{
+            case Constants.ThreeFourFive:
+                odds = new List<int>(){3,3,4,4,4,4,5,5,5,5,5,5};
+                break;
             case Constants.FourFiveSix:
-                odds = new List<int>(){4,4,5,5,5,5,5,5,5,6,6,6,6,6};
+                odds = new List<int>(){4,4,4,5,5,5,5,5,5,6,6,6,6,6};
                 break;
-            case Constants.ThreeFourFiveSix:
-                odds = new List<int>(){3,3,4,4,4,5,5,5,5,5,5,5,6,6,6,6};
+            case Constants.FiveSixSeven:
+                odds = new List<int>(){5,5,5,5,6,6,6,6,7,7};
                 break;
-            case Constants.ThreeFourFiveSixSeven:
-                odds = new List<int>(){3,3,3,3,4,4,4,4,4,4,5,5,5,5,5,5,5,5,5,5,5,6,6,6,6,6,6,6,7,7,7};
-                break;
-            case Constants.ThreeFourFiveSixSevenEight:
-                odds = new List<int>(){3,3,3,4,4,4,4,4,4,5,5,5,5,5,5,5,5,5,5,5,6,6,6,6,6,6,6,7,7,7,7,8,8};
+            case Constants.ThreeFiveSixSeven:
+                odds = new List<int>(){3,3,3,5,5,5,5,5,6,6,6,6,7,7,7};
                 break;
             case Constants.FourFiveSixSeven:
-                odds = new List<int>(){4,4,4,5,5,5,5,5,5,5,6,6,6,6,7,7};
+                odds = new List<int>(){4,4,4,5,5,5,5,5,5,5,6,6,6,6,7,7,7};
                 break;
-            case Constants.FourFiveSixSevenEight:
-                odds = new List<int>(){4,4,4,4,5,5,5,5,5,5,5,5,6,6,6,6,6,7,7,7,8,8};
+            case Constants.FiveSixSevenEight:
+                odds = new List<int>(){5,5,5,5,5,6,6,6,6,6,7,7,7,8,8};
                 break;
-            case Constants.FourFiveSixEight:
-                odds = new List<int>(){4,4,4,4,5,5,5,5,5,5,5,5,6,6,6,6,6,8,8};
+            case Constants.SixSeven:
+                odds = new List<int>(){6,6,6,7,7};
                 break;
-            case Constants.ThreeFourFiveSixEight:
-                odds = new List<int>(){3,3,3,4,4,4,4,5,5,5,5,5,5,5,5,6,6,6,6,6,8,8};
+            case Constants.Seven:
+                odds = new List<int>(){7};
+                break;
+            case Constants.SevenEight:
+                odds = new List<int>(){7,7,7,8,8};
+                break;
+            case Constants.Eight:
+                odds = new List<int>(){8};
                 break;
         }
 
@@ -100,28 +105,40 @@ public class WordsManager : MonoBehaviour
         char[] characters = word.ToCharArray();
         char tempCharacter;
 
-        for(int i = 0; i < characters.Length - 1; i++)
+        for(int i = 0; i < characters.Length; i++)
         {
-            int randomNum = Random.Range(i,characters.Length);
-            tempCharacter = characters[randomNum];
-            characters[randomNum] = characters[i];
-            characters[i] = tempCharacter;
+            tempCharacter = characters[i];
+            int randomIndex= Random.Range(i,characters.Length);
+            characters[i] = characters[randomIndex];
+            characters[randomIndex] = tempCharacter;
         }
-
         return new string(characters);
     }
 
+
     public List<string> GetScrambledWord()
     {
+        bool running = true;
         string randomWord = GetRandomWord();
-        string shuffledWord = Shuffle(randomWord);
-
-        while (shuffledWord == randomWord)
+        string shuffledWord = null;
+        while (running)
         {
-            shuffledWord = Shuffle(randomWord);
-			shuffledWord = Shuffle(shuffledWord);
+            if(HacksManager.Instance.ActivatedA)
+            {
+                char firstLetter = randomWord[0];
+                shuffledWord = firstLetter + Shuffle(Shuffle(randomWord.Substring(1)));
+            }
+            else if(HacksManager.Instance.ActivatedB){
+                char lastLetter = randomWord[randomWord.Length-1];
+                shuffledWord = Shuffle(Shuffle(randomWord.Substring(0,randomWord.Length-1)))+ lastLetter;
+            }else{
+                shuffledWord = Shuffle(Shuffle(randomWord));
+            }
+            if(shuffledWord != randomWord)
+            {
+                running = false;
+            }
         }
-        
         return new List<string>(){randomWord,shuffledWord};
     }
 
