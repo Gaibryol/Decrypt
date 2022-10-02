@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System;
 
 public class UIManager : MonoBehaviour
 {
@@ -13,6 +14,8 @@ public class UIManager : MonoBehaviour
 
 	[SerializeField, Header("Text")] private TMP_Text score;
 	[SerializeField] private TMP_Text stage;
+
+	[SerializeField, Header("Indicator Animations")] private Animator indicatorAnim;
 
 	private void Awake()
 	{
@@ -39,6 +42,8 @@ public class UIManager : MonoBehaviour
 
 		indicator.SetActive(true);
 		indicator.transform.localPosition = new Vector3(indicator.transform.localPosition.x, y);
+
+		indicatorAnim.Play("Solving");
 	}
 
 	public void OnWordExit()

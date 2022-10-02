@@ -45,7 +45,6 @@ public class Letter : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 		isCovered = covered;
 		canMove = move;
 
-		Debug.Log("cover: " + isCovered + " - move: " + canMove);
 		if (!isCovered)
 		{
 			image.sprite = LettersManager.Instance.GetSprite(Constants.LetterColors.Orange, letter);

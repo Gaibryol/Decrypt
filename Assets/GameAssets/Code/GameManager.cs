@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -50,6 +51,7 @@ public class GameManager : MonoBehaviour
 			UIManager.Instance.OnWordExit();
 		}
 
+		UIManager.Instance.OnWordSolved(1000);
 		Destroy(word);
 	}
 
