@@ -4,10 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class UIManager : MonoBehaviour
+public class GameUIController : MonoBehaviour
 {
-	public static UIManager Instance { get; private set; }
-
 	[SerializeField, Header("Objects")] private GameObject brackets;
 	[SerializeField] private GameObject topBanner;
 	[SerializeField] private GameObject indicator;
@@ -24,17 +22,15 @@ public class UIManager : MonoBehaviour
 	[SerializeField] private Button helpButton;
 	[SerializeField] private Button pauseButton;
 
-	private void Awake()
+	public void StartGame()
 	{
-		if (Instance != null && Instance != this)
-		{
-			Destroy(this.gameObject);
-		}
-		else
-		{
-			Instance = this;
-		}
+		InitVariables();
 
+		// Start game
+	}
+
+	private void InitVariables()
+	{
 		brackets.SetActive(false);
 		indicator.SetActive(false);
 
@@ -55,7 +51,9 @@ public class UIManager : MonoBehaviour
 
 		indicatorAnim.Play("Solving");
 	}
-	public void DisplayWarning(bool show){
+
+	public void DisplayWarning(bool show)
+	{
 		warning.SetActive(show);
 	}
 

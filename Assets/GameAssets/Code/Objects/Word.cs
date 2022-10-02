@@ -13,8 +13,11 @@ public class Word : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 	
 	private HorizontalLayoutGroup horizontalLayoutGroup;
 
-	public void SpawnWord(string word, string scrambled)
+	private GameController gameController;
+
+	public void SpawnWord(GameController controller, string word, string scrambled)
 	{
+		gameController = controller;
 		realWord = word;
 		scrambledWord = scrambled;
 		int randomNumber = Random.Range(0,realWord.Length);
@@ -63,7 +66,7 @@ public class Word : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
 		if (letters == realWord)
 		{
-			GameManager.Instance.CorrectWord(this.gameObject);
+			gameController.CorrectWord(this.gameObject);
 		}
 	}
 
@@ -79,27 +82,28 @@ public class Word : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
 	public void OnPointerEnter(PointerEventData eventData)
 	{
-		UIManager.Instance.OnWordHover(transform.localPosition.y);
+		gameController.OnWordHover(transform.localPosition.y);
 	}
 
 	public void OnPointerExit(PointerEventData eventData)
 	{
-		UIManager.Instance.OnWordExit();
+		gameController.OnWordExit();
 	}
 
 	public void OnPointerClick(PointerEventData eventData)
 	{
-		if(eventData.button == PointerEventData.InputButton.Right){
+		if(eventData.button == PointerEventData.InputButton.Right)
+		{
 			if(HacksManager.Instance.ActivatedE)
 			{
-				GameManager.Instance.DecryptWord(this.gameObject);
+				gameController.DecryptWord(this.gameObject);
 			}
 			else if(HacksManager.Instance.ActivatedG)
 			{
 				//Drop Instantly
 			}
 			else if(HacksManager.Instance.ActivatedI){
-				GameManager.Instance.DecryptList();
+				gameController.DecryptList();
 			}
 		}
 	}

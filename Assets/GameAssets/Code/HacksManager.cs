@@ -9,6 +9,9 @@ public class HacksManager : MonoBehaviour
     public List<string> ActivatedHacks = new List<string>();
     public static HacksManager Instance;
 
+	[SerializeField] private GameController gameController;
+	[SerializeField] private GameUIController gameUIController;
+
     #region Bool Variables
     public bool ActivatedA = false;
     public bool ActivatedB = false;
@@ -19,8 +22,8 @@ public class HacksManager : MonoBehaviour
     public bool ActivatedG = false;
     public bool ActivatedH = false;
     public bool ActivatedI = false;
-
     #endregion 
+
     private void Awake()
     {
         if (Instance == null)
@@ -28,6 +31,7 @@ public class HacksManager : MonoBehaviour
             Instance = this;
         }
     }
+
     public void AddEarlyHack(string hackLetter)
     {
         possibleEarlyHacks.Remove(hackLetter);
@@ -41,7 +45,7 @@ public class HacksManager : MonoBehaviour
                 }
                 possibleEarlyHacks.Remove("B");
                 ActivatedA = true;
-                UIManager.Instance.CoverWords(7);
+				gameUIController.CoverWords(7);
                 break;
             case Constants.HackB://Finished
                 if(possibleEarlyHacks.Contains("D"))
@@ -50,7 +54,7 @@ public class HacksManager : MonoBehaviour
                 }
                 possibleEarlyHacks.Remove("A");
                 ActivatedB = true;
-                UIManager.Instance.CoverWords(7);
+				gameUIController.CoverWords(7);
                 break;
             case Constants.HackC://Finished
                 possibleEarlyHacks.Remove("H");
@@ -58,24 +62,24 @@ public class HacksManager : MonoBehaviour
                 break;
             case Constants.HackD://Finished
                 ActivatedD = true;
-                GameManager.Instance.ChangeMaxLife(1);
-                UIManager.Instance.CoverWords(5);
+				gameController.ChangeMaxLife(1);
+				gameUIController.CoverWords(5);
                 break;
             case Constants.HackE://Finished
                 possibleEarlyHacks.Remove("G");
                 possibleEarlyHacks.Remove("I");
                 ActivatedE = true;
-                GameManager.Instance.SetDecryptAmount(4);
+				gameController.SetDecryptAmount(4);
                 break;
             case Constants.HackF://Able to view letters as they are falling
                 ActivatedF = true;
-                GameManager.Instance.ChangeMaxLife(-1);
+				gameController.ChangeMaxLife(-1);
                 break;
             case Constants.HackG:
                 possibleEarlyHacks.Remove("E");//Right Click Instantly drops
                 possibleEarlyHacks.Remove("I");
                 ActivatedG = true;
-                GameManager.Instance.ChangeMaxLife(-1);
+				gameController.ChangeMaxLife(-1);
                 break;
             case Constants.HackH://Finished
                 possibleEarlyHacks.Remove("C");
@@ -85,11 +89,12 @@ public class HacksManager : MonoBehaviour
                 possibleEarlyHacks.Remove("E");
                 possibleEarlyHacks.Remove("G");
                 ActivatedI = true;
-                GameManager.Instance.SetDecryptAmount(1);
-                GameManager.Instance.ChangeMaxLife(-2);
+				gameController.SetDecryptAmount(1);
+				gameController.ChangeMaxLife(-2);
                 break;  
         }
     }
+
     public void AddLateHack(string hackLetter)
     {
         possibleLateHacks.Remove(hackLetter);
@@ -98,31 +103,31 @@ public class HacksManager : MonoBehaviour
         {
             case Constants.HackJ:
                 WordsManager.Instance.ChangePossibleWordLength("3,5,6,7");
-                GameManager.Instance.SetMultiplier(0.75f);
+				gameController.SetMultiplier(0.75f);
                 break;
             case Constants.HackK:
                 WordsManager.Instance.ChangePossibleWordLength("4,5,6,7");
-                GameManager.Instance.SetMultiplier(0.85f);
+				gameController.SetMultiplier(0.85f);
                 break;
             case Constants.HackL:
                 WordsManager.Instance.ChangePossibleWordLength("5,6,7,8");
-                GameManager.Instance.SetMultiplier(1.50f);
+				gameController.SetMultiplier(1.50f);
                 break;
             case Constants.HackM:
                 WordsManager.Instance.ChangePossibleWordLength("6,7");
-                GameManager.Instance.SetMultiplier(1.20f);
+				gameController.SetMultiplier(1.20f);
                 break;
             case Constants.HackN:
                 WordsManager.Instance.ChangePossibleWordLength("7");
-                GameManager.Instance.SetMultiplier(2.00f);
+				gameController.SetMultiplier(2.00f);
                 break;
             case Constants.HackO:
                 WordsManager.Instance.ChangePossibleWordLength("7,8");
-                GameManager.Instance.SetMultiplier(2.50f);
+				gameController.SetMultiplier(2.50f);
                 break;
             case Constants.HackP:
                 WordsManager.Instance.ChangePossibleWordLength("8");
-                GameManager.Instance.SetMultiplier(4.00f);
+				gameController.SetMultiplier(4.00f);
                 break;
         }
     }
@@ -133,7 +138,8 @@ public class HacksManager : MonoBehaviour
         string hack1 = null;
         string hack2 = null;
         List<string> possibleHacks;
-        if(stage == "Early"){
+        if(stage == "Early")
+		{
             possibleHacks = possibleEarlyHacks;
         }
         else
@@ -149,6 +155,7 @@ public class HacksManager : MonoBehaviour
         }
         return new List<string>(){hack1,hack2};
     }
+
     public string GetDescription(string hackLetter)
     {
         switch(hackLetter)
