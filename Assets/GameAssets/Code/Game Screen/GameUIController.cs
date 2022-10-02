@@ -19,11 +19,11 @@ public class GameUIController : MonoBehaviour
 
 	[SerializeField, Header("Buttons")] private Toggle helpButton;
 	[SerializeField] private Toggle pauseButton;
+	private GameController gameController;
 
 	public void StartGame()
 	{
 		InitVariables();
-
 		// Start game
 	}
 
@@ -34,6 +34,7 @@ public class GameUIController : MonoBehaviour
 
 		score.text = "0";
 		stage.text = "01";
+		gameController = GetComponent<GameController>();
 	}
 
 	public void OnWordHover(float y)
@@ -79,5 +80,14 @@ public class GameUIController : MonoBehaviour
 	{
 		RectTransform rt = cover.GetComponent<RectTransform>();
 		rt.sizeDelta = new Vector2(rt.sizeDelta.x, rt.sizeDelta.y +(amount*100));
+	}
+	public void PauseGame(){
+		if(pauseButton.isOn)
+		{
+			gameController.ChangeSubState(Constants.SubState.Pause);
+		}
+		else{
+			gameController.ChangeSubState(Constants.SubState.Playing);
+		}
 	}
 }

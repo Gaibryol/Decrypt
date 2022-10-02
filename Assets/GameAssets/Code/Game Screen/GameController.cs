@@ -25,10 +25,12 @@ public class GameController : MonoBehaviour
 	private int warningLimit;
 	private float pointsMultiplier;
 
+	private Constants.SubState subState;
+
 	public void StartGame()
 	{
 		InitVariables();
-
+		gameUI.StartGame();
 		// Start game
 		SpawnWord();
 	}
@@ -46,6 +48,7 @@ public class GameController : MonoBehaviour
 
 		warningLimit = Constants.WarningLimit;
 		pointsMultiplier = 1f;
+		subState = Constants.SubState.Playing;
 
 		gameUI = GetComponent<GameUIController>();
 	}
@@ -59,8 +62,6 @@ public class GameController : MonoBehaviour
 		newWord.transform.localPosition = spawnPos;
 
 		newWord.GetComponent<Word>().SpawnWord(this, words[0], words[1]);
-	
-		// newWord.transform.localPosition = new Vector3(bottomLinePos.x, bottomLinePos.y + ((newWord.GetComponent<RectTransform>().rect.height + wordsYOffset) * lines.Count));
 
 		StartCoroutine(MoveWord(newWord));
 		lines.Add(newWord);
@@ -81,10 +82,35 @@ public class GameController : MonoBehaviour
 
 		Vector3 newPos = new Vector3(bottomLinePos.x, bottomLinePos.y + ((newWord.GetComponent<RectTransform>().rect.height + wordsYOffset) * lines.Count));
 		while(newWord.transform.localPosition != newPos){
-			newWord.transform.localPosition = Vector3.MoveTowards(newWord.transform.localPosition, newPos, 0.5f);
+			if(subState != Constants.SubState.Pause)
+				newWord.transform.localPosition = Vector3.MoveTowards(newWord.transform.localPosition, newPos, 0.3f);
 			yield return null;
 		}
 		newWord.GetComponent<Word>().IsMoving = false;
+		newWord.GetComponent<Word>().IsInteractable = true;
+	}
+
+	public void ChangeSubState(Constants.SubState state){
+		switch(state){
+			case(Constants.SubState.Playing):
+				subState = state;
+				for(int i = 0; i<lines.Count;i++){
+					lines[i].GetComponent<Word>().IsInteractable = true;
+				}
+				break;
+			case(Constants.SubState.Pause):
+				subState = state;
+				for(int i = 0; i<lines.Count;i++){
+					lines[i].GetComponent<Word>().IsInteractable = false;
+				}
+				break;
+			case(Constants.SubState.Help):
+				subState = state;
+				break;
+			case(Constants.SubState.Hack):
+				subState = state;
+				break;
+		}
 	}
 	
 
@@ -187,8 +213,11 @@ public class GameController : MonoBehaviour
 
 	private void Update()
 	{
+		if(subState != Constants.SubState.Playing) return;
+		
 		decryptTime -= Time.deltaTime;
 		countDownTime -= Time.deltaTime;
+
 		if (countDownTime <= 0 || lines.Count == 0)
 		{
 			countDownTime = Constants.MaxTime;

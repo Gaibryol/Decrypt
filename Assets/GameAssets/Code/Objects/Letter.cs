@@ -55,7 +55,7 @@ public class Letter : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 
 	public void OnBeginDrag(PointerEventData eventData)
 	{
-		if(word.IsMoving) return;
+		if(!word.IsInteractable) return;
 		
 		if (!canMove) return;
 
@@ -69,7 +69,7 @@ public class Letter : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 
 	public void OnEndDrag(PointerEventData eventData)
 	{
-		if(word.IsMoving) return;
+		if(!word.IsInteractable) return;
 
 		if (!canMove) return;
 
