@@ -71,13 +71,15 @@ public static class Constants
 	public const string DescriptionL = "1.50x the points for each word decrypted|Add the possibility of eight letter words";
 	public const string DescriptionM = "1.20x the points for each word decrypted|Remove the possibility of five letter words";
 	public const string DescriptionN = "2.00x the points for each word decrypted|It is only possible to get seven letter words";
-	public const string DescriptionO = "|2.50x the points for each word decrypted|It is only possible to get seven and eight letter words";
-	public const string DescriptionP = "3.00x the points for each word decrypted|It is only possible to get eight letter words";
+	public const string DescriptionO = "2.50x the points for each word decrypted|It is only possible to get seven and eight letter words";
+	public const string DescriptionP = "4.00x the points for each word decrypted|It is only possible to get eight letter words";
 
 	public const float MaxTime = 10f;
 	public const float PointsPerLetter = 200;
 
 	public const float DecryptTime = 30f;
+
+	public const int WarningLimit = 1;
 
 
     //H(Destroy a word every 25 seconds - Two words come down every 10 seconds)
