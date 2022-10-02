@@ -21,7 +21,9 @@ public class GameManager : MonoBehaviour
 	private int completedLines = 0;
 	private float countDownTime = Constants.MaxTime;
 	private float decryptTime = Constants.DecryptTime;
-	private float pointsMultiplier = 0f;
+
+	private int warningLimit = Constants.WarningLimit;
+	private float pointsMultiplier = 1f;
 	#endregion
 	
 
@@ -42,6 +44,16 @@ public class GameManager : MonoBehaviour
 		lines.Add(newWord);
 
 		UIManager.Instance.OnSpawnWord();
+
+		if(lines.Count > maximumNumLines){
+			//Game Over(To Restart Screen)
+			Debug.Log("GameOver");
+			GameState = Constants.GameStates.MainMenu;
+		}
+		else if(lines.Count >= maximumNumLines - warningLimit)
+		{
+			UIManager.Instance.DisplayWarning(true);
+		}
 	}
 
 	public void CorrectWord(GameObject word)
@@ -61,7 +73,14 @@ public class GameManager : MonoBehaviour
 
 		UIManager.Instance.OnWordExit();
 		UIManager.Instance.OnWordSolved(1000);
+	
+		UIManager.Instance.OnWordSolved(Mathf.FloorToInt(playerPoints));
 		Destroy(word);
+
+		if(lines.Count <maximumNumLines - warningLimit)
+		{
+			UIManager.Instance.DisplayWarning(false);
+		}
 	}
 
 	public void SetMultiplier(float multiplier)
@@ -149,9 +168,10 @@ public class GameManager : MonoBehaviour
 	{	
 		decryptTime -= Time.deltaTime;
 		countDownTime -= Time.deltaTime;
-    
-		if(countDownTime <= 0)
+		if(countDownTime <= 0 || lines.Count == 0)
 		{
+			countDownTime = Constants.MaxTime;
+			
 			if(HacksManager.Instance.ActivatedH){
 				StartCoroutine(SpawnTwoWords());
 			}
@@ -159,8 +179,6 @@ public class GameManager : MonoBehaviour
 			{
 				SpawnWord();
 			}
-
-			countDownTime = Constants.MaxTime;
 		}
     
 		if(decryptTime <= 0)
@@ -182,11 +200,6 @@ public class GameManager : MonoBehaviour
 					CorrectWord(randomWord);
 				}
 			}
-		}
-    
-		if (Input.GetKeyDown(KeyCode.Space))
-		{
-			SpawnWord();
 		}
 	}
 }

@@ -15,6 +15,7 @@ public class UIManager : MonoBehaviour
 	[SerializeField, Header("Text")] private TMP_Text score;
 	[SerializeField] private TMP_Text stage;
 	[SerializeField] private GameObject cover;
+	[SerializeField] private GameObject warning;
 
 	[SerializeField, Header("Indicator Animations")] private Animator indicatorAnim;
 
@@ -54,6 +55,9 @@ public class UIManager : MonoBehaviour
 
 		indicatorAnim.Play("Solving");
 	}
+	public void DisplayWarning(bool show){
+		warning.SetActive(show);
+	}
 
 	public void OnWordExit()
 	{
@@ -74,7 +78,7 @@ public class UIManager : MonoBehaviour
 
 	public void OnWordSolved(int amount)
 	{
-		int newScore = int.Parse(score.text) + amount;
+		int newScore = amount;
 		score.text = newScore.ToString();
 	}
 

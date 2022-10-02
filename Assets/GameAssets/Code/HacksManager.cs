@@ -41,7 +41,7 @@ public class HacksManager : MonoBehaviour
                 }
                 possibleEarlyHacks.Remove("B");
                 ActivatedA = true;
-                UIManager.Instance.CoverWords(7);
+                //UIManager.Instance.CoverWords(7);
                 break;
             case Constants.HackB://Finished
                 if(possibleEarlyHacks.Contains("D"))
@@ -122,7 +122,7 @@ public class HacksManager : MonoBehaviour
                 break;
             case Constants.HackP:
                 WordsManager.Instance.ChangePossibleWordLength("8");
-                GameManager.Instance.SetMultiplier(3.00f);
+                GameManager.Instance.SetMultiplier(4.00f);
                 break;
         }
     }
