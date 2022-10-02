@@ -27,8 +27,9 @@ public class GameController : MonoBehaviour
 
 
 	private Constants.SubState subState;
-	private int currentStage;
 
+	private int currentStage;
+	private bool alternateColor;
 
 	public void StartGame()
 	{
@@ -49,7 +50,8 @@ public class GameController : MonoBehaviour
 		countDownTime = Constants.MaxTime;
 		decryptTime = Constants.DecryptTime;
 
-		currentStage = 0;
+		currentStage = 1;
+		alternateColor = false;
 
 		warningLimit = Constants.WarningLimit;
 		pointsMultiplier = 1f;
@@ -66,7 +68,9 @@ public class GameController : MonoBehaviour
 		newWord.transform.SetParent(Canvas.transform.Find("GameScreen").transform);
 		newWord.transform.localPosition = spawnPos;
 
-		newWord.GetComponent<Word>().SpawnWord(this, words[0], words[1]);
+		newWord.GetComponent<Word>().SpawnWord(this, words[0], words[1], currentStage, alternateColor);
+
+		alternateColor = !alternateColor;
 
 		StartCoroutine(MoveWord(newWord));
 		lines.Add(newWord);

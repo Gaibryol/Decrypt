@@ -37,7 +37,7 @@ public class Letter : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 		}
 	}
 
-	public void Construct(string letter, bool covered, bool move)
+	public void Construct(string letter, bool covered, bool move, Constants.LetterColors color)
 	{
 		Character = letter;
 		isCovered = covered;
@@ -45,7 +45,7 @@ public class Letter : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 
 		if (!isCovered)
 		{
-			image.sprite = LettersManager.Instance.GetSprite(Constants.LetterColors.Orange, letter);
+			image.sprite = LettersManager.Instance.GetSprite(color, letter);
 		}
 		else
 		{

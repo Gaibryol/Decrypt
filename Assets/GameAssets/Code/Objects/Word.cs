@@ -17,8 +17,7 @@ public class Word : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
 	private GameController gameController;
 
-
-	public void SpawnWord(GameController controller, string word, string scrambled)
+	public void SpawnWord(GameController controller, string word, string scrambled, int currentStage, bool alternateColor)
 	{
 		gameController = controller;
 		realWord = word;
@@ -27,21 +26,47 @@ public class Word : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 		IsInteractable = false;
 		int randomNumber = Random.Range(0,realWord.Length);
 
-		for(int i = 0; i < scrambledWord.Length; i++)
+		Constants.LetterColors color = Constants.LetterColors.Blue;
+		if (currentStage == 1 && alternateColor)
+		{
+			color = Constants.LetterColors.Blue;
+		}
+		else if (currentStage == 1 && !alternateColor)
+		{
+			color = Constants.LetterColors.Orange;
+		}
+		else if (currentStage == 2 && alternateColor)
+		{
+			color = Constants.LetterColors.Green;
+		}
+		else if (currentStage == 2 && !alternateColor)
+		{
+			color = Constants.LetterColors.Yellow;
+		}
+		else if (currentStage == 3 && alternateColor)
+		{
+			color = Constants.LetterColors.Pink;
+		}
+		else if (currentStage == 3 && !alternateColor)
+		{
+			color = Constants.LetterColors.Purple;
+		}
+
+		for (int i = 0; i < scrambledWord.Length; i++)
 		{
 			GameObject newObj = Instantiate(letterPrefab, transform);
 			Letter lScript = newObj.GetComponent<Letter>();
 			if(HacksManager.Instance.ActivatedC & i == randomNumber)
 			{
-				lScript.Construct(scrambledWord[i].ToString(), true, true);
+				lScript.Construct(scrambledWord[i].ToString(), true, true, color);
 			}
 			else if(HacksManager.Instance.ActivatedE)
 			{
-				lScript.Construct(scrambledWord[i].ToString(), true, true);
+				lScript.Construct(scrambledWord[i].ToString(), true, true, color);
 			}
 			else
 			{
-				lScript.Construct(scrambledWord[i].ToString(), false, true);
+				lScript.Construct(scrambledWord[i].ToString(), false, true, color);
 			}
 		}
 		horizontalLayoutGroup = GetComponent<HorizontalLayoutGroup>();
