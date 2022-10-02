@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using TMPro;
 
 public class Letter : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler, IPointerEnterHandler, IPointerExitHandler
 {
@@ -123,6 +122,7 @@ public class Letter : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 	{
 		
 	}
+
 	public void OnPointerEnter(PointerEventData eventData)
 	{
 		if(HacksManager.Instance.ActivatedE){
@@ -132,7 +132,8 @@ public class Letter : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 
 	public void OnPointerExit(PointerEventData eventData)
 	{
-		if(HacksManager.Instance.ActivatedE){
+		if(HacksManager.Instance.ActivatedE)
+		{
 			image.sprite = LettersManager.Instance.GetTileCoverSprite();
 		}
 	}

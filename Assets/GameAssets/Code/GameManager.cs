@@ -14,8 +14,6 @@ public class GameManager : MonoBehaviour
 
 	private List<GameObject> lines;
 
-
-
 	#region Game Variables
 	private int abilityUsages = 1;
 	private int maximumNumLines = 6;
@@ -90,7 +88,7 @@ public class GameManager : MonoBehaviour
 		if(abilityUsages > 0)
 		{
 			for(int i = lines.Count-1; i >= 0 ;i--)
-      {
+			{
 				CorrectWord(lines[i]);
 			}
       
@@ -111,7 +109,7 @@ public class GameManager : MonoBehaviour
 		{
 			int wordLength = word.GetComponent<Word>().GetWordLength();
 			if(wordLength > maxLength)
-      {
+			{
 				maxLength = wordLength;
 				longestWord = word;
 			}
@@ -126,7 +124,8 @@ public class GameManager : MonoBehaviour
 		  SpawnWord();
     }
     
-	public void ChangeMaxLife(int num){
+	public void ChangeMaxLife(int num)
+	{
 		maximumNumLines += num;
 	}
 
@@ -160,9 +159,12 @@ public class GameManager : MonoBehaviour
 		{
 			if(HacksManager.Instance.ActivatedH){
 				StartCoroutine(SpawnTwoWords());
-			}else{
+			}
+			else
+			{
 				SpawnWord();
 			}
+
 			countDownTime = Constants.MaxTime;
 		}
     
@@ -173,14 +175,14 @@ public class GameManager : MonoBehaviour
 			{
 				GameObject longestWord = GetLongestWord();
 				if(longestWord != null)
-        {
+				{
 					CorrectWord(longestWord);
 				}
 			}
 			else if(HacksManager.Instance.ActivatedH)
 			{
 				if(lines.Count != 0)
-        {
+				{
 					GameObject randomWord = lines[UnityEngine.Random.Range(0,lines.Count)];
 					CorrectWord(randomWord);
 				}
@@ -192,7 +194,4 @@ public class GameManager : MonoBehaviour
 			SpawnWord();
 		}
 	}
-	
-
-
 }

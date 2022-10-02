@@ -8,12 +8,10 @@ using TMPro;
 public class Word : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
 	[SerializeField] public GameObject letterPrefab;
-	
 
 	public string realWord;
 	public string scrambledWord;
 	
-
 	private HorizontalLayoutGroup horizontalLayoutGroup;
 
 	public void SpawnWord(string word, string scrambled)
@@ -21,6 +19,7 @@ public class Word : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 		realWord = word;
 		scrambledWord = scrambled;
 		int randomNumber = Random.Range(0,realWord.Length);
+
 		for(int i = 0; i < scrambledWord.Length; i++)
 		{
 			GameObject newObj = Instantiate(letterPrefab, transform);
@@ -88,6 +87,7 @@ public class Word : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 	{
 		UIManager.Instance.OnWordExit();
 	}
+
 	public void OnPointerClick(PointerEventData eventData)
 	{
 		if(eventData.button == PointerEventData.InputButton.Right){
@@ -104,7 +104,9 @@ public class Word : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 			}
 		}
 	}
-	public int GetWordLength(){
+
+	public int GetWordLength()
+	{
 		return realWord.Length;
 	}
 }

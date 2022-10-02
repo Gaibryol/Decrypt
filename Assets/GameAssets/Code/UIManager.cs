@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using System;
 
 public class UIManager : MonoBehaviour
 {
@@ -69,6 +68,7 @@ public class UIManager : MonoBehaviour
 		int newScore = int.Parse(score.text) + amount;
 		score.text = newScore.ToString();
 	}
+
 	public void CoverWords(int amount)
 	{
 		RectTransform rt = cover.GetComponent<RectTransform>();
