@@ -14,11 +14,15 @@ public class WordsManager : MonoBehaviour
 		{
             Instance = this;
         }
-
-		possibleWordLengths = "4,5,6";
-		spawnedList = new List<string>();
+        InitVariables();
     }
-
+    private void InitVariables(){
+        possibleWordLengths = "3,4,5";
+        spawnedList = new List<string>();
+    }
+    public void Restart(){
+        InitVariables();
+    }
     private int GetNumOfLetters()
     {
         switch (possibleWordLengths)

@@ -26,7 +26,6 @@ public class GameUIController : MonoBehaviour
 	public void StartGame()
 	{
 		InitVariables();
-		// Start game
 	}
 
 	private void InitVariables()
@@ -81,7 +80,7 @@ public class GameUIController : MonoBehaviour
 	public void CoverWords(int amount)
 	{
 		RectTransform rt = cover.GetComponent<RectTransform>();
-		rt.sizeDelta = new Vector2(rt.sizeDelta.x, rt.sizeDelta.y +(amount*100));
+		rt.sizeDelta = new Vector2(rt.sizeDelta.x, amount*100);
 	}
 	public void PauseGame(){
 		if(pauseButton.isOn)
@@ -106,10 +105,11 @@ public class GameUIController : MonoBehaviour
 	}
 	public void RestartGame(){
 		pauseButton.isOn = false;
-		gameController.StartGame();
+		gameController.NewGame();
 	}
 	public void ToMainMenu(){
 		pauseButton.isOn = false;
+		gameController.NewGame();
 		GameManager.Instance.ChangeState(Constants.GameStates.MainMenu);
 	}
 }

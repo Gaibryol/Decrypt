@@ -1,15 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class GameController : MonoBehaviour
+public class GameController : MonoBehaviour, IPointerClickHandler
 {
 	[SerializeField] public GameObject WordPrefab;
 	[SerializeField] public Canvas Canvas;
+	[SerializeField] private GameObject Hack1;
+	[SerializeField] private GameObject Hack2;
 
 	[SerializeField] private float wordsYOffset;
 	[SerializeField] private float bottomLineY;
 	[SerializeField] private float spawnY;
+
+
 
 	private GameUIController gameUI;
 
@@ -19,7 +24,6 @@ public class GameController : MonoBehaviour
 	private int maximumNumLines;
 	private int defaultMaxLines;
 	private float playerPoints;
-	private int completedLines;
 	private float countDownTime;
 	private float decryptTime;
 
@@ -35,8 +39,8 @@ public class GameController : MonoBehaviour
 	{
 		InitVariables();
 		gameUI.StartGame();
-		// Start game
-		SpawnWord();
+		HacksManager.Instance.AddEarlyHack("F");
+		Debug.Log(maximumNumLines);
 	}
 
 	private void InitVariables()
@@ -47,7 +51,6 @@ public class GameController : MonoBehaviour
 		maximumNumLines = 6;
 		defaultMaxLines = 6;
 		playerPoints = 0f;
-		completedLines = 0;
 		countDownTime = Constants.MaxTime;
 		decryptTime = Constants.DecryptTime;
 
@@ -88,9 +91,26 @@ public class GameController : MonoBehaviour
 			gameUI.DisplayWarning(true);
 		}
 	}
+	private void ResetList()
+	{
+		StopAllCoroutines();
+		if(lines != null){
+			for(int i = lines.Count-1; i>=0; i--){
+				Destroy(lines[i]);
+			}
+		}
+	}
 
-	public IEnumerator MoveWord(GameObject newWord){
+	public void NewGame()
+	{
+		ResetList();
+		InitVariables();
+		HacksManager.Instance.InitVariables();
+		HacksManager.Instance.InitVariables();
+	}
 
+	public IEnumerator MoveWord(GameObject newWord)
+  {
 		Vector3 newPos = new Vector3(0, bottomLineY + ((newWord.GetComponent<RectTransform>().rect.height + wordsYOffset) * lines.Count) + ((newWord.GetComponent<RectTransform>().rect.height + wordsYOffset) * (maximumNumLines - defaultMaxLines)));
 
 		int currentNumWords = lines.Count;
@@ -108,6 +128,9 @@ public class GameController : MonoBehaviour
 				newWord.transform.localPosition = Vector3.MoveTowards(newWord.transform.localPosition, newPos, 1f);
 			}
 			yield return null;
+		}
+		foreach(Transform child in newWord.transform){
+			child.GetComponent<Letter>().RevealLetter();
 		}
 		newWord.GetComponent<Word>().IsMoving = false;
 		newWord.GetComponent<Word>().IsInteractable = true;
@@ -132,6 +155,7 @@ public class GameController : MonoBehaviour
 				subState = state;
 				break;
 			case(Constants.SubState.Hack):
+				ResetList();
 				subState = state;
 				break;
 		}
@@ -159,11 +183,9 @@ public class GameController : MonoBehaviour
 			lines[i].transform.localPosition = new Vector3(lines[i].transform.localPosition.x, lines[i].transform.localPosition.y - word.GetComponent<RectTransform>().rect.height - wordsYOffset);
 		}
 
-		completedLines += 1;
 		playerPoints += word.GetComponent<Word>().realWord.Length * Constants.PointsPerLetter * pointsMultiplier;
 
 		gameUI.OnWordExit();
-		gameUI.OnWordSolved(1000);
 
 		gameUI.OnWordSolved(Mathf.FloorToInt(playerPoints));
 		Destroy(word);
@@ -171,6 +193,21 @@ public class GameController : MonoBehaviour
 		if (lines.Count < maximumNumLines - warningLimit)
 		{
 			gameUI.DisplayWarning(false);
+		}
+		if(playerPoints >= 10000 & currentStage ==1)
+		{
+			ChangeSubState(Constants.SubState.Hack);
+			currentStage += 1;
+		}
+		else if(playerPoints >= 25000 & currentStage == 2)
+		{
+			ChangeSubState(Constants.SubState.Hack);
+			currentStage += 1;
+		}
+		else if(playerPoints >= 50000 & currentStage == 3)
+		{
+			ChangeSubState(Constants.SubState.Hack);
+			currentStage += 1;
 		}
 	}
 
@@ -225,6 +262,20 @@ public class GameController : MonoBehaviour
 			}
 		}
 		return longestWord;
+	}
+	public void OnPointerClick(PointerEventData eventData)
+	{
+		if(eventData.button == PointerEventData.InputButton.Right)
+		{
+			if(HacksManager.Instance.ActivatedG)
+			{
+				GameObject newWord = lines[lines.Count-1];
+				newWord.transform.localPosition = new Vector3(bottomLinePos.x, bottomLinePos.y + ((newWord.GetComponent<RectTransform>().rect.height + wordsYOffset) * (lines.Count-1)));
+			}
+			else if(true){
+				DecryptList();
+			}
+		}
 	}
 
 	public IEnumerator SpawnTwoWords()
