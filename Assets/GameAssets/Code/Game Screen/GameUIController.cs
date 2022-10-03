@@ -33,6 +33,7 @@ public class GameUIController : MonoBehaviour
 	{
 		brackets.SetActive(false);
 		indicator.SetActive(false);
+		cover.SetActive(false);
 
 		score.text = "0";
 		stage.text = "01";
@@ -82,11 +83,13 @@ public class GameUIController : MonoBehaviour
 		hack.SetActive(true);
 	}
 
-	public void CoverWords(int amount)
+	public void CoverWords(int numLinesShowing)
 	{
-		RectTransform rt = cover.GetComponent<RectTransform>();
-		rt.sizeDelta = new Vector2(rt.sizeDelta.x, amount*100);
+		float newYAddition = (((gameController.WordPrefab.GetComponent<RectTransform>().rect.height + gameController.WordsYOffset) * (8 - gameController.MaximumNumLines)) + (gameController.WordPrefab.GetComponent<RectTransform>().rect.height + gameController.WordsYOffset) * (numLinesShowing - 1));
+		cover.SetActive(true);
+		cover.transform.localPosition = new Vector3(cover.transform.localPosition.x, cover.transform.localPosition.y + newYAddition);
 	}
+
 	public void PauseGame()
 	{
 		SoundEffectsManager.Instance.PlayOneShotSFX("ClickSound");

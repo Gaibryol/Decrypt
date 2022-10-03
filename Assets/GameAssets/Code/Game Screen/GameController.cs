@@ -10,7 +10,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 	[SerializeField] private GameObject Hack1;
 	[SerializeField] private GameObject Hack2;
 
-	[SerializeField] private float wordsYOffset;
+	[SerializeField] public float WordsYOffset;
 	[SerializeField] private float bottomLineY;
 	[SerializeField] private float spawnY;
 
@@ -19,7 +19,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 	private List<GameObject> lines;
 
 	private int abilityUsages;
-	private int maximumNumLines;
+	public int MaximumNumLines;
 	private int defaultMaxLines;
 	private float playerPoints;
 	private float countDownTime;
@@ -44,7 +44,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 		lines = new List<GameObject>();
 
 		abilityUsages = 1;
-		maximumNumLines = 6;
+		MaximumNumLines = 6;
 		defaultMaxLines = 6;
 		playerPoints = 0f;
 		countDownTime = Constants.MaxTime;
@@ -79,12 +79,12 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 
 		gameUI.OnSpawnWord();
 
-		if (lines.Count > maximumNumLines)
+		if (lines.Count > MaximumNumLines)
 		{
 			//Game Over(To Restart Screen)
 			Debug.Log("GameOver");
 		}
-		else if (lines.Count >= maximumNumLines - warningLimit)
+		else if (lines.Count >= MaximumNumLines - warningLimit)
 		{
 			SoundEffectsManager.Instance.PlayOneShotSFX("Warning");
 			gameUI.DisplayWarning(true);
@@ -112,17 +112,17 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 	public IEnumerator MoveWord(GameObject newWord)
 	{
 		Vector3 newPos = new Vector3();
-		if (maximumNumLines > defaultMaxLines)
+		if (MaximumNumLines > defaultMaxLines)
 		{
-			newPos = new Vector3(0, bottomLineY + ((newWord.GetComponent<RectTransform>().rect.height + wordsYOffset) * lines.Count) - ((newWord.GetComponent<RectTransform>().rect.height + wordsYOffset) * (maximumNumLines - defaultMaxLines)));
+			newPos = new Vector3(0, bottomLineY + ((newWord.GetComponent<RectTransform>().rect.height + WordsYOffset) * lines.Count) - ((newWord.GetComponent<RectTransform>().rect.height + WordsYOffset) * (MaximumNumLines - defaultMaxLines)));
 		}
-		else if (maximumNumLines < defaultMaxLines)
+		else if (MaximumNumLines < defaultMaxLines)
 		{
-			newPos = new Vector3(0, bottomLineY + ((newWord.GetComponent<RectTransform>().rect.height + wordsYOffset) * lines.Count) + ((newWord.GetComponent<RectTransform>().rect.height + wordsYOffset) * (defaultMaxLines - maximumNumLines)));
+			newPos = new Vector3(0, bottomLineY + ((newWord.GetComponent<RectTransform>().rect.height + WordsYOffset) * lines.Count) + ((newWord.GetComponent<RectTransform>().rect.height + WordsYOffset) * (defaultMaxLines - MaximumNumLines)));
 		}
 		else
 		{
-			newPos = new Vector3(0, bottomLineY + ((newWord.GetComponent<RectTransform>().rect.height + wordsYOffset) * lines.Count));
+			newPos = new Vector3(0, bottomLineY + ((newWord.GetComponent<RectTransform>().rect.height + WordsYOffset) * lines.Count));
 		}
 		
 		int currentNumWords = lines.Count;
@@ -133,7 +133,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 			{
 				if (lines.Count != currentNumWords)
 				{
-					newPos = new Vector3(newPos.x, newPos.y - ((newWord.GetComponent<RectTransform>().rect.height + wordsYOffset) * (currentNumWords - lines.Count)));
+					newPos = new Vector3(newPos.x, newPos.y - ((newWord.GetComponent<RectTransform>().rect.height + WordsYOffset) * (currentNumWords - lines.Count)));
 					currentNumWords = lines.Count;
 				}
 
@@ -194,7 +194,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 		// Need to bump all the other words down
 		for (; i < lines.Count; i++)
 		{
-			lines[i].transform.localPosition = new Vector3(lines[i].transform.localPosition.x, lines[i].transform.localPosition.y - word.GetComponent<RectTransform>().rect.height - wordsYOffset);
+			lines[i].transform.localPosition = new Vector3(lines[i].transform.localPosition.x, lines[i].transform.localPosition.y - word.GetComponent<RectTransform>().rect.height - WordsYOffset);
 		}
 
 		playerPoints += word.GetComponent<Word>().realWord.Length * Constants.PointsPerLetter * pointsMultiplier;
@@ -204,7 +204,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 		gameUI.OnWordSolved(Mathf.FloorToInt(playerPoints));
 		Destroy(word);
 
-		if (lines.Count < maximumNumLines - warningLimit)
+		if (lines.Count < MaximumNumLines - warningLimit)
 		{
 			gameUI.DisplayWarning(false);
 		}
@@ -264,7 +264,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 
 	public void ChangeMaxLife(int num)
 	{
-		maximumNumLines += num;
+		MaximumNumLines += num;
 	}
 
 	private GameObject GetLongestWord()
@@ -289,7 +289,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 			if(HacksManager.Instance.ActivatedG)
 			{
 				GameObject newWord = lines[lines.Count-1];
-				newWord.transform.localPosition = new Vector3(0, bottomLineY + ((newWord.GetComponent<RectTransform>().rect.height + wordsYOffset) * lines.Count) + ((newWord.GetComponent<RectTransform>().rect.height + wordsYOffset) * Mathf.Abs(maximumNumLines - defaultMaxLines)));
+				newWord.transform.localPosition = new Vector3(0, bottomLineY + ((newWord.GetComponent<RectTransform>().rect.height + WordsYOffset) * lines.Count) + ((newWord.GetComponent<RectTransform>().rect.height + WordsYOffset) * Mathf.Abs(MaximumNumLines - defaultMaxLines)));
 			}
 			else if(true){
 				DecryptList();
