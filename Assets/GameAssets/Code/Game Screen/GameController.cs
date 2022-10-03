@@ -44,7 +44,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 		lines = new List<GameObject>();
 
 		abilityUsages = 1;
-		maximumNumLines = 8;
+		maximumNumLines = 6;
 		defaultMaxLines = 6;
 		playerPoints = 0f;
 		countDownTime = Constants.MaxTime;
@@ -62,6 +62,8 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 
 	private void SpawnWord()
 	{
+		SoundEffectsManager.Instance.PlayOneShotSFX("WordSpawned");
+
 		List<string> words = WordsManager.Instance.GetScrambledWord();
 
 		GameObject newWord = Instantiate(WordPrefab, Canvas.transform);
@@ -84,6 +86,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 		}
 		else if (lines.Count >= maximumNumLines - warningLimit)
 		{
+			SoundEffectsManager.Instance.PlayOneShotSFX("Warning");
 			gameUI.DisplayWarning(true);
 		}
 	}
@@ -206,16 +209,19 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 		}
 		if(playerPoints >= 10000 & currentStage ==1)
 		{
+			SoundEffectsManager.Instance.PlayOneShotSFX("StageEnded");
 			ChangeSubState(Constants.SubState.Hack);
 			currentStage += 1;
 		}
 		else if(playerPoints >= 25000 & currentStage == 2)
 		{
+			SoundEffectsManager.Instance.PlayOneShotSFX("StageEnded");
 			ChangeSubState(Constants.SubState.Hack);
 			currentStage += 1;
 		}
 		else if(playerPoints >= 50000 & currentStage == 3)
 		{
+			SoundEffectsManager.Instance.PlayOneShotSFX("StageEnded");
 			ChangeSubState(Constants.SubState.Hack);
 			currentStage += 1;
 		}

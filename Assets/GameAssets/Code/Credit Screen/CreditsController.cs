@@ -9,6 +9,7 @@ public class CreditsController : MonoBehaviour
 
 	private void OnReturnPressed()
 	{
+		SoundEffectsManager.Instance.PlayOneShotSFX("ClickSound");
 		GameManager.Instance.ChangeState(Constants.GameStates.MainMenu);
 	}
 

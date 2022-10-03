@@ -113,11 +113,13 @@ public class Word : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
 	public void OnPickUpLetter()
 	{
+		SoundEffectsManager.Instance.PlayOneShotSFX("PickupLetter");
 		horizontalLayoutGroup.enabled = false;
 	}
 
 	public void OnPutDownLetter()
 	{
+		SoundEffectsManager.Instance.PlayOneShotSFX("PutdownLetter");
 		horizontalLayoutGroup.enabled = true;
 	}
 

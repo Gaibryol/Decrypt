@@ -19,7 +19,8 @@ public class SettingsManager : MonoBehaviour
 
 	[SerializeField, Header("Audio")] private AudioMixer mixer;
 	[SerializeField] private AudioClip theme;
-	[SerializeField, Range(-80, 20)] private float normalVolume;
+	[SerializeField, Range(-80, 20)] private float normalMusicVolume;
+	[SerializeField, Range(-80, 20)] private float normalSoundVolume;
 
 	private bool musicState;
 	private bool soundState;
@@ -49,8 +50,8 @@ public class SettingsManager : MonoBehaviour
 
 	private void Start()
 	{
-		mixer.SetFloat("Music", normalVolume);
-		mixer.SetFloat("Sound", normalVolume);
+		mixer.SetFloat("Music", normalMusicVolume);
+		mixer.SetFloat("Sound", normalSoundVolume);
 	}
 
 	private void AdjustUI()
@@ -66,16 +67,20 @@ public class SettingsManager : MonoBehaviour
 
 	public void ToggleMusic(bool isOn)
 	{
+		SoundEffectsManager.Instance.PlayOneShotSFX("ClickSound");
+
 		musicState = isOn;
-		mixer.SetFloat("Music", isOn ? normalVolume : -80f);
+		mixer.SetFloat("Music", isOn ? normalMusicVolume : -80f);
 
 		AdjustUI();
 	}
 
 	public void ToggleSound(bool isOn)
 	{
+		SoundEffectsManager.Instance.PlayOneShotSFX("ClickSound");
+
 		soundState = isOn;
-		mixer.SetFloat("Sound", isOn ? normalVolume : -80f);
+		mixer.SetFloat("Sound", isOn ? normalSoundVolume : -80f);
 
 		AdjustUI();
 	}

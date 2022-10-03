@@ -16,11 +16,15 @@ public class TitleScreenController : MonoBehaviour
 	private void StartGame()
 	{
 		GameManager.Instance.ChangeState(Constants.GameStates.Game);
+
+		SoundEffectsManager.Instance.PlayOneShotSFX("StartGame");
 	}
 
 	private void OpenCredits()
 	{
 		GameManager.Instance.ChangeState(Constants.GameStates.Credits);
+
+		SoundEffectsManager.Instance.PlayOneShotSFX("ClickSound");
 	}
 
 	private void ExitGame()
@@ -30,6 +34,7 @@ public class TitleScreenController : MonoBehaviour
 
 	public void OnHoverEnter(GameObject obj)
 	{
+		SoundEffectsManager.Instance.PlayOneShotSFX("ClickSound");
 		selector.SetActive(true);
 
 		selector.transform.localPosition = new Vector3(selector.transform.localPosition.x, obj.transform.localPosition.y + yOffset);
