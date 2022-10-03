@@ -15,6 +15,7 @@ public class GameUIController : MonoBehaviour
 	[SerializeField] private GameObject cover;
 	[SerializeField] private GameObject warning;
 	[SerializeField] private GameObject pause;
+	[SerializeField] private GameObject hack;
 
 	[SerializeField, Header("Indicator Animations")] private Animator indicatorAnim;
 
@@ -75,6 +76,10 @@ public class GameUIController : MonoBehaviour
 	{
 		int newScore = amount;
 		score.text = newScore.ToString();
+	}
+
+	public void DisplayHacks(){
+		hack.SetActive(true);
 	}
 
 	public void CoverWords(int amount)

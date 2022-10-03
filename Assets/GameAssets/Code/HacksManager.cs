@@ -152,13 +152,13 @@ public class HacksManager : MonoBehaviour
         }
     }
 
-    public List<string> GenerateHacks(string stage)
+    public List<string> GenerateHacks(int stage)
     {
         bool running = true;
         string hack1 = null;
         string hack2 = null;
         List<string> possibleHacks;
-        if(stage == "Early")
+        if(stage != 3)
 		{
             possibleHacks = possibleEarlyHacks;
         }
