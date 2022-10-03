@@ -8,8 +8,8 @@ public class GameController : MonoBehaviour
 	[SerializeField] public Canvas Canvas;
 
 	[SerializeField] private float wordsYOffset;
-	[SerializeField] private Vector3 bottomLinePos;
-	[SerializeField] private Vector3 spawnPos;
+	[SerializeField] private float bottomLineY;
+	[SerializeField] private float spawnY;
 
 	private GameUIController gameUI;
 
@@ -17,6 +17,7 @@ public class GameController : MonoBehaviour
 
 	private int abilityUsages;
 	private int maximumNumLines;
+	private int defaultMaxLines;
 	private float playerPoints;
 	private int completedLines;
 	private float countDownTime;
@@ -24,7 +25,6 @@ public class GameController : MonoBehaviour
 
 	private int warningLimit;
 	private float pointsMultiplier;
-
 
 	private Constants.SubState subState;
 
@@ -45,6 +45,7 @@ public class GameController : MonoBehaviour
 
 		abilityUsages = 1;
 		maximumNumLines = 6;
+		defaultMaxLines = 6;
 		playerPoints = 0f;
 		completedLines = 0;
 		countDownTime = Constants.MaxTime;
@@ -66,14 +67,14 @@ public class GameController : MonoBehaviour
 
 		GameObject newWord = Instantiate(WordPrefab, Canvas.transform);
 		newWord.transform.SetParent(Canvas.transform.Find("GameScreen").transform);
-		newWord.transform.localPosition = spawnPos;
+		newWord.transform.localPosition = new Vector3(newWord.transform.localPosition.x, spawnY);
 
 		newWord.GetComponent<Word>().SpawnWord(this, words[0], words[1], currentStage, alternateColor);
 
 		alternateColor = !alternateColor;
 
-		StartCoroutine(MoveWord(newWord));
 		lines.Add(newWord);
+		StartCoroutine(MoveWord(newWord));
 
 		gameUI.OnSpawnWord();
 
@@ -90,10 +91,22 @@ public class GameController : MonoBehaviour
 
 	public IEnumerator MoveWord(GameObject newWord){
 
-		Vector3 newPos = new Vector3(bottomLinePos.x, bottomLinePos.y + ((newWord.GetComponent<RectTransform>().rect.height + wordsYOffset) * lines.Count));
-		while(newWord.transform.localPosition != newPos){
+		Vector3 newPos = new Vector3(0, bottomLineY + ((newWord.GetComponent<RectTransform>().rect.height + wordsYOffset) * lines.Count) + ((newWord.GetComponent<RectTransform>().rect.height + wordsYOffset) * (maximumNumLines - defaultMaxLines)));
+
+		int currentNumWords = lines.Count;
+
+		while (newWord.transform.localPosition != newPos)
+		{
 			if(subState != Constants.SubState.Pause)
-				newWord.transform.localPosition = Vector3.MoveTowards(newWord.transform.localPosition, newPos, 0.5f);
+			{
+				if (lines.Count != currentNumWords)
+				{
+					newPos = new Vector3(newPos.x, newPos.y - ((newWord.GetComponent<RectTransform>().rect.height + wordsYOffset) * (currentNumWords - lines.Count)));
+					currentNumWords = lines.Count;
+				}
+
+				newWord.transform.localPosition = Vector3.MoveTowards(newWord.transform.localPosition, newPos, 1f);
+			}
 			yield return null;
 		}
 		newWord.GetComponent<Word>().IsMoving = false;
