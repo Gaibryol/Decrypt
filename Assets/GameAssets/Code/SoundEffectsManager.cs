@@ -16,6 +16,7 @@ public class SoundEffectsManager : MonoBehaviour
 	[SerializeField, Header("Sound Effects")] private AudioClip clickSound;
 	[SerializeField] private AudioClip gameEnded; // TODO
 	[SerializeField] private AudioClip hackSelected; // TODO
+	[SerializeField] private AudioClip hover;
 	[SerializeField] private AudioClip pickupLetter;
 	[SerializeField] private AudioClip putdownLetter;
 	[SerializeField] private AudioClip stageEnded;
@@ -55,6 +56,9 @@ public class SoundEffectsManager : MonoBehaviour
 				break;
 			case "HackSelected":
 				sfxSource.PlayOneShot(hackSelected);
+				break;
+			case "Hover":
+				sfxSource.PlayOneShot(hover);
 				break;
 			case "PickupLetter":
 				sfxSource.PlayOneShot(pickupLetter);
