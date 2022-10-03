@@ -4,24 +4,24 @@ using UnityEngine;
 
 public class HacksManager : MonoBehaviour
 {
-    public List<string> possibleEarlyHacks = new List<string>(){"A","B","C","D","E","F","G","H","I"};
-    public List<string> possibleLateHacks = new List<string>(){"J","K","L","M","N","O","P",};
-    public List<string> ActivatedHacks = new List<string>();
+    public List<string> possibleEarlyHacks;
+    public List<string> possibleLateHacks;
+    public List<string> ActivatedHacks;
     public static HacksManager Instance { get; private set; }
 
 	[SerializeField] private GameController gameController;
 	[SerializeField] private GameUIController gameUIController;
 
     #region Bool Variables
-    public bool ActivatedA = false;
-    public bool ActivatedB = false;
-    public bool ActivatedC = false;
-    public bool ActivatedD = false;
-    public bool ActivatedE = false;
-    public bool ActivatedF = false;
-    public bool ActivatedG = false;
-    public bool ActivatedH = false;
-    public bool ActivatedI = false;
+    public bool ActivatedA;
+    public bool ActivatedB;
+    public bool ActivatedC;
+    public bool ActivatedD;
+    public bool ActivatedE;
+    public bool ActivatedF;
+    public bool ActivatedG;
+    public bool ActivatedH;
+    public bool ActivatedI;
     #endregion 
 
     private void Awake()
@@ -30,8 +30,24 @@ public class HacksManager : MonoBehaviour
 		{
             Instance = this;
         }
+        InitVariables();
     }
 
+    public void InitVariables()
+    {
+        possibleEarlyHacks = new List<string>(){"A","B","C","D","E","F","G","H","I"};
+        possibleLateHacks = new List<string>(){"J","K","L","M","N","O","P",};
+        ActivatedHacks = new List<string>();
+        ActivatedA = false;
+        ActivatedB = false;
+        ActivatedC = false;
+        ActivatedD = false;
+        ActivatedE = false;
+        ActivatedF = false;
+        ActivatedG = false;
+        ActivatedH = false;
+        ActivatedI = false;
+    }
     public void AddEarlyHack(string hackLetter)
     {
         possibleEarlyHacks.Remove(hackLetter);
@@ -71,7 +87,7 @@ public class HacksManager : MonoBehaviour
                 ActivatedE = true;
 				gameController.SetDecryptAmount(4);
                 break;
-            case Constants.HackF://Able to view letters as they are falling
+            case Constants.HackF://Finished
                 ActivatedF = true;
 				gameController.ChangeMaxLife(-1);
                 break;

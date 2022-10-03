@@ -18,6 +18,8 @@ public class Letter : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 
 	private bool isCovered;
 	private bool canMove;
+	private bool specialLetter;
+	private Constants.LetterColors characterColor;
 
 	private void Awake()
 	{
@@ -25,7 +27,6 @@ public class Letter : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 		word = transform.parent.GetComponent<Word>();
 		rectTransform = GetComponent<RectTransform>();
 		isDown = true;
-
 		isCovered = false;
 	}
 
@@ -37,27 +38,34 @@ public class Letter : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 		}
 	}
 
-	public void Construct(string letter, bool covered, bool move, Constants.LetterColors color)
+	public void Construct(string letter, bool covered, bool move, Constants.LetterColors color, bool special)
 	{
+		specialLetter = special;
 		Character = letter;
 		isCovered = covered;
 		canMove = move;
-
-		if (!isCovered)
+		if(!canMove)
 		{
-			image.sprite = LettersManager.Instance.GetSprite(color, letter);
+			characterColor = Constants.LetterColors.Green;
 		}
 		else
 		{
-			image.sprite = LettersManager.Instance.GetTileCoverSprite();;
+			characterColor = color;
+		}
+
+		if (!isCovered)
+		{
+			RevealLetter();
+		}
+		else
+		{
+			image.sprite = LettersManager.Instance.GetTileCoverSprite();
 		}
 	}
 
 	public void OnBeginDrag(PointerEventData eventData)
 	{
 		if(!word.IsInteractable) return;
-		
-		if (!canMove) return;
 
 		word.OnPickUpLetter();
 
@@ -70,8 +78,6 @@ public class Letter : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 	public void OnEndDrag(PointerEventData eventData)
 	{
 		if(!word.IsInteractable) return;
-
-		if (!canMove) return;
 
 		word.OnPutDownLetter();
 		rectTransform.SetParent(word.transform);
@@ -126,11 +132,15 @@ public class Letter : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 	{
 		
 	}
-
+	public void RevealLetter()
+	{
+		if(!specialLetter)
+			image.sprite = LettersManager.Instance.GetSprite(characterColor, Character);
+	}
 	public void OnPointerEnter(PointerEventData eventData)
 	{
 		if(HacksManager.Instance.ActivatedE){
-			image.sprite = LettersManager.Instance.GetSprite(Constants.LetterColors.Orange, Character);
+			image.sprite = LettersManager.Instance.GetSprite(characterColor, Character);
 		}
 	}
 

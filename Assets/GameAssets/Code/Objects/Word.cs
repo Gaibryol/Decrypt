@@ -56,17 +56,25 @@ public class Word : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 		{
 			GameObject newObj = Instantiate(letterPrefab, transform);
 			Letter lScript = newObj.GetComponent<Letter>();
-			if(HacksManager.Instance.ActivatedC & i == randomNumber)
+			if(HacksManager.Instance.ActivatedA & i == 0){
+				Debug.Log("hello");
+				lScript.Construct(scrambledWord[i].ToString(), true, false, color,false);
+			}
+			else if(HacksManager.Instance.ActivatedB & i == scrambledWord.Length -1)
 			{
-				lScript.Construct(scrambledWord[i].ToString(), true, true, color);
+				lScript.Construct(scrambledWord[i].ToString(), true, false, color,false);
+			}
+			else if(HacksManager.Instance.ActivatedC & i == randomNumber)
+			{
+				lScript.Construct(scrambledWord[i].ToString(), true, true, color,true);
 			}
 			else if(HacksManager.Instance.ActivatedE)
 			{
-				lScript.Construct(scrambledWord[i].ToString(), true, true, color);
+				lScript.Construct(scrambledWord[i].ToString(), true, true, color,true);
 			}
 			else
 			{
-				lScript.Construct(scrambledWord[i].ToString(), false, true, color);
+				lScript.Construct(scrambledWord[i].ToString(), true, true, color,false);
 			}
 		}
 		horizontalLayoutGroup = GetComponent<HorizontalLayoutGroup>();
@@ -129,16 +137,9 @@ public class Word : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 	{
 		if(eventData.button == PointerEventData.InputButton.Right)
 		{
-			if(HacksManager.Instance.ActivatedE)
+			if(HacksManager.Instance.ActivatedE & IsInteractable)
 			{
 				gameController.DecryptWord(this.gameObject);
-			}
-			else if(HacksManager.Instance.ActivatedG)
-			{
-				//Drop Instantly
-			}
-			else if(HacksManager.Instance.ActivatedI){
-				gameController.DecryptList();
 			}
 		}
 	}
