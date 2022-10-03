@@ -61,7 +61,7 @@ public class HacksManager : MonoBehaviour
                 }
                 possibleEarlyHacks.Remove("B");
                 ActivatedA = true;
-				gameUIController.CoverWords(7);
+				gameUIController.CoverWords(1);
                 break;
             case Constants.HackB://Finished
                 if(possibleEarlyHacks.Contains("D"))
@@ -70,7 +70,7 @@ public class HacksManager : MonoBehaviour
                 }
                 possibleEarlyHacks.Remove("A");
                 ActivatedB = true;
-				gameUIController.CoverWords(7);
+				gameUIController.CoverWords(1);
                 break;
             case Constants.HackC://Finished
                 possibleEarlyHacks.Remove("H");
@@ -80,7 +80,7 @@ public class HacksManager : MonoBehaviour
             case Constants.HackD://Finished
                 ActivatedD = true;
 				gameController.ChangeMaxLife(1);
-				gameUIController.CoverWords(5);
+				gameUIController.CoverWords(3);
                 break;
             case Constants.HackE://Finished
                 possibleEarlyHacks.Remove("G");
