@@ -61,6 +61,7 @@ public class HacksManager : MonoBehaviour
                     possibleEarlyHacks.Remove("D");
                 }
                 possibleEarlyHacks.Remove("B");
+                possibleLateHacks.Remove("J");
                 ActivatedA = true;
 				gameUIController.CoverWords(1);
                 break;
@@ -70,6 +71,7 @@ public class HacksManager : MonoBehaviour
                     possibleEarlyHacks.Remove("D");
                 }
                 possibleEarlyHacks.Remove("A");
+                possibleLateHacks.Remove("J");
                 ActivatedB = true;
 				gameUIController.CoverWords(1);
                 break;
