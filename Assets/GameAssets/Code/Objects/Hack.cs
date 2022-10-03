@@ -12,12 +12,13 @@ public class Hack : MonoBehaviour , IPointerEnterHandler, IPointerExitHandler
     [SerializeField] private TMP_Text positiveText;
     [SerializeField] private TMP_Text negativeText;
     [SerializeField] private GameObject arrow;
-    public void SetHack(string positive,string negative, string hackLetter, int stageLevel, GameController gameController){
+    public void SetHack(string hackLetter, int stageLevel, GameController gameController){
         hack = hackLetter;
         stage = stageLevel;
         gc = gameController;
-        positiveText.text = positive;
-        negativeText.text = negative;
+        string[] decription = HacksManager.Instance.GetDescription(hackLetter).Split("|");
+        positiveText.text = decription[0];
+        negativeText.text = decription[1];
 
     }
     public void OnPointerEnter(PointerEventData eventData)
@@ -32,14 +33,15 @@ public class Hack : MonoBehaviour , IPointerEnterHandler, IPointerExitHandler
         this.gameObject.transform.localScale = new Vector3(0.6f,0.6f,0.6f);
 	}
     public void Clicked(){
-        if(stage == 3)
-        {
-            HacksManager.Instance.AddLateHack(hack);
-        }else
+        if(stage != 3)
         {
             HacksManager.Instance.AddEarlyHack(hack);
         }
-        gc.ChangeSubState(Constants.SubState.Playing);
+        else
+        {
+            HacksManager.Instance.AddLateHack(hack);
+        }
         this.transform.parent.gameObject.SetActive(false);
+        gc.ChangeSubState(Constants.SubState.Playing);
     }
 }

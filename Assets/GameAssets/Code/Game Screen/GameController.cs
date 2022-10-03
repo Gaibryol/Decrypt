@@ -147,26 +147,27 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 	}
 
 	public void ChangeSubState(Constants.SubState state){
+		subState = state;
 		switch(state){
 			case(Constants.SubState.Playing):
-				subState = state;
 				for(int i = 0; i<lines.Count;i++){
 					if(lines[i].GetComponent<Word>().IsMoving!= true)
 						lines[i].GetComponent<Word>().IsInteractable = true;
 				}
 				break;
 			case(Constants.SubState.Pause):
-				subState = state;
 				for(int i = 0; i<lines.Count;i++){
 					lines[i].GetComponent<Word>().IsInteractable = false;
 				}
 				break;
 			case(Constants.SubState.Help):
-				subState = state;
 				break;
 			case(Constants.SubState.Hack):
 				ResetList();
-				subState = state;
+				List<string> hacks = HacksManager.Instance.GenerateHacks(currentStage);
+				Hack1.GetComponent<Hack>().SetHack(hacks[0],currentStage,this);
+				Hack2.GetComponent<Hack>().SetHack(hacks[1],currentStage,this);
+				gameUI.DisplayHacks();
 				break;
 		}
 	}
@@ -204,13 +205,15 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 		{
 			gameUI.DisplayWarning(false);
 		}
-		if(playerPoints >= 10000 & currentStage ==1)
+		if(playerPoints >= 10000 & currentStage == 1)
 		{
+			WordsManager.Instance.ChangePossibleWordLength("4,5,6");
 			ChangeSubState(Constants.SubState.Hack);
 			currentStage += 1;
 		}
 		else if(playerPoints >= 25000 & currentStage == 2)
 		{
+			WordsManager.Instance.ChangePossibleWordLength("5,6,7");
 			ChangeSubState(Constants.SubState.Hack);
 			currentStage += 1;
 		}
