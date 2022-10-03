@@ -74,6 +74,7 @@ public class HacksManager : MonoBehaviour
                 break;
             case Constants.HackC://Finished
                 possibleEarlyHacks.Remove("H");
+                possibleEarlyHacks.Remove("E");
                 ActivatedC = true;
                 break;
             case Constants.HackD://Finished
@@ -83,12 +84,15 @@ public class HacksManager : MonoBehaviour
                 break;
             case Constants.HackE://Finished
                 possibleEarlyHacks.Remove("G");
+                possibleEarlyHacks.Remove("F");
+                possibleEarlyHacks.Remove("C");
                 possibleEarlyHacks.Remove("I");
                 ActivatedE = true;
 				gameController.SetDecryptAmount(4);
                 break;
             case Constants.HackF://Finished
                 ActivatedF = true;
+                possibleEarlyHacks.Remove("E");
 				gameController.ChangeMaxLife(-1);
                 break;
             case Constants.HackG:
