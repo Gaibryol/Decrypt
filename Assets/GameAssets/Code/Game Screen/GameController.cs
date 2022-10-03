@@ -46,7 +46,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 		abilityUsages = 1;
 		maximumNumLines = 6;
 		defaultMaxLines = 6;
-		playerPoints = 0f;
+		playerPoints = 9000f;//Reset to 0f
 		countDownTime = Constants.MaxTime;
 		decryptTime = Constants.DecryptTime;
 
@@ -54,7 +54,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 		alternateColor = false;
 
 		warningLimit = Constants.WarningLimit;
-		pointsMultiplier = 1f;
+		pointsMultiplier = 3f;// Reset To 1f
 		subState = Constants.SubState.Playing;
 
 		gameUI = GetComponent<GameUIController>();
@@ -96,9 +96,13 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 		if (lines != null)
 		{
 			for(int i = lines.Count-1; i>=0; i--){
-				Destroy(lines[i]);
+				GameObject tempObj = lines[i];
+				lines.Remove(lines[i]);
+				Destroy(tempObj);
 			}
 		}
+		countDownTime = Constants.MaxTime;
+		decryptTime = Constants.DecryptTime;
 	}
 
 	public void NewGame()
@@ -153,7 +157,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 		subState = state;
 		switch(state){
 			case(Constants.SubState.Playing):
-				for(int i = 0; i<lines.Count;i++){
+				for(int i = 0; i <lines.Count;i++){
 					if(lines[i].GetComponent<Word>().IsMoving!= true)
 						lines[i].GetComponent<Word>().IsInteractable = true;
 				}
@@ -214,6 +218,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 			SoundEffectsManager.Instance.PlayOneShotSFX("StageEnded");
 			ChangeSubState(Constants.SubState.Hack);
 			currentStage += 1;
+			gameUI.OnStageComplete(currentStage);
 		}
 		else if(playerPoints >= 25000 & currentStage == 2)
 		{
@@ -221,12 +226,14 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 			SoundEffectsManager.Instance.PlayOneShotSFX("StageEnded");
 			ChangeSubState(Constants.SubState.Hack);
 			currentStage += 1;
+			gameUI.OnStageComplete(currentStage);
 		}
 		else if(playerPoints >= 50000 & currentStage == 3)
 		{
 			SoundEffectsManager.Instance.PlayOneShotSFX("StageEnded");
 			ChangeSubState(Constants.SubState.Hack);
 			currentStage += 1;
+			gameUI.OnStageComplete(currentStage);
 		}
 	}
 

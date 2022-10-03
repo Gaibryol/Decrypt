@@ -79,6 +79,7 @@ public class GameUIController : MonoBehaviour
 	}
 
 	public void DisplayHacks(){
+		hack.transform.SetAsLastSibling();
 		hack.SetActive(true);
 	}
 
