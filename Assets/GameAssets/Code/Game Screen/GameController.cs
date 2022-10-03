@@ -37,14 +37,14 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 	{
 		InitVariables();
 		gameUI.StartGame();
-		HacksManager.Instance.AddEarlyHack("E");
+		HacksManager.Instance.AddEarlyHack("G");
 	}
 
 	private void InitVariables()
 	{
 		lines = new List<GameObject>();
 
-		abilityUsages = 1;
+		abilityUsages = 0;
 		MaximumNumLines = 6;
 		defaultMaxLines = 6;
 		playerPoints = 0f;
@@ -83,7 +83,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 		if (lines.Count > MaximumNumLines)
 		{
 			StopAllCoroutines();
-			gameUI.CommpleteGame();
+			gameUI.CompleteGame();
 		}
 		else if (lines.Count > MaximumNumLines - warningLimit)
 		{
@@ -262,6 +262,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 		{
 			CorrectWord(word);
 			abilityUsages -= 1;
+			gameUI.LowerDiplayAbility();
 		}
 	}
 
@@ -275,6 +276,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 			}
 
 			abilityUsages -= 1;
+			gameUI.LowerDiplayAbility();
 		}
 	}
 

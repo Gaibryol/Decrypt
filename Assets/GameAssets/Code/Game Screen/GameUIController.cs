@@ -16,6 +16,7 @@ public class GameUIController : MonoBehaviour
 	[SerializeField] private GameObject hack;
 	[SerializeField] private GameObject complete;
 	[SerializeField] private GameObject abilityPrefab;
+	[SerializeField]private GameObject abilityParent;
 	[SerializeField] private List<GameObject> displayHacks;
 
 	[SerializeField, Header("Text")] private TMP_Text score;
@@ -32,7 +33,6 @@ public class GameUIController : MonoBehaviour
 	[SerializeField] private Toggle pauseButton;
 	[SerializeField] private Animator timer;
 	private GameController gameController;
-
 	private List<GameObject> abilityUses;
 
 	public void StartGame()
@@ -46,11 +46,8 @@ public class GameUIController : MonoBehaviour
 		indicator.SetActive(false);
 		cover.SetActive(false);
 
-		if(abilityUses != null)
-		{
-			for(int i = abilityUses.Count-1; i>=0;i--){
-				Destroy(abilityUses[i]);
-			}
+		foreach(Transform child in abilityParent.transform){
+			Destroy(child.gameObject);
 		}
 
 		abilityUses = new List<GameObject>();
@@ -109,13 +106,18 @@ public class GameUIController : MonoBehaviour
 		ability.text = text;
 		if(uses > 0){
 			for(int i = 0;i < uses;i++){
-				GameObject abilityUse = Instantiate(abilityPrefab,gameController.Canvas.transform);
-				abilityUse.transform.localPosition = new Vector3(-852 + (i*13),-430,0);
+				GameObject abilityUse = Instantiate(abilityPrefab,abilityParent.transform);
+				abilityUse.transform.localPosition = new Vector3(-852 + (i*13),-380,0);
 				abilityUses.Add(abilityUse);
 			}
 		}
 	}
-	public void CommpleteGame()
+	public void LowerDiplayAbility(){
+		GameObject temp = abilityUses[abilityUses.Count-1];
+		temp.GetComponent<Ability>().UseAbility();
+		abilityUses.Remove(temp);
+	}
+	public void CompleteGame()
 	{
 		gameController.ChangeSubState(Constants.SubState.Complete);
 		complete.transform.SetAsLastSibling();
