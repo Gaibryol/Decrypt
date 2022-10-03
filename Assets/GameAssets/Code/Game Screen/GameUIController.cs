@@ -16,9 +16,10 @@ public class GameUIController : MonoBehaviour
 	[SerializeField] private GameObject hack;
 	[SerializeField] private GameObject complete;
 	[SerializeField] private GameObject abilityPrefab;
-	[SerializeField]private GameObject abilityParent;
+	[SerializeField] private GameObject abilityParent;
 	[SerializeField] private List<GameObject> displayHacks;
 	[SerializeField] private Image baseLine;
+	[SerializeField] private GameObject tutorial;
 
 	private float startingBaselineY;
 
@@ -174,6 +175,23 @@ public class GameUIController : MonoBehaviour
 		{
 			gameController.ChangeSubState(Constants.SubState.Playing);
 			pause.SetActive(false);
+			timer.enabled = true;
+		}
+	}
+
+	public void OnToggleHelp()
+	{
+		if (helpButton.isOn)
+		{
+			gameController.ChangeSubState(Constants.SubState.Pause);
+			tutorial.transform.SetAsLastSibling();
+			tutorial.SetActive(true);
+			timer.enabled = false;
+		}
+		else
+		{
+			gameController.ChangeSubState(Constants.SubState.Playing);
+			tutorial.SetActive(false);
 			timer.enabled = true;
 		}
 	}

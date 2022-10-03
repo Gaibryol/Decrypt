@@ -44,7 +44,12 @@ public class GameManager : MonoBehaviour
 
 		if (GameState == Constants.GameStates.Game)
 		{
+			SoundEffectsManager.Instance.PlayGameMusic();
 			gameController.StartGame();
+		}
+		else if (GameState == Constants.GameStates.MainMenu)
+		{
+			SoundEffectsManager.Instance.PlayMainMenuMusic();
 		}
 	}
 }

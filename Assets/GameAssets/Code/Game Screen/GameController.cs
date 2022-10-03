@@ -160,10 +160,13 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 		switch(state)
 		{
 			case(Constants.SubState.Playing):
-				for(int i = 0; i <lines.Count;i++)
+				SoundEffectsManager.Instance.PlayGameMusic();
+				for (int i = 0; i <lines.Count;i++)
 				{
-					if(lines[i].GetComponent<Word>().IsMoving!= true)
+					if (lines[i].GetComponent<Word>().IsMoving!= true)
+					{
 						lines[i].GetComponent<Word>().IsInteractable = true;
+					}
 				}
 				break;
 			case(Constants.SubState.Pause):
@@ -175,8 +178,10 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 			case(Constants.SubState.Help):
 				break;			
 			case(Constants.SubState.Complete):
+				SoundEffectsManager.Instance.PlayEverythingElseMusic();
 				break;
 			case(Constants.SubState.Hack):
+				SoundEffectsManager.Instance.PlayEverythingElseMusic();
 				ResetList();
 				List<string> hacks = HacksManager.Instance.GenerateHacks(currentStage);
 				Hack1.GetComponent<Hack>().SetHack(hacks[0],currentStage,this);

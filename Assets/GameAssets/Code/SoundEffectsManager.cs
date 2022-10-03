@@ -12,6 +12,8 @@ public class SoundEffectsManager : MonoBehaviour
 	[SerializeField] private AudioSource sfxSource;
 
 	[SerializeField, Header("Music")] private AudioClip mainMenuTheme;
+	[SerializeField] private AudioClip gameTheme;
+	[SerializeField] private AudioClip everythingElseTheme;
 
 	[SerializeField, Header("Sound Effects")] private AudioClip clickSound;
 	[SerializeField] private AudioClip gameEnded; // TODO
@@ -39,9 +41,7 @@ public class SoundEffectsManager : MonoBehaviour
 			Instance = this;
 		}
 
-		musicSource.clip = mainMenuTheme;
-		musicSource.loop = true;
-		musicSource.Play();
+		PlayMainMenuMusic();
 	}
 
 	public void PlayOneShotSFX(string soundEffect)
@@ -101,5 +101,26 @@ public class SoundEffectsManager : MonoBehaviour
 				sfxSource.PlayOneShot(wordSpawn);
 				break;
 		}
+	}
+
+	public void PlayGameMusic()
+	{
+		musicSource.clip = gameTheme;
+		musicSource.loop = true;
+		musicSource.Play();
+	}
+
+	public void PlayMainMenuMusic()
+	{
+		musicSource.clip = mainMenuTheme;
+		musicSource.loop = true;
+		musicSource.Play();
+	}
+
+	public void PlayEverythingElseMusic()
+	{
+		musicSource.clip = everythingElseTheme;
+		musicSource.loop = true;
+		musicSource.Play();
 	}
 }
