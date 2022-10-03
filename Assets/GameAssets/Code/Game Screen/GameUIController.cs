@@ -12,10 +12,16 @@ public class GameUIController : MonoBehaviour
 
 	[SerializeField, Header("Text")] private TMP_Text score;
 	[SerializeField] private TMP_Text stage;
-	[SerializeField] private GameObject cover;
+	[SerializeField,Header("Game Screens")] private GameObject cover;
 	[SerializeField] private GameObject warning;
 	[SerializeField] private GameObject pause;
 	[SerializeField] private GameObject hack;
+	[SerializeField] private GameObject complete;
+
+	[SerializeField,Header("Completed Objects")] private List<GameObject> displayHacks;
+	[SerializeField] private TMP_Text pointsCompleted;
+	[SerializeField] private TMP_Text stageCompleted;
+	[SerializeField] private Sprite hackCompleted;
 
 	[SerializeField, Header("Indicator Animations")] private Animator indicatorAnim;
 
@@ -29,7 +35,7 @@ public class GameUIController : MonoBehaviour
 		InitVariables();
 	}
 
-	private void InitVariables()
+	public void InitVariables()
 	{
 		brackets.SetActive(false);
 		indicator.SetActive(false);
@@ -78,9 +84,23 @@ public class GameUIController : MonoBehaviour
 		score.text = newScore.ToString();
 	}
 
-	public void DisplayHacks(){
+	public void DisplayHacks()
+	{
 		hack.transform.SetAsLastSibling();
 		hack.SetActive(true);
+	}
+	public void CommpleteGame()
+	{
+		gameController.ChangeSubState(Constants.SubState.Complete);
+		complete.transform.SetAsLastSibling();
+		complete.SetActive(true);
+		pointsCompleted.text = score.text;
+		stageCompleted.text = stage.text;
+		List<string> hacks = HacksManager.Instance.ActivatedHacks;
+		for(int i = 0; i < hacks.Count; i++){
+			displayHacks[i].GetComponent<Image>().sprite = hackCompleted;
+			displayHacks[i].GetComponent<DisplayHack>().SetDiplayHack(hacks[i]);
+		}
 	}
 
 	public void CoverWords(int amount)

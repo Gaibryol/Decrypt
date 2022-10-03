@@ -37,6 +37,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 	{
 		InitVariables();
 		gameUI.StartGame();
+
 	}
 
 	private void InitVariables()
@@ -46,7 +47,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 		abilityUsages = 1;
 		maximumNumLines = 6;
 		defaultMaxLines = 6;
-		playerPoints = 9000f;//Reset to 0f
+		playerPoints = 0f;
 		countDownTime = Constants.MaxTime;
 		decryptTime = Constants.DecryptTime;
 
@@ -54,7 +55,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 		alternateColor = false;
 
 		warningLimit = Constants.WarningLimit;
-		pointsMultiplier = 3f;// Reset To 1f
+		pointsMultiplier = 1f;
 		subState = Constants.SubState.Playing;
 
 		gameUI = GetComponent<GameUIController>();
@@ -81,10 +82,10 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 
 		if (lines.Count > maximumNumLines)
 		{
-			//Game Over(To Restart Screen)
-			Debug.Log("GameOver");
+			StopAllCoroutines();
+			gameUI.CommpleteGame();
 		}
-		else if (lines.Count >= maximumNumLines - warningLimit)
+		else if (lines.Count > maximumNumLines - warningLimit)
 		{
 			SoundEffectsManager.Instance.PlayOneShotSFX("Warning");
 			gameUI.DisplayWarning(true);
@@ -109,8 +110,9 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 	{
 		ResetList();
 		InitVariables();
+		gameUI.InitVariables();
 		HacksManager.Instance.InitVariables();
-		HacksManager.Instance.InitVariables();
+		WordsManager.Instance.InitVariables();
 	}
 
 	public IEnumerator MoveWord(GameObject newWord)
@@ -168,6 +170,8 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 				}
 				break;
 			case(Constants.SubState.Help):
+				break;			
+			case(Constants.SubState.Complete):
 				break;
 			case(Constants.SubState.Hack):
 				ResetList();
@@ -307,7 +311,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 	public IEnumerator SpawnTwoWords()
 	{
 		SpawnWord();
-		yield return new WaitForSeconds(0.5f);
+		yield return new WaitForSeconds(1.5f);
 		SpawnWord();
 	}
 

@@ -41,7 +41,6 @@ public class Hack : MonoBehaviour , IPointerEnterHandler, IPointerExitHandler
         {
             HacksManager.Instance.AddLateHack(hack);
         }
-        this.transform.parent.gameObject.SetActive(false);
         gc.ChangeSubState(Constants.SubState.Playing);
     }
 }

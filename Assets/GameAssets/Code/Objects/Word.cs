@@ -24,7 +24,6 @@ public class Word : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 		scrambledWord = scrambled;
 		IsMoving = true;
 		IsInteractable = false;
-		int randomNumber = Random.Range(0,realWord.Length);
 
 		Constants.LetterColors color = Constants.LetterColors.Blue;
 		if (currentStage == 1 && alternateColor)
@@ -51,7 +50,7 @@ public class Word : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 		{
 			color = Constants.LetterColors.Purple;
 		}
-
+		int randomNumber = Random.Range(0,realWord.Length);
 		for (int i = 0; i < scrambledWord.Length; i++)
 		{
 			GameObject newObj = Instantiate(letterPrefab, transform);
@@ -67,7 +66,7 @@ public class Word : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 			{
 				lScript.Construct(scrambledWord[i].ToString(), covered, false, color,false);
 			}
-			else if(HacksManager.Instance.ActivatedC & i == randomNumber)
+			else if(HacksManager.Instance.ActivatedC & i == randomNumber & Random.Range(0,4) == 3)
 			{
 				lScript.Construct(scrambledWord[i].ToString(), true, true, color,true);
 			}
