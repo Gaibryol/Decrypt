@@ -94,7 +94,8 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 	private void ResetList()
 	{
 		StopAllCoroutines();
-		if(lines != null){
+		if (lines != null)
+		{
 			for(int i = lines.Count-1; i>=0; i--){
 				Destroy(lines[i]);
 			}
@@ -110,8 +111,8 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 	}
 
 	public IEnumerator MoveWord(GameObject newWord)
-  {
-		Vector3 newPos = new Vector3(0, bottomLineY + ((newWord.GetComponent<RectTransform>().rect.height + wordsYOffset) * lines.Count) + ((newWord.GetComponent<RectTransform>().rect.height + wordsYOffset) * (maximumNumLines - defaultMaxLines)));
+	{
+		Vector3 newPos = new Vector3(0, bottomLineY + ((newWord.GetComponent<RectTransform>().rect.height + wordsYOffset) * lines.Count) + ((newWord.GetComponent<RectTransform>().rect.height + wordsYOffset) * Mathf.Abs(maximumNumLines - defaultMaxLines)));
 
 		int currentNumWords = lines.Count;
 
@@ -129,7 +130,8 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 			}
 			yield return null;
 		}
-		foreach(Transform child in newWord.transform){
+		foreach(Transform child in newWord.transform)
+		{
 			child.GetComponent<Letter>().RevealLetter();
 		}
 		newWord.GetComponent<Word>().IsMoving = false;
@@ -270,7 +272,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 			if(HacksManager.Instance.ActivatedG)
 			{
 				GameObject newWord = lines[lines.Count-1];
-				newWord.transform.localPosition = new Vector3(bottomLinePos.x, bottomLinePos.y + ((newWord.GetComponent<RectTransform>().rect.height + wordsYOffset) * (lines.Count-1)));
+				newWord.transform.localPosition = new Vector3(0, bottomLineY + ((newWord.GetComponent<RectTransform>().rect.height + wordsYOffset) * (lines.Count-1)));
 			}
 			else if(true){
 				DecryptList();
