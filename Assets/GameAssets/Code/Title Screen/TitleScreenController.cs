@@ -34,7 +34,7 @@ public class TitleScreenController : MonoBehaviour
 
 	public void OnHoverEnter(GameObject obj)
 	{
-		SoundEffectsManager.Instance.PlayOneShotSFX("ClickSound");
+		SoundEffectsManager.Instance.PlayOneShotSFX("Hover");
 		selector.SetActive(true);
 
 		selector.transform.localPosition = new Vector3(selector.transform.localPosition.x, obj.transform.localPosition.y + yOffset);
