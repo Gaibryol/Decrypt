@@ -61,10 +61,12 @@ public class HacksManager : MonoBehaviour
                     possibleEarlyHacks.Remove("D");
                 }
                 possibleEarlyHacks.Remove("B");
+                possibleEarlyHacks.Remove("J");
                 ActivatedA = true;
 				gameUIController.CoverWords(1);
                 break;
             case Constants.HackB://Finished
+                possibleEarlyHacks.Remove("J");
                 if(possibleEarlyHacks.Contains("D"))
                 {
                     possibleEarlyHacks.Remove("D");

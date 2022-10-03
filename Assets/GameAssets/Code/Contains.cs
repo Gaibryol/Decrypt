@@ -12,7 +12,7 @@ public class Contains : MonoBehaviour
 		{
             Instance = this;
         }
-        var textFile = Resources.Load<TextAsset>("clean_words_alpha");
+        var textFile = Resources.Load<TextAsset>("fewer_words");
         foreach(string word in textFile.text.Split("\n"))
         {
             HashWords.Add(word.Trim());
