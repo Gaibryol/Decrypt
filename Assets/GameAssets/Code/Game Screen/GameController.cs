@@ -39,7 +39,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 	{
 		InitVariables();
 		gameUI.StartGame();
-		HacksManager.Instance.AddEarlyHack("F");
+		HacksManager.Instance.AddEarlyHack("I");
 		Debug.Log(maximumNumLines);
 	}
 
@@ -272,7 +272,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 			if(HacksManager.Instance.ActivatedG)
 			{
 				GameObject newWord = lines[lines.Count-1];
-				newWord.transform.localPosition = new Vector3(0, bottomLineY + ((newWord.GetComponent<RectTransform>().rect.height + wordsYOffset) * (lines.Count-1)));
+				newWord.transform.localPosition = new Vector3(0, bottomLineY + ((newWord.GetComponent<RectTransform>().rect.height + wordsYOffset) * lines.Count) + ((newWord.GetComponent<RectTransform>().rect.height + wordsYOffset) * Mathf.Abs(maximumNumLines - defaultMaxLines)));
 			}
 			else if(true){
 				DecryptList();
