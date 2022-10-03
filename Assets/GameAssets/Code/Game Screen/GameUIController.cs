@@ -87,8 +87,11 @@ public class GameUIController : MonoBehaviour
 		RectTransform rt = cover.GetComponent<RectTransform>();
 		rt.sizeDelta = new Vector2(rt.sizeDelta.x, amount*100);
 	}
-	public void PauseGame(){
-		if(pauseButton.isOn)
+	public void PauseGame()
+	{
+		SoundEffectsManager.Instance.PlayOneShotSFX("ClickSound");
+
+		if (pauseButton.isOn)
 		{
 			gameController.ChangeSubState(Constants.SubState.Pause);
 			pause.transform.SetAsLastSibling();
@@ -101,18 +104,28 @@ public class GameUIController : MonoBehaviour
 			timer.enabled = true;
 		}
 	}
-	public void ResetTimer(){
+	public void ResetTimer()
+	{
 		timer.Rebind();
 		timer.Update(0f);
 	}
-	public void ResumeGame(){
+
+	public void ResumeGame()
+	{
+		SoundEffectsManager.Instance.PlayOneShotSFX("ClickSound");
 		pauseButton.isOn = false;
 	}
-	public void RestartGame(){
+
+	public void RestartGame()
+	{
+		SoundEffectsManager.Instance.PlayOneShotSFX("ClickSound");
 		pauseButton.isOn = false;
 		gameController.NewGame();
 	}
-	public void ToMainMenu(){
+
+	public void ToMainMenu()
+	{
+		SoundEffectsManager.Instance.PlayOneShotSFX("ClickSound");
 		pauseButton.isOn = false;
 		gameController.NewGame();
 		GameManager.Instance.ChangeState(Constants.GameStates.MainMenu);
