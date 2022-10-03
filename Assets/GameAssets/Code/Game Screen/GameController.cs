@@ -85,7 +85,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 			StopAllCoroutines();
 			gameUI.CommpleteGame();
 		}
-		else if (lines.Count >= MaximumNumLines - warningLimit)
+		else if (lines.Count > MaximumNumLines - warningLimit)
 		{
 			SoundEffectsManager.Instance.PlayOneShotSFX("Warning");
 			gameUI.DisplayWarning(true);
