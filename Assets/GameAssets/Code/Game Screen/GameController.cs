@@ -14,8 +14,6 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 	[SerializeField] private float bottomLineY;
 	[SerializeField] private float spawnY;
 
-
-
 	private GameUIController gameUI;
 
 	private List<GameObject> lines;
@@ -39,8 +37,6 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 	{
 		InitVariables();
 		gameUI.StartGame();
-		HacksManager.Instance.AddEarlyHack("F");
-		Debug.Log(maximumNumLines);
 	}
 
 	private void InitVariables()
@@ -48,7 +44,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 		lines = new List<GameObject>();
 
 		abilityUsages = 1;
-		maximumNumLines = 6;
+		maximumNumLines = 8;
 		defaultMaxLines = 6;
 		playerPoints = 0f;
 		countDownTime = Constants.MaxTime;
@@ -112,8 +108,20 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 
 	public IEnumerator MoveWord(GameObject newWord)
 	{
-		Vector3 newPos = new Vector3(0, bottomLineY + ((newWord.GetComponent<RectTransform>().rect.height + wordsYOffset) * lines.Count) + ((newWord.GetComponent<RectTransform>().rect.height + wordsYOffset) * Mathf.Abs(maximumNumLines - defaultMaxLines)));
-
+		Vector3 newPos = new Vector3();
+		if (maximumNumLines > defaultMaxLines)
+		{
+			newPos = new Vector3(0, bottomLineY + ((newWord.GetComponent<RectTransform>().rect.height + wordsYOffset) * lines.Count) - ((newWord.GetComponent<RectTransform>().rect.height + wordsYOffset) * (maximumNumLines - defaultMaxLines)));
+		}
+		else if (maximumNumLines < defaultMaxLines)
+		{
+			newPos = new Vector3(0, bottomLineY + ((newWord.GetComponent<RectTransform>().rect.height + wordsYOffset) * lines.Count) + ((newWord.GetComponent<RectTransform>().rect.height + wordsYOffset) * (defaultMaxLines - maximumNumLines)));
+		}
+		else
+		{
+			newPos = new Vector3(0, bottomLineY + ((newWord.GetComponent<RectTransform>().rect.height + wordsYOffset) * lines.Count));
+		}
+		
 		int currentNumWords = lines.Count;
 
 		while (newWord.transform.localPosition != newPos)

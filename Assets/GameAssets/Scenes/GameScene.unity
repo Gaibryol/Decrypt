@@ -1826,8 +1826,8 @@ MonoBehaviour:
   Canvas: {fileID: 826842866}
   Hack1: {fileID: 402058142}
   Hack2: {fileID: 886511950}
-  wordsYOffset: 20
-  bottomLineY: -290
+  wordsYOffset: 10
+  bottomLineY: -340
   spawnY: 440
 --- !u!114 &658680612
 MonoBehaviour:
