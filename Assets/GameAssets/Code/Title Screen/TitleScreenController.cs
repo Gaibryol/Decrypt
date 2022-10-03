@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 public class TitleScreenController : MonoBehaviour
 {
@@ -26,7 +25,7 @@ public class TitleScreenController : MonoBehaviour
 
 	private void ExitGame()
 	{
-		Debug.Log("Exit Game");
+		Application.Quit();
 	}
 
 	public void OnHoverEnter(GameObject obj)

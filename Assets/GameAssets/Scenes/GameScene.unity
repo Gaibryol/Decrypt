@@ -1827,8 +1827,8 @@ MonoBehaviour:
   Hack1: {fileID: 402058142}
   Hack2: {fileID: 886511950}
   wordsYOffset: 20
-  bottomLinePos: {x: 0, y: -442, z: 0}
-  spawnPos: {x: 0, y: 400, z: 0}
+  bottomLineY: -290
+  spawnY: 440
 --- !u!114 &658680612
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5771,7 +5771,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 285157188}
   m_Father: {fileID: 658680610}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5800,7 +5801,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 1466418012, guid: ffe7239990a40d540a49bb3eea485430, type: 3}
+  m_Sprite: {fileID: -966119676, guid: 04cf3c17f2854f548aa2f5b41d9ca960, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1

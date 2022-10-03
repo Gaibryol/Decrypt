@@ -37,7 +37,7 @@ public class Word : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 		}
 		else if (currentStage == 2 && alternateColor)
 		{
-			color = Constants.LetterColors.Green;
+			color = Constants.LetterColors.Red;
 		}
 		else if (currentStage == 2 && !alternateColor)
 		{
