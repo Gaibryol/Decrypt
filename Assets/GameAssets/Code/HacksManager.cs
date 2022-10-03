@@ -48,6 +48,7 @@ public class HacksManager : MonoBehaviour
         ActivatedH = false;
         ActivatedI = false;
     }
+
     public void AddEarlyHack(string hackLetter)
     {
         possibleEarlyHacks.Remove(hackLetter);
@@ -116,7 +117,9 @@ public class HacksManager : MonoBehaviour
 				gameController.ChangeMaxLife(-2);
                 break;  
         }
-    }
+
+		gameUIController.DisplayBaseline();
+	}
 
     public void AddLateHack(string hackLetter)
     {
@@ -153,7 +156,9 @@ public class HacksManager : MonoBehaviour
 				gameController.SetMultiplier(4.00f);
                 break;
         }
-    }
+
+		gameUIController.DisplayBaseline();
+	}
 
     public List<string> GenerateHacks(int stage)
     {

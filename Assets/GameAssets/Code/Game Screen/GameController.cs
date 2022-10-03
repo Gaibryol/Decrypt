@@ -46,7 +46,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 		abilityUsages = 0;
 		MaximumNumLines = 6;
 		defaultMaxLines = 6;
-		playerPoints = 0f;
+		playerPoints = 9000f;
 		countDownTime = Constants.MaxTime;
 		decryptTime = Constants.DecryptTime;
 
@@ -157,15 +157,18 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 
 	public void ChangeSubState(Constants.SubState state){
 		subState = state;
-		switch(state){
+		switch(state)
+		{
 			case(Constants.SubState.Playing):
-				for(int i = 0; i <lines.Count;i++){
+				for(int i = 0; i <lines.Count;i++)
+				{
 					if(lines[i].GetComponent<Word>().IsMoving!= true)
 						lines[i].GetComponent<Word>().IsInteractable = true;
 				}
 				break;
 			case(Constants.SubState.Pause):
-				for(int i = 0; i<lines.Count;i++){
+				for(int i = 0; i<lines.Count;i++)
+				{
 					lines[i].GetComponent<Word>().IsInteractable = false;
 				}
 				break;

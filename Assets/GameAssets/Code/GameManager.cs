@@ -9,11 +9,12 @@ public class GameManager : MonoBehaviour
 
 	[SerializeField] public Canvas Canvas;
 	[SerializeField] public Constants.GameStates GameState;
+	[SerializeField] public Texture2D crosshair;
 
 	[SerializeField, Header("Controllers")] private GameController gameController;
 	[SerializeField] private TitleScreenController titleController;
 
-	[SerializeField] private GameObject titleScreen;
+	[SerializeField, Header("Screens")] private GameObject titleScreen;
 	[SerializeField] private GameObject gameScreen;
 	[SerializeField] private GameObject creditsScreen;
 
@@ -27,6 +28,8 @@ public class GameManager : MonoBehaviour
 		{
 			Instance = this;
 		}
+
+		Cursor.SetCursor(crosshair, Vector2.zero, CursorMode.Auto);
 
 		GameState = Constants.GameStates.MainMenu;
 	}

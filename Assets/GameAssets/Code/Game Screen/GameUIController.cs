@@ -18,12 +18,16 @@ public class GameUIController : MonoBehaviour
 	[SerializeField] private GameObject abilityPrefab;
 	[SerializeField]private GameObject abilityParent;
 	[SerializeField] private List<GameObject> displayHacks;
+	[SerializeField] private Image baseLine;
+
+	private float startingBaselineY;
 
 	[SerializeField, Header("Text")] private TMP_Text score;
 	[SerializeField] private TMP_Text stage;
 	[SerializeField] private TMP_Text ability;
 	[SerializeField] private TMP_Text pointsCompleted;
 	[SerializeField] private TMP_Text stageCompleted;
+
 	[SerializeField,Header("Sprite")] private Sprite hackCompleted;
 	
 
@@ -38,6 +42,7 @@ public class GameUIController : MonoBehaviour
 	public void StartGame()
 	{
 		InitVariables();
+		DisplayBaseline();
 	}
 
 	public void InitVariables()
@@ -46,7 +51,8 @@ public class GameUIController : MonoBehaviour
 		indicator.SetActive(false);
 		cover.SetActive(false);
 
-		foreach(Transform child in abilityParent.transform){
+		foreach(Transform child in abilityParent.transform)
+		{
 			Destroy(child.gameObject);
 		}
 
@@ -55,6 +61,7 @@ public class GameUIController : MonoBehaviour
 		stage.text = "01";
 		ability.text = "None";
 		gameController = GetComponent<GameController>();
+		startingBaselineY = baseLine.transform.localPosition.y;
 	}
 
 	public void OnWordHover(float y)
@@ -97,12 +104,21 @@ public class GameUIController : MonoBehaviour
 		score.text = newScore.ToString();
 	}
 
+	public void DisplayBaseline()
+	{
+		float newYAddition = ((gameController.WordPrefab.GetComponent<RectTransform>().rect.height + gameController.WordsYOffset) * (8 - gameController.MaximumNumLines));
+
+		baseLine.transform.localPosition = new Vector3(baseLine.transform.localPosition.x, startingBaselineY + newYAddition);
+	}
+
 	public void DisplayHacks()
 	{
 		hack.transform.SetAsLastSibling();
 		hack.SetActive(true);
 	}
-	public void DisplayAbility(string text, int uses){
+
+	public void DisplayAbility(string text, int uses)
+	{
 		ability.text = text;
 		if(uses > 0){
 			for(int i = 0;i < uses;i++){
@@ -112,11 +128,14 @@ public class GameUIController : MonoBehaviour
 			}
 		}
 	}
-	public void LowerDiplayAbility(){
+
+	public void LowerDiplayAbility()
+	{
 		GameObject temp = abilityUses[abilityUses.Count-1];
 		temp.GetComponent<Ability>().UseAbility();
 		abilityUses.Remove(temp);
 	}
+
 	public void CompleteGame()
 	{
 		gameController.ChangeSubState(Constants.SubState.Complete);
@@ -125,7 +144,9 @@ public class GameUIController : MonoBehaviour
 		pointsCompleted.text = score.text;
 		stageCompleted.text = stage.text;
 		List<string> hacks = HacksManager.Instance.ActivatedHacks;
-		for(int i = 0; i < hacks.Count; i++){
+
+		for(int i = 0; i < hacks.Count; i++)
+		{
 			displayHacks[i].GetComponent<Image>().sprite = hackCompleted;
 			displayHacks[i].GetComponent<DisplayHack>().SetDiplayHack(hacks[i]);
 		}
@@ -149,12 +170,14 @@ public class GameUIController : MonoBehaviour
 			pause.SetActive(true);
 			timer.enabled = false;
 		}
-		else{
+		else
+		{
 			gameController.ChangeSubState(Constants.SubState.Playing);
 			pause.SetActive(false);
 			timer.enabled = true;
 		}
 	}
+
 	public void ResetTimer()
 	{
 		timer.Rebind();
