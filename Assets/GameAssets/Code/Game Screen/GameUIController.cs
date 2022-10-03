@@ -9,19 +9,21 @@ public class GameUIController : MonoBehaviour
 	[SerializeField, Header("Objects")] private GameObject brackets;
 	[SerializeField] private GameObject topBanner;
 	[SerializeField] private GameObject indicator;
-
-	[SerializeField, Header("Text")] private TMP_Text score;
-	[SerializeField] private TMP_Text stage;
-	[SerializeField,Header("Game Screens")] private GameObject cover;
+	[SerializeField] private GameObject cover;
 	[SerializeField] private GameObject warning;
 	[SerializeField] private GameObject pause;
 	[SerializeField] private GameObject hack;
 	[SerializeField] private GameObject complete;
+	[SerializeField] private GameObject abilityPrefab;
+	[SerializeField] private List<GameObject> displayHacks;
 
-	[SerializeField,Header("Completed Objects")] private List<GameObject> displayHacks;
+	[SerializeField, Header("Text")] private TMP_Text score;
+	[SerializeField] private TMP_Text stage;
+	[SerializeField] private TMP_Text ability;
 	[SerializeField] private TMP_Text pointsCompleted;
 	[SerializeField] private TMP_Text stageCompleted;
-	[SerializeField] private Sprite hackCompleted;
+	[SerializeField,Header("Sprite")] private Sprite hackCompleted;
+	
 
 	[SerializeField, Header("Indicator Animations")] private Animator indicatorAnim;
 
@@ -29,6 +31,8 @@ public class GameUIController : MonoBehaviour
 	[SerializeField] private Toggle pauseButton;
 	[SerializeField] private Animator timer;
 	private GameController gameController;
+
+	private List<GameObject> abilityUses;
 
 	public void StartGame()
 	{
@@ -41,8 +45,17 @@ public class GameUIController : MonoBehaviour
 		indicator.SetActive(false);
 		cover.SetActive(false);
 
+		if(abilityUses != null)
+		{
+			for(int i = abilityUses.Count-1; i>=0;i--){
+				Destroy(abilityUses[i]);
+			}
+		}
+
+		abilityUses = new List<GameObject>();
 		score.text = "0";
 		stage.text = "01";
+		ability.text = "None";
 		gameController = GetComponent<GameController>();
 	}
 
@@ -89,6 +102,16 @@ public class GameUIController : MonoBehaviour
 	{
 		hack.transform.SetAsLastSibling();
 		hack.SetActive(true);
+	}
+	public void DisplayAbility(string text, int uses){
+		ability.text = text;
+		if(uses > 0){
+			for(int i = 0;i < uses;i++){
+				GameObject abilityUse = Instantiate(abilityPrefab,gameController.Canvas.transform);
+				abilityUse.transform.localPosition = new Vector3(-852 + (i*13),-430,0);
+				abilityUses.Add(abilityUse);
+			}
+		}
 	}
 	public void CommpleteGame()
 	{

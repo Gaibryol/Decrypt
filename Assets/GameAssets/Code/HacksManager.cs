@@ -88,6 +88,7 @@ public class HacksManager : MonoBehaviour
                 possibleEarlyHacks.Remove("C");
                 possibleEarlyHacks.Remove("I");
                 ActivatedE = true;
+                gameUIController.DisplayAbility("RIGHT CLICK TO DESTROY A WORD", 4);
 				gameController.SetDecryptAmount(4);
                 break;
             case Constants.HackF://Finished
@@ -100,6 +101,7 @@ public class HacksManager : MonoBehaviour
                 possibleEarlyHacks.Remove("I");
                 ActivatedG = true;
 				gameController.ChangeMaxLife(-1);
+                gameUIController.DisplayAbility("RIGHT CLICK TO INSTANTLY DROP A WORD",0);
                 break;
             case Constants.HackH://Finished
                 possibleEarlyHacks.Remove("C");
@@ -109,6 +111,7 @@ public class HacksManager : MonoBehaviour
                 possibleEarlyHacks.Remove("E");
                 possibleEarlyHacks.Remove("G");
                 ActivatedI = true;
+                gameUIController.DisplayAbility("RIGHT CLICK TO CLEAR BOARD",1);
 				gameController.SetDecryptAmount(1);
 				gameController.ChangeMaxLife(-2);
                 break;  

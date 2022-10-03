@@ -37,7 +37,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 	{
 		InitVariables();
 		gameUI.StartGame();
-
+		HacksManager.Instance.AddEarlyHack("E");
 	}
 
 	private void InitVariables()
@@ -302,7 +302,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 				GameObject newWord = lines[lines.Count-1];
 				newWord.transform.localPosition = new Vector3(0, bottomLineY + ((newWord.GetComponent<RectTransform>().rect.height + WordsYOffset) * lines.Count) + ((newWord.GetComponent<RectTransform>().rect.height + WordsYOffset) * Mathf.Abs(MaximumNumLines - defaultMaxLines)));
 			}
-			else if(true){
+			else if(HacksManager.Instance.ActivatedI){
 				DecryptList();
 			}
 		}
