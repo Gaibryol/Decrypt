@@ -56,28 +56,28 @@ public class Word : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 		{
 			GameObject newObj = Instantiate(letterPrefab, transform);
 			Letter lScript = newObj.GetComponent<Letter>();
-			bool reveal = false;
+			bool covered = true;
 			if(HacksManager.Instance.ActivatedF){
-				reveal = true;
+				covered = false;
 			}
 			if(HacksManager.Instance.ActivatedA & i == 0){
-				lScript.Construct(scrambledWord[i].ToString(), reveal, false, color,false);
+				lScript.Construct(scrambledWord[i].ToString(), covered, false, color,false);
 			}
 			else if(HacksManager.Instance.ActivatedB & i == scrambledWord.Length -1)
 			{
-				lScript.Construct(scrambledWord[i].ToString(), reveal, false, color,false);
+				lScript.Construct(scrambledWord[i].ToString(), covered, false, color,false);
 			}
 			else if(HacksManager.Instance.ActivatedC & i == randomNumber)
 			{
-				lScript.Construct(scrambledWord[i].ToString(), false, true, color,true);
+				lScript.Construct(scrambledWord[i].ToString(), true, true, color,true);
 			}
 			else if(HacksManager.Instance.ActivatedE)
 			{
-				lScript.Construct(scrambledWord[i].ToString(), reveal, true, color,true);
+				lScript.Construct(scrambledWord[i].ToString(), covered, true, color,true);
 			}
 			else
 			{
-				lScript.Construct(scrambledWord[i].ToString(), reveal, true, color,false);
+				lScript.Construct(scrambledWord[i].ToString(), covered, true, color,false);
 			}
 		}
 		horizontalLayoutGroup = GetComponent<HorizontalLayoutGroup>();
