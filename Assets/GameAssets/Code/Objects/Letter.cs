@@ -82,7 +82,7 @@ public class Letter : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 		word.OnPutDownLetter();
 		rectTransform.SetParent(word.transform);
 
-		float diff = Mathf.Abs(originalX - eventData.position.x);
+		float diff = originalX - eventData.position.x;
 		int movement = 0;
 		if (diff > 0)
 		{

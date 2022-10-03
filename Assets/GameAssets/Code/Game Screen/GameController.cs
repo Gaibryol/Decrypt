@@ -37,7 +37,6 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 	{
 		InitVariables();
 		gameUI.StartGame();
-		HacksManager.Instance.AddEarlyHack("G");
 	}
 
 	private void InitVariables()
@@ -91,6 +90,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 			gameUI.DisplayWarning(true);
 		}
 	}
+
 	private void ResetList()
 	{
 		StopAllCoroutines();
@@ -139,7 +139,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 			{
 				if (lines.Count != currentNumWords)
 				{
-					newPos = new Vector3(newPos.x, newPos.y - ((newWord.GetComponent<RectTransform>().rect.height + WordsYOffset) * (currentNumWords - lines.Count)));
+					newPos = new Vector3(newPos.x, newPos.y - (newWord.GetComponent<RectTransform>().rect.height + WordsYOffset));
 					currentNumWords = lines.Count;
 				}
 
@@ -305,6 +305,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 		}
 		return longestWord;
 	}
+
 	public void OnPointerClick(PointerEventData eventData)
 	{
 		if(eventData.button == PointerEventData.InputButton.Right)
