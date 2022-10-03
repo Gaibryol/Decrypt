@@ -37,6 +37,8 @@ public class GameUIController : MonoBehaviour
 	[SerializeField, Header("Buttons")] private Toggle helpButton;
 	[SerializeField] private Toggle pauseButton;
 	[SerializeField] private Animator timer;
+	[SerializeField] private Toggle secondHelpToggle;
+
 	private GameController gameController;
 	private List<GameObject> abilityUses;
 
@@ -187,12 +189,33 @@ public class GameUIController : MonoBehaviour
 			tutorial.transform.SetAsLastSibling();
 			tutorial.SetActive(true);
 			timer.enabled = false;
+			secondHelpToggle.isOn = true;
 		}
 		else
 		{
 			gameController.ChangeSubState(Constants.SubState.Playing);
 			tutorial.SetActive(false);
 			timer.enabled = true;
+			secondHelpToggle.isOn = false;
+		}
+	}
+
+	public void OnSecondToggleHelp()
+	{
+		if (secondHelpToggle.isOn)
+		{
+			gameController.ChangeSubState(Constants.SubState.Pause);
+			tutorial.transform.SetAsLastSibling();
+			tutorial.SetActive(true);
+			timer.enabled = false;
+			helpButton.isOn = true;
+		}
+		else
+		{
+			gameController.ChangeSubState(Constants.SubState.Playing);
+			tutorial.SetActive(false);
+			timer.enabled = true;
+			helpButton.isOn = false;
 		}
 	}
 

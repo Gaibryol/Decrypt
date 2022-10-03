@@ -46,7 +46,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 		abilityUsages = 0;
 		MaximumNumLines = 6;
 		defaultMaxLines = 6;
-		playerPoints = 9000f;
+		playerPoints = 0f;
 		countDownTime = Constants.MaxTime;
 		decryptTime = Constants.DecryptTime;
 
@@ -143,7 +143,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 					currentNumWords = lines.Count;
 				}
 
-				newWord.transform.localPosition = Vector3.MoveTowards(newWord.transform.localPosition, newPos, 1f);
+				newWord.transform.localPosition = Vector3.MoveTowards(newWord.transform.localPosition, newPos, 5f * Time.deltaTime);
 			}
 			yield return null;
 		}
@@ -215,7 +215,10 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 		// Need to bump all the other words down
 		for (; i < lines.Count; i++)
 		{
-			lines[i].transform.localPosition = new Vector3(lines[i].transform.localPosition.x, lines[i].transform.localPosition.y - word.GetComponent<RectTransform>().rect.height - WordsYOffset);
+			if (!lines[i].GetComponent<Word>().IsMoving)
+			{
+				lines[i].transform.localPosition = new Vector3(lines[i].transform.localPosition.x, lines[i].transform.localPosition.y - word.GetComponent<RectTransform>().rect.height - WordsYOffset);
+			}
 		}
 
 		playerPoints += word.GetComponent<Word>().realWord.Length * Constants.PointsPerLetter * pointsMultiplier;
