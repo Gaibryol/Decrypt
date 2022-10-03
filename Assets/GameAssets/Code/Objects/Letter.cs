@@ -132,11 +132,18 @@ public class Letter : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 	{
 		
 	}
+
 	public void RevealLetter()
 	{
 		if(!specialLetter)
 			image.sprite = LettersManager.Instance.GetSprite(characterColor, Character);
 	}
+
+	public void ChangeToCorrect()
+	{
+		image.sprite = LettersManager.Instance.GetSprite(Constants.LetterColors.Green, Character);
+	}
+
 	public void OnPointerEnter(PointerEventData eventData)
 	{
 		if(HacksManager.Instance.ActivatedE){

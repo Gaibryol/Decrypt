@@ -152,4 +152,14 @@ public class Word : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 	{
 		return realWord.Length;
 	}
+
+	public void ShowIsCorrect()
+	{
+		IsInteractable = false;
+
+		foreach (Transform obj in transform)
+		{
+			obj.GetComponent<Letter>().ChangeToCorrect();
+		}
+	}
 }

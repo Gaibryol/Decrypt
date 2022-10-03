@@ -8,6 +8,7 @@ public class GameUIController : MonoBehaviour
 {
 	[SerializeField, Header("Objects")] private GameObject brackets;
 	[SerializeField] private GameObject topBanner;
+	[SerializeField] private GameObject bracketAnim;
 	[SerializeField] private GameObject indicator;
 
 	[SerializeField, Header("Text")] private TMP_Text score;
@@ -50,6 +51,7 @@ public class GameUIController : MonoBehaviour
 	{
 		brackets.SetActive(true);
 		brackets.transform.localPosition = new Vector3(brackets.transform.localPosition.x, y);
+		bracketAnim.transform.localPosition = brackets.transform.localPosition;
 
 		indicator.SetActive(true);
 		indicator.transform.localPosition = new Vector3(indicator.transform.localPosition.x, y);

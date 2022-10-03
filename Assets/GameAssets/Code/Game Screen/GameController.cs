@@ -193,11 +193,16 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 		gameUI.OnWordExit();
 	}
 
-	public void CorrectWord(GameObject word)
+	private IEnumerator CorrectWordAnim(GameObject word)
 	{
 		int i = 0;
 		i = lines.IndexOf(word);
 		lines.Remove(word);
+
+		word.GetComponent<Word>().ShowIsCorrect();
+
+		// wait for 1 second
+		yield return new WaitForSeconds(1f);
 
 		// Need to bump all the other words down
 		for (; i < lines.Count; i++)
@@ -216,7 +221,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 		{
 			gameUI.DisplayWarning(false);
 		}
-		if(playerPoints >= 10000 & currentStage == 1)
+		if (playerPoints >= 10000 & currentStage == 1)
 		{
 			WordsManager.Instance.ChangePossibleWordLength("4,5,6");
 			SoundEffectsManager.Instance.PlayOneShotSFX("StageEnded");
@@ -224,7 +229,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 			currentStage += 1;
 			gameUI.OnStageComplete(currentStage);
 		}
-		else if(playerPoints >= 25000 & currentStage == 2)
+		else if (playerPoints >= 25000 & currentStage == 2)
 		{
 			WordsManager.Instance.ChangePossibleWordLength("5,6,7");
 			SoundEffectsManager.Instance.PlayOneShotSFX("StageEnded");
@@ -232,13 +237,18 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 			currentStage += 1;
 			gameUI.OnStageComplete(currentStage);
 		}
-		else if(playerPoints >= 50000 & currentStage == 3)
+		else if (playerPoints >= 50000 & currentStage == 3)
 		{
 			SoundEffectsManager.Instance.PlayOneShotSFX("StageEnded");
 			ChangeSubState(Constants.SubState.Hack);
 			currentStage += 1;
 			gameUI.OnStageComplete(currentStage);
 		}
+	}
+
+	public void CorrectWord(GameObject word)
+	{
+		StartCoroutine(CorrectWordAnim(word));
 	}
 
 	public void SetMultiplier(float multiplier)
