@@ -64,7 +64,8 @@ public class WordsManager : MonoBehaviour
     private string GetRandomWord()
     {
         int numLetters = GetNumOfLetters();
-        List<string> aList = new List<string>();
+
+        List<string> aList;
         switch(numLetters)
 		{
             case 3:
