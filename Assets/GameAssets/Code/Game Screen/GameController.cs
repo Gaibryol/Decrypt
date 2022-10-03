@@ -143,7 +143,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 					currentNumWords = lines.Count;
 				}
 
-				newWord.transform.localPosition = Vector3.MoveTowards(newWord.transform.localPosition, newPos, 5f * Time.deltaTime);
+				newWord.transform.localPosition = Vector3.MoveTowards(newWord.transform.localPosition, newPos, 250f * Time.deltaTime);
 			}
 			yield return null;
 		}
