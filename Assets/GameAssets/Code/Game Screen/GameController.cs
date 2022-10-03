@@ -37,6 +37,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 	{
 		InitVariables();
 		gameUI.StartGame();
+
 	}
 
 	private void InitVariables()
@@ -81,8 +82,8 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 
 		if (lines.Count > MaximumNumLines)
 		{
-			//Game Over(To Restart Screen)
-			Debug.Log("GameOver");
+			StopAllCoroutines();
+			gameUI.CommpleteGame();
 		}
 		else if (lines.Count >= MaximumNumLines - warningLimit)
 		{
@@ -96,17 +97,22 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 		if (lines != null)
 		{
 			for(int i = lines.Count-1; i>=0; i--){
-				Destroy(lines[i]);
+				GameObject tempObj = lines[i];
+				lines.Remove(lines[i]);
+				Destroy(tempObj);
 			}
 		}
+		countDownTime = Constants.MaxTime;
+		decryptTime = Constants.DecryptTime;
 	}
 
 	public void NewGame()
 	{
 		ResetList();
 		InitVariables();
+		gameUI.InitVariables();
 		HacksManager.Instance.InitVariables();
-		HacksManager.Instance.InitVariables();
+		WordsManager.Instance.InitVariables();
 	}
 
 	public IEnumerator MoveWord(GameObject newWord)
@@ -153,7 +159,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 		subState = state;
 		switch(state){
 			case(Constants.SubState.Playing):
-				for(int i = 0; i<lines.Count;i++){
+				for(int i = 0; i <lines.Count;i++){
 					if(lines[i].GetComponent<Word>().IsMoving!= true)
 						lines[i].GetComponent<Word>().IsInteractable = true;
 				}
@@ -164,6 +170,8 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 				}
 				break;
 			case(Constants.SubState.Help):
+				break;			
+			case(Constants.SubState.Complete):
 				break;
 			case(Constants.SubState.Hack):
 				ResetList();
@@ -214,6 +222,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 			SoundEffectsManager.Instance.PlayOneShotSFX("StageEnded");
 			ChangeSubState(Constants.SubState.Hack);
 			currentStage += 1;
+			gameUI.OnStageComplete(currentStage);
 		}
 		else if(playerPoints >= 25000 & currentStage == 2)
 		{
@@ -221,12 +230,14 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 			SoundEffectsManager.Instance.PlayOneShotSFX("StageEnded");
 			ChangeSubState(Constants.SubState.Hack);
 			currentStage += 1;
+			gameUI.OnStageComplete(currentStage);
 		}
 		else if(playerPoints >= 50000 & currentStage == 3)
 		{
 			SoundEffectsManager.Instance.PlayOneShotSFX("StageEnded");
 			ChangeSubState(Constants.SubState.Hack);
 			currentStage += 1;
+			gameUI.OnStageComplete(currentStage);
 		}
 	}
 
@@ -300,7 +311,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 	public IEnumerator SpawnTwoWords()
 	{
 		SpawnWord();
-		yield return new WaitForSeconds(0.5f);
+		yield return new WaitForSeconds(1.5f);
 		SpawnWord();
 	}
 

@@ -16,12 +16,9 @@ public class WordsManager : MonoBehaviour
         }
         InitVariables();
     }
-    private void InitVariables(){
+    public void InitVariables(){
         possibleWordLengths = "3,4,5";
         spawnedList = new List<string>();
-    }
-    public void Restart(){
-        InitVariables();
     }
     private int GetNumOfLetters()
     {

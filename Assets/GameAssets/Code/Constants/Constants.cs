@@ -4,7 +4,7 @@ public static class Constants
 {
     public enum GameStates { MainMenu = 0, Credits = 1, Settings = 2, Game = 3, }
 
-	public enum SubState{Playing = 0,Pause = 1, Help = 2, Hack = 3}
+	public enum SubState{Playing = 0,Pause = 1, Help = 2, Hack = 3,Complete = 4}
 
 	public enum LetterColors { Blue = 0, Green = 1, Orange = 2, Pink = 3, Purple = 4, Red = 5, Yellow = 6 }
 
@@ -62,13 +62,13 @@ public static class Constants
 	public const string HackP = "P";
 	public const string DescriptionA = "The first letter of each word is in the correct position|You only see the bottom row of words)";
 	public const string DescriptionB = "The last letter of each word is in the correct position|You only see the bottom row of words";
-	public const string DescriptionC = "Decrypt the longest words every 30 second|One of the letter in each word is always obscured";
+	public const string DescriptionC = "Decrypt the longest words every 25 second|A word has a chance of having a letter obscured";
 	public const string DescriptionD = "You have 1 extra life line|You only see the three bottom row of words";
-	public const string DescriptionE = "Right-click to decrypt a word instantly(Up to 4 uses in a game)|Letters only appear when hovering over the letter tile";
+	public const string DescriptionE = "Right-click to decrypt a word instantly (Up to 4 uses in a game)|Letters only appear when hovering over the letter tile";
 	public const string DescriptionF = "Able to view the letters as they’re falling down|Lose 1 life line";
 	public const string DescriptionG = "Right-click instantly drops the falling word|Lose 1 life line";
-	public const string DescriptionH = "Decrypt a random word every 30f seconds|Two words come down every 10 seconds)";
-	public const string DescriptionI = "Ability To Clear The Board(One use per game)|Lose 2 life line";
+	public const string DescriptionH = "Decrypt a random word every 25 seconds|Two words come down every 10 seconds)";
+	public const string DescriptionI = "Decrypt All The Displayed Words (One use per game)|Lose 2 life line";
 	public const string DescriptionJ = "Add the possibility of three letter words|0.75x the points for each word decrypted";
 	public const string DescriptionK = "Add the possibility of four letter words|0.85x the points for each word decrypted";
 	public const string DescriptionL = "1.50x the points for each word decrypted|Add the possibility of eight letter words";
@@ -80,7 +80,7 @@ public static class Constants
 	public const float MaxTime = 10f;
 	public const float PointsPerLetter = 200;
 
-	public const float DecryptTime = 30f;
+	public const float DecryptTime = 25f;
 
 	public const int WarningLimit = 1;
 
