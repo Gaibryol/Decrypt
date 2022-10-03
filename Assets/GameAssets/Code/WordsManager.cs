@@ -139,6 +139,10 @@ public class WordsManager : MonoBehaviour
             {
                 running = false;
             }
+            if(Contains.Instance.IfContains(shuffledWord))
+            {
+                running = true;
+            }
         }
         return new List<string>(){randomWord,shuffledWord};
     }
