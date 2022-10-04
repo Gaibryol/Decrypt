@@ -62,10 +62,9 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 
 	private void SpawnWord()
 	{
+		while(countDownTime < 0 );
 		SoundEffectsManager.Instance.PlayOneShotSFX("WordSpawned");
-
 		List<string> words = WordsManager.Instance.GetScrambledWord();
-
 		GameObject newWord = Instantiate(WordPrefab, Canvas.transform);
 		newWord.transform.SetParent(Canvas.transform.Find("GameScreen").transform);
 		newWord.transform.localPosition = new Vector3(newWord.transform.localPosition.x, spawnY);

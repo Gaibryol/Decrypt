@@ -63,6 +63,7 @@ public class GameUIController : MonoBehaviour
 		stage.text = "01";
 		ability.text = "None";
 		gameController = GetComponent<GameController>();
+		warning.SetActive(false);
 		startingBaselineY = baseLine.transform.localPosition.y;
 	}
 
