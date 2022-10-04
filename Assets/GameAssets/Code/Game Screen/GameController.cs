@@ -207,8 +207,12 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 
 		word.GetComponent<Word>().ShowIsCorrect();
 
-		// wait for 1 second
+		// wait for 0.75 second
 		yield return new WaitForSeconds(0.75f);
+		playerPoints += word.GetComponent<Word>().realWord.Length * Constants.PointsPerLetter * pointsMultiplier;
+		gameUI.OnWordExit();
+		gameUI.OnWordSolved(Mathf.FloorToInt(playerPoints));
+		Destroy(word);
 
 		// Need to bump all the other words down
 		for (; i < lines.Count; i++)
@@ -218,13 +222,6 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 				lines[i].transform.localPosition = new Vector3(lines[i].transform.localPosition.x, lines[i].transform.localPosition.y - word.GetComponent<RectTransform>().rect.height - WordsYOffset);
 			}
 		}
-
-		playerPoints += word.GetComponent<Word>().realWord.Length * Constants.PointsPerLetter * pointsMultiplier;
-
-		gameUI.OnWordExit();
-
-		gameUI.OnWordSolved(Mathf.FloorToInt(playerPoints));
-		Destroy(word);
 
 		if (lines.Count < MaximumNumLines - warningLimit)
 		{
