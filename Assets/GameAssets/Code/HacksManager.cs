@@ -82,7 +82,7 @@ public class HacksManager : MonoBehaviour
                 break;
             case Constants.HackD://Finished
                 ActivatedD = true;
-				gameController.ChangeMaxLife(1);
+				gameController.ChangeMaxLife(2);
 				gameUIController.CoverWords(3);
                 break;
             case Constants.HackE://Finished
