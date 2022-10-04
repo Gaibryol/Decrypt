@@ -62,7 +62,6 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 
 	private void SpawnWord()
 	{
-		while(countDownTime <= 0 );
 		SoundEffectsManager.Instance.PlayOneShotSFX("WordSpawned");
 		List<string> words = WordsManager.Instance.GetScrambledWord();
 		GameObject newWord = Instantiate(WordPrefab, Canvas.transform);
@@ -142,7 +141,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 					currentNumWords = lines.Count;
 				}
 
-				newWord.transform.localPosition = Vector3.MoveTowards(newWord.transform.localPosition, newPos, 250f * Time.deltaTime);
+				newWord.transform.localPosition = Vector3.MoveTowards(newWord.transform.localPosition, newPos, 300f * Time.deltaTime);
 			}
 			yield return null;
 		}
@@ -209,7 +208,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 		word.GetComponent<Word>().ShowIsCorrect();
 
 		// wait for 1 second
-		yield return new WaitForSeconds(1f);
+		yield return new WaitForSeconds(0.75f);
 
 		// Need to bump all the other words down
 		for (; i < lines.Count; i++)
