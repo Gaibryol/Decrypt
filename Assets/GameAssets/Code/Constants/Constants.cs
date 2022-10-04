@@ -63,7 +63,7 @@ public static class Constants
 	public const string DescriptionA = "The first letter of each word is in the correct position|You only see the bottom row of words)";
 	public const string DescriptionB = "The last letter of each word is in the correct position|You only see the bottom row of words";
 	public const string DescriptionC = "Decrypt the longest words every 25 second|A word has a chance of having a letter obscured";
-	public const string DescriptionD = "You have 1 extra life line|You only see the three bottom row of words";
+	public const string DescriptionD = "You have 2 extra life line|You only see the three bottom row of words";
 	public const string DescriptionE = "Right-click to decrypt a word instantly (Up to 4 uses in a game)|Letters only appear when hovering over the letter tile";
 	public const string DescriptionF = "Able to view the letters as they’re falling down|Lose 1 life line";
 	public const string DescriptionG = "Right-click instantly drops the falling word|Lose 1 life line";
