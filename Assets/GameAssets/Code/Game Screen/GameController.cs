@@ -37,8 +37,6 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 	{
 		InitVariables();
 		gameUI.StartGame();
-		HacksManager.Instance.AddEarlyHack("A");
-		HacksManager.Instance.AddEarlyHack("E");
 	}
 
 	private void InitVariables()
