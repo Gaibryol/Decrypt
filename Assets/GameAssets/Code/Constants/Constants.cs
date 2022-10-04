@@ -67,7 +67,7 @@ public static class Constants
 	public const string DescriptionE = "Right-click to decrypt a word instantly (Up to 4 uses in a game)|Letters only appear when hovering over the letter tile";
 	public const string DescriptionF = "Able to view the letters as they’re falling down|Lose 1 life line";
 	public const string DescriptionG = "Right-click instantly drops the falling word|Lose 1 life line";
-	public const string DescriptionH = "Decrypt a random word every 25 seconds|Two words come down every 10 seconds)";
+	public const string DescriptionH = "Decrypt a random word every 25 seconds|Lose 3 life line)";
 	public const string DescriptionI = "Decrypt All The Displayed Words (One use per game)|Lose 2 life line";
 	public const string DescriptionJ = "Add the possibility of three letter words|0.75x the points for each word decrypted";
 	public const string DescriptionK = "Add the possibility of four letter words|0.85x the points for each word decrypted";

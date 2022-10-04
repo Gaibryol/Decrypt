@@ -37,6 +37,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 	{
 		InitVariables();
 		gameUI.StartGame();
+		HacksManager.Instance.AddEarlyHack("H");
 	}
 
 	private void InitVariables()
@@ -333,12 +334,6 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 		}
 	}
 
-	public IEnumerator SpawnTwoWords()
-	{
-		SpawnWord();
-		yield return new WaitForSeconds(1.5f);
-		SpawnWord();
-	}
 
 	private void Update()
 	{
@@ -350,15 +345,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 		if (countDownTime <= 0 || lines.Count == 0)
 		{
 			countDownTime = Constants.MaxTime;
-
-			if (HacksManager.Instance.ActivatedH)
-			{
-				StartCoroutine(SpawnTwoWords());
-			}
-			else
-			{
-				SpawnWord();
-			}
+			SpawnWord();
 			gameUI.ResetTimer();
 		}
 
