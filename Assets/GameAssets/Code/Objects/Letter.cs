@@ -138,22 +138,27 @@ public class Letter : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 		if(!specialLetter)
 			image.sprite = LettersManager.Instance.GetSprite(characterColor, Character);
 	}
+	public void ReplaceLetter(string correctCharacter)
+	{
+		Character = correctCharacter;
+	}
 
 	public void ChangeToCorrect()
 	{
+		isCovered = false;
 		image.sprite = LettersManager.Instance.GetSprite(Constants.LetterColors.Green, Character);
 	}
 
 	public void OnPointerEnter(PointerEventData eventData)
 	{
-		if(HacksManager.Instance.ActivatedE){
+		if(HacksManager.Instance.ActivatedE & isCovered == true){
 			image.sprite = LettersManager.Instance.GetSprite(characterColor, Character);
 		}
 	}
 
 	public void OnPointerExit(PointerEventData eventData)
 	{
-		if(HacksManager.Instance.ActivatedE)
+		if(HacksManager.Instance.ActivatedE & isCovered == true)
 		{
 			image.sprite = LettersManager.Instance.GetTileCoverSprite();
 		}

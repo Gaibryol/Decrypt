@@ -37,6 +37,8 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 	{
 		InitVariables();
 		gameUI.StartGame();
+		HacksManager.Instance.AddEarlyHack("A");
+		HacksManager.Instance.AddEarlyHack("E");
 	}
 
 	private void InitVariables()
@@ -271,6 +273,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 	{
 		if (abilityUsages > 0)
 		{
+			word.GetComponent<Word>().solveWord();
 			CorrectWord(word);
 			abilityUsages -= 1;
 			gameUI.LowerDiplayAbility();
@@ -283,9 +286,9 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 		{
 			for (int i = lines.Count - 1; i >= 0; i--)
 			{
+				lines[i].GetComponent<Word>();
 				CorrectWord(lines[i]);
 			}
-
 			abilityUsages -= 1;
 			gameUI.LowerDiplayAbility();
 		}

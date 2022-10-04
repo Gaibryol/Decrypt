@@ -60,11 +60,11 @@ public class Word : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 				covered = false;
 			}
 			if(HacksManager.Instance.ActivatedA & i == 0){
-				lScript.Construct(scrambledWord[i].ToString(), covered, false, color,false);
+				lScript.Construct(scrambledWord[i].ToString(), false, false, color,false);
 			}
 			else if(HacksManager.Instance.ActivatedB & i == scrambledWord.Length -1)
 			{
-				lScript.Construct(scrambledWord[i].ToString(), covered, false, color,false);
+				lScript.Construct(scrambledWord[i].ToString(), false, false, color,false);
 			}
 			else if(HacksManager.Instance.ActivatedC & i == randomNumber & Random.Range(0,4) == 3)
 			{
@@ -93,6 +93,15 @@ public class Word : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 		}
 
 		return -1;
+	}
+
+	public void solveWord(){
+		int i = 0;
+		foreach(Transform obj in transform)
+		{
+			obj.gameObject.GetComponent<Letter>().ReplaceLetter(realWord[i].ToString());
+			i++;
+		}
 	}
 
 	public void CheckIsCorrect()
@@ -146,6 +155,10 @@ public class Word : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 				gameController.DecryptWord(this.gameObject);
 			}
 		}
+	}
+
+	public void ReplaceLetter(){
+		
 	}
 
 	public int GetWordLength()
