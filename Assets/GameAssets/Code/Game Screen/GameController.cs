@@ -55,7 +55,8 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 
 		warningLimit = Constants.WarningLimit;
 		pointsMultiplier = 1f;
-		subState = Constants.SubState.Playing;
+
+		ChangeSubState(Constants.SubState.Playing);
 
 		gameUI = GetComponent<GameUIController>();
 	}
@@ -108,7 +109,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 	{
 		ResetList();
 		InitVariables();
-		gameUI.InitVariables();
+		gameUI.StartGame();
 		HacksManager.Instance.InitVariables();
 		WordsManager.Instance.InitVariables();
 	}

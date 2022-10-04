@@ -3230,7 +3230,7 @@ MonoBehaviour:
   - {fileID: 264627628}
   baseLine: {fileID: 460872244}
   tutorial: {fileID: 1473573250}
-  startingBaselineY: 20
+  startingBaselineY: -520
   score: {fileID: 1583605828}
   stage: {fileID: 680118129}
   ability: {fileID: 1012349695}
