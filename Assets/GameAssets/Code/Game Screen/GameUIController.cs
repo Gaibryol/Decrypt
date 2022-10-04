@@ -21,7 +21,7 @@ public class GameUIController : MonoBehaviour
 	[SerializeField] private Image baseLine;
 	[SerializeField] private GameObject tutorial;
 
-	private float startingBaselineY;
+	[SerializeField] private float startingBaselineY;
 
 	[SerializeField, Header("Text")] private TMP_Text score;
 	[SerializeField] private TMP_Text stage;
@@ -41,6 +41,7 @@ public class GameUIController : MonoBehaviour
 
 	private GameController gameController;
 	private List<GameObject> abilityUses;
+
 	public void StartGame()
 	{
 		InitVariables();
@@ -64,7 +65,6 @@ public class GameUIController : MonoBehaviour
 		ability.text = "None";
 		gameController = GetComponent<GameController>();
 		warning.SetActive(false);
-		startingBaselineY = baseLine.transform.localPosition.y;
 	}
 
 	public void OnWordHover(float y)
