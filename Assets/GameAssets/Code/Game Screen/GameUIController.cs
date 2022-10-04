@@ -41,7 +41,6 @@ public class GameUIController : MonoBehaviour
 
 	private GameController gameController;
 	private List<GameObject> abilityUses;
-
 	public void StartGame()
 	{
 		InitVariables();
@@ -157,6 +156,7 @@ public class GameUIController : MonoBehaviour
 
 	public void CoverWords(int numLinesShowing)
 	{
+		cover.transform.localPosition = new Vector3(cover.transform.localPosition.x, 460);
 		float newYAddition = (((gameController.WordPrefab.GetComponent<RectTransform>().rect.height + gameController.WordsYOffset) * (8 - gameController.MaximumNumLines)) + (gameController.WordPrefab.GetComponent<RectTransform>().rect.height + gameController.WordsYOffset) * (numLinesShowing - 1));
 		cover.SetActive(true);
 		cover.transform.localPosition = new Vector3(cover.transform.localPosition.x, cover.transform.localPosition.y + newYAddition);
