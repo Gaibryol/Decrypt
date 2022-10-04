@@ -355,6 +355,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 				GameObject longestWord = GetLongestWord();
 				if (longestWord != null)
 				{
+					longestWord.GetComponent<Word>().solveWord();
 					CorrectWord(longestWord);
 				}
 			}
@@ -363,6 +364,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 				if (lines.Count != 0)
 				{
 					GameObject randomWord = lines[Random.Range(0, lines.Count)];
+					randomWord.GetComponent<Word>().solveWord();
 					CorrectWord(randomWord);
 				}
 			}
