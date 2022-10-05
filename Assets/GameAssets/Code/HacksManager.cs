@@ -100,6 +100,7 @@ public class HacksManager : MonoBehaviour
 				gameController.ChangeMaxLife(-1);
                 break;
             case Constants.HackG:
+                possibleEarlyHacks.Remove("A");
                 possibleEarlyHacks.Remove("E");//Right Click Instantly drops
                 possibleEarlyHacks.Remove("I");
                 ActivatedG = true;

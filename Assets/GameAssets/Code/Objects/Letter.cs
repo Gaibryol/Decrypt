@@ -66,9 +66,8 @@ public class Letter : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 	public void OnBeginDrag(PointerEventData eventData)
 	{
 		if(!word.IsInteractable) return;
-
+		this.gameObject.name = "PickedUp";
 		word.OnPickUpLetter();
-
 		originalIndex = word.GetIndex(this.gameObject);
 		originalX = rectTransform.position.x;
 		transform.SetParent(GameManager.Instance.Canvas.transform);
@@ -78,7 +77,7 @@ public class Letter : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 	public void OnEndDrag(PointerEventData eventData)
 	{
 		if(!word.IsInteractable) return;
-
+		this.gameObject.name = "Letter(Clone)";
 		word.OnPutDownLetter();
 		rectTransform.SetParent(word.transform);
 

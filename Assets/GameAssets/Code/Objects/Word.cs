@@ -12,6 +12,7 @@ public class Word : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 	public string scrambledWord;
 	public bool IsInteractable;
 	public bool IsMoving;
+	public List<GameObject> letters;
 	
 	private HorizontalLayoutGroup horizontalLayoutGroup;
 
@@ -54,6 +55,7 @@ public class Word : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 		for (int i = 0; i < scrambledWord.Length; i++)
 		{
 			GameObject newObj = Instantiate(letterPrefab, transform);
+			letters.Add(newObj);
 			Letter lScript = newObj.GetComponent<Letter>();
 			bool covered = true;
 			if(HacksManager.Instance.ActivatedF){

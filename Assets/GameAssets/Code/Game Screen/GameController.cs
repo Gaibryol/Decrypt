@@ -117,32 +117,24 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 	public IEnumerator MoveWord(GameObject newWord)
 	{
 		Vector3 newPos = new Vector3();
-		if (MaximumNumLines > defaultMaxLines)
-		{
-			newPos = new Vector3(0, bottomLineY + ((newWord.GetComponent<RectTransform>().rect.height + WordsYOffset) * lines.Count) - ((newWord.GetComponent<RectTransform>().rect.height + WordsYOffset) * (MaximumNumLines - defaultMaxLines)));
-		}
-		else if (MaximumNumLines < defaultMaxLines)
-		{
-			newPos = new Vector3(0, bottomLineY + ((newWord.GetComponent<RectTransform>().rect.height + WordsYOffset) * lines.Count) + ((newWord.GetComponent<RectTransform>().rect.height + WordsYOffset) * (defaultMaxLines - MaximumNumLines)));
-		}
-		else
-		{
-			newPos = new Vector3(0, bottomLineY + ((newWord.GetComponent<RectTransform>().rect.height + WordsYOffset) * lines.Count));
-		}
-		
-		int currentNumWords = lines.Count;
 
 		while (newWord.transform.localPosition != newPos)
 		{
 			if(subState != Constants.SubState.Pause)
 			{
-				if (lines.Count != currentNumWords)
+				if (MaximumNumLines > defaultMaxLines)
 				{
-					newPos = new Vector3(newPos.x, newPos.y - (newWord.GetComponent<RectTransform>().rect.height + WordsYOffset));
-					currentNumWords = lines.Count;
+					newPos = new Vector3(0, bottomLineY + ((newWord.GetComponent<RectTransform>().rect.height + WordsYOffset) * lines.Count) - ((newWord.GetComponent<RectTransform>().rect.height + WordsYOffset) * (MaximumNumLines - defaultMaxLines)));
 				}
-
-				newWord.transform.localPosition = Vector3.MoveTowards(newWord.transform.localPosition, newPos, 300f * Time.deltaTime);
+				else if (MaximumNumLines < defaultMaxLines)
+				{
+					newPos = new Vector3(0, bottomLineY + ((newWord.GetComponent<RectTransform>().rect.height + WordsYOffset) * lines.Count) + ((newWord.GetComponent<RectTransform>().rect.height + WordsYOffset) * (defaultMaxLines - MaximumNumLines)));
+				}
+				else
+				{
+					newPos = new Vector3(0, bottomLineY + ((newWord.GetComponent<RectTransform>().rect.height + WordsYOffset) * lines.Count));
+				}
+					newWord.transform.localPosition = Vector3.MoveTowards(newWord.transform.localPosition, newPos, 300f * Time.deltaTime);
 			}
 			yield return null;
 		}
@@ -202,18 +194,20 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 
 	private IEnumerator CorrectWordAnim(GameObject word)
 	{
-		int i = 0;
-		i = lines.IndexOf(word);
-		lines.Remove(word);
-
+		int i = lines.IndexOf(word);
 		word.GetComponent<Word>().ShowIsCorrect();
-
 		// wait for 0.75 second
 		yield return new WaitForSeconds(0.75f);
 		playerPoints += word.GetComponent<Word>().realWord.Length * Constants.PointsPerLetter * pointsMultiplier;
 		gameUI.OnWordExit();
 		gameUI.OnWordSolved(Mathf.FloorToInt(playerPoints));
+		lines.Remove(word);
 		Destroy(word);
+
+		GameObject temp = GameObject.Find("PickedUp");
+		if(temp != null){
+			Destroy(temp);
+		}
 
 		// Need to bump all the other words down
 		for (; i < lines.Count; i++)
