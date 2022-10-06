@@ -96,6 +96,7 @@ public class HacksManager : MonoBehaviour
                 break;
             case Constants.HackF://Finished
                 ActivatedF = true;
+                possibleEarlyHacks.Remove("A");
                 possibleEarlyHacks.Remove("E");
 				gameController.ChangeMaxLife(-1);
                 break;
