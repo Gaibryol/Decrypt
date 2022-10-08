@@ -201,13 +201,18 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 		playerPoints += word.GetComponent<Word>().realWord.Length * Constants.PointsPerLetter * pointsMultiplier;
 		gameUI.OnWordExit();
 		gameUI.OnWordSolved(Mathf.FloorToInt(playerPoints));
+		GameObject tempLetter = GameObject.Find("PickedUp");
+		if(tempLetter != null )
+		{
+			if(word.GetComponent<Word>().letters.Contains(tempLetter)){
+				tempLetter.GetComponent<Letter>().ChangeToCorrect();
+				Destroy(tempLetter);
+			}
+		}
 		lines.Remove(word);
 		Destroy(word);
 
-		GameObject temp = GameObject.Find("PickedUp");
-		if(temp != null){
-			Destroy(temp);
-		}
+
 
 		// Need to bump all the other words down
 		for (; i < lines.Count; i++)
