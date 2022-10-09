@@ -126,7 +126,8 @@ public class HacksManager : MonoBehaviour
                 break;  
         }
 		gameUIController.DisplayBaseline();
-        if(covered != 0){
+        if (covered != 0)
+		{
             gameUIController.CoverWords(covered);
         }
 	}
@@ -188,8 +189,10 @@ public class HacksManager : MonoBehaviour
         {
             hack1 = possibleHacks[Random.Range(0,possibleHacks.Count)];
             hack2 = possibleHacks[Random.Range(0,possibleHacks.Count)];
-            if(hack1 != hack2) 
-                running = false;
+            if(hack1 != hack2)
+			{
+				running = false;
+			}
         }
         return new List<string>(){hack1,hack2};
     }
