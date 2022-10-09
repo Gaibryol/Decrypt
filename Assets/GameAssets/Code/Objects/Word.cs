@@ -97,6 +97,19 @@ public class Word : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 		return -1;
 	}
 
+	public int GetIndexByPos(float x)
+	{
+		for(int i = 0; i < transform.childCount; i++)
+		{
+			if (x  < transform.GetChild(i).localPosition.x)
+			{
+				return i;
+			}
+		}
+
+		return transform.childCount;
+	}
+
 	public void solveWord(){
 		int i = 0;
 		foreach(Transform obj in transform)

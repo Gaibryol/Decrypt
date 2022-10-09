@@ -79,49 +79,10 @@ public class Letter : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 		if(!word.IsInteractable) return;
 		this.gameObject.name = "Letter(Clone)";
 		word.OnPutDownLetter();
+		int endIndex = word.GetIndexByPos(rectTransform.localPosition.x);
 		rectTransform.SetParent(word.transform);
+		rectTransform.SetSiblingIndex(endIndex);
 
-		float diff = originalX - eventData.position.x;
-		int movement = 0;
-		if (diff > 0)
-		{
-			// Went left
-			movement = Mathf.RoundToInt(Mathf.Abs(originalX - eventData.position.x - (rectTransform.rect.width / 2)) / rectTransform.rect.width);
-		}
-		else if (diff < 0)
-		{
-			// Went right
-			movement = Mathf.RoundToInt(Mathf.Abs(originalX - eventData.position.x + (rectTransform.rect.width / 2)) / rectTransform.rect.width);
-		}
-
-		if (originalX - eventData.position.x > 0)
-		{
-			// Went left
-			if (originalIndex - movement <= 0)
-			{
-				rectTransform.SetSiblingIndex(0);
-			}
-			else
-			{
-				rectTransform.SetSiblingIndex(originalIndex - movement);
-			}
-		}
-		else if (originalX - eventData.position.x < 0)
-		{
-			// Went right
-			if (originalIndex + movement >= rectTransform.parent.childCount - 1)
-			{
-				rectTransform.SetSiblingIndex(rectTransform.parent.childCount - 1);
-			}
-			else
-			{
-				rectTransform.SetSiblingIndex(originalIndex + movement);
-			}
-		}
-		else
-		{
-			rectTransform.SetSiblingIndex(originalIndex);
-		}
 		isDown = true;
 
 		word.CheckIsCorrect();
