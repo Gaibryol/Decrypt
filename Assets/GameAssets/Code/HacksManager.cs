@@ -12,6 +12,8 @@ public class HacksManager : MonoBehaviour
 	[SerializeField] private GameController gameController;
 	[SerializeField] private GameUIController gameUIController;
 
+    private int covered;
+
     #region Bool Variables
     public bool ActivatedA;
     public bool ActivatedB;
@@ -35,6 +37,7 @@ public class HacksManager : MonoBehaviour
 
     public void InitVariables()
     {
+        covered = 0;
         possibleEarlyHacks = new List<string>(){"A","B","C","D","E","F","G","H","I"};
         possibleLateHacks = new List<string>(){"J","K","L","M","N","O","P",};
         ActivatedHacks = new List<string>();
@@ -63,7 +66,7 @@ public class HacksManager : MonoBehaviour
                 possibleEarlyHacks.Remove("B");
                 possibleLateHacks.Remove("J");
                 ActivatedA = true;
-				gameUIController.CoverWords(1);
+                covered = 1;
                 break;
             case Constants.HackB://Finished
                 if(possibleEarlyHacks.Contains("D"))
@@ -73,7 +76,7 @@ public class HacksManager : MonoBehaviour
                 possibleEarlyHacks.Remove("A");
                 possibleLateHacks.Remove("J");
                 ActivatedB = true;
-				gameUIController.CoverWords(1);
+                covered = 1;
                 break;
             case Constants.HackC://Finished
                 possibleEarlyHacks.Remove("H");
@@ -83,7 +86,7 @@ public class HacksManager : MonoBehaviour
             case Constants.HackD://Finished
                 ActivatedD = true;
 				gameController.ChangeMaxLife(2);
-				gameUIController.CoverWords(3);
+                covered = 3;
                 break;
             case Constants.HackE://Finished
                 possibleEarlyHacks.Remove("G");
@@ -122,8 +125,10 @@ public class HacksManager : MonoBehaviour
 				gameController.ChangeMaxLife(-2);
                 break;  
         }
-
 		gameUIController.DisplayBaseline();
+        if(covered != 0){
+            gameUIController.CoverWords(covered);
+        }
 	}
 
     public void AddLateHack(string hackLetter)
