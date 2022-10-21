@@ -74,6 +74,8 @@ public class Letter : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 		originalX = rectTransform.position.x;
 		transform.SetParent(GameManager.Instance.Canvas.transform);
 
+        Image placeHolderImage = LettersManager.Instance.placeHolder.GetComponent<Image>();
+        placeHolderImage.color = new Color(placeHolderImage.color.r, placeHolderImage.color.g, placeHolderImage.color.b, 1f);
         LettersManager.Instance.placeHolder.transform.SetParent(word.transform);
         LettersManager.Instance.placeHolder.transform.SetSiblingIndex(originalIndex);
 
@@ -89,6 +91,8 @@ public class Letter : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 		rectTransform.SetParent(word.transform);
 		rectTransform.SetSiblingIndex(endIndex);
 
+        Image placeHolderImage = LettersManager.Instance.placeHolder.GetComponent<Image>();
+        placeHolderImage.color = new Color(placeHolderImage.color.r, placeHolderImage.color.g, placeHolderImage.color.b, 0f);
         LettersManager.Instance.placeHolder.transform.SetParent(GameManager.Instance.Canvas.transform);
         animator.Play("LetterPulsate");
 
