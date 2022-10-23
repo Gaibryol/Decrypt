@@ -22,6 +22,8 @@ public class LettersManager : MonoBehaviour
 
 	[SerializeField] Sprite tileCover;
 
+    [SerializeField] public GameObject placeHolder;
+
 	private void Awake()
 	{
 		if (Instance != null && Instance != this)

@@ -10,6 +10,7 @@ public class Letter : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 
 	private Image image;
 	private RectTransform rectTransform;
+    private Animator animator;
 	private Word word;
 	private bool isDown;
 
@@ -23,9 +24,10 @@ public class Letter : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 
 	private void Awake()
 	{
-		image = GetComponent<Image>();
+		image = GetComponentInChildren<Image>();
 		word = transform.parent.GetComponent<Word>();
 		rectTransform = GetComponent<RectTransform>();
+        animator = GetComponentInChildren<Animator>();
 		isDown = true;
 		isCovered = false;
 	}
@@ -34,7 +36,7 @@ public class Letter : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 	{
 		if (!isDown)
 		{
-			transform.position = new Vector3(Input.mousePosition.x, transform.position.y, 0);
+			transform.position = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0);
 		}
 	}
 
@@ -71,7 +73,13 @@ public class Letter : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 		originalIndex = word.GetIndex(this.gameObject);
 		originalX = rectTransform.position.x;
 		transform.SetParent(GameManager.Instance.Canvas.transform);
-		isDown = false;
+
+        Image placeHolderImage = LettersManager.Instance.placeHolder.GetComponent<Image>();
+        placeHolderImage.color = new Color(placeHolderImage.color.r, placeHolderImage.color.g, placeHolderImage.color.b, 1f);
+        LettersManager.Instance.placeHolder.transform.SetParent(word.transform);
+        LettersManager.Instance.placeHolder.transform.SetSiblingIndex(originalIndex);
+
+        isDown = false;
 	}
 
 	public void OnEndDrag(PointerEventData eventData)
@@ -83,15 +91,21 @@ public class Letter : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 		rectTransform.SetParent(word.transform);
 		rectTransform.SetSiblingIndex(endIndex);
 
-		isDown = true;
+        Image placeHolderImage = LettersManager.Instance.placeHolder.GetComponent<Image>();
+        placeHolderImage.color = new Color(placeHolderImage.color.r, placeHolderImage.color.g, placeHolderImage.color.b, 0f);
+        LettersManager.Instance.placeHolder.transform.SetParent(GameManager.Instance.Canvas.transform);
+        animator.Play("LetterPulsate");
+
+        isDown = true;
 
 		word.CheckIsCorrect();
 	}
 
 	public void OnDrag(PointerEventData eventData)
 	{
-		
-	}
+        int currentIndex = word.GetIndexByPos(rectTransform.localPosition.x);
+        LettersManager.Instance.placeHolder.transform.SetSiblingIndex(currentIndex);
+    }
 
 	public void RevealLetter()
 	{
