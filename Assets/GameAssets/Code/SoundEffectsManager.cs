@@ -39,9 +39,11 @@ public class SoundEffectsManager : MonoBehaviour
 		else
 		{
 			Instance = this;
-		}
+            DontDestroyOnLoad(this.gameObject);
 
-		PlayMainMenuMusic();
+        }
+
+        PlayMainMenuMusic();
 	}
 
 	public void PlayOneShotSFX(string soundEffect)
@@ -105,13 +107,17 @@ public class SoundEffectsManager : MonoBehaviour
 
 	public void PlayGameMusic()
 	{
-		musicSource.clip = gameTheme;
+        if (musicSource.clip == gameTheme) return;
+
+        musicSource.clip = gameTheme;
 		musicSource.loop = true;
 		musicSource.Play();
 	}
 
 	public void PlayMainMenuMusic()
 	{
+        if (musicSource.clip == mainMenuTheme) return;
+
 		musicSource.clip = mainMenuTheme;
 		musicSource.loop = true;
 		musicSource.Play();
@@ -119,7 +125,9 @@ public class SoundEffectsManager : MonoBehaviour
 
 	public void PlayEverythingElseMusic()
 	{
-		musicSource.clip = everythingElseTheme;
+        if (musicSource.clip == everythingElseTheme) return;
+
+        musicSource.clip = everythingElseTheme;
 		musicSource.loop = true;
 		musicSource.Play();
 	}
