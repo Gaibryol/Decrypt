@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 public class GameController : MonoBehaviour, IPointerClickHandler
 {
 	[SerializeField] public GameObject WordPrefab;
-	[SerializeField] public Canvas Canvas;
+    [SerializeField] public Canvas Canvas;
 	[SerializeField] private GameObject Hack1;
 	[SerializeField] private GameObject Hack2;
 
@@ -33,7 +33,12 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 	private int currentStage;
 	private bool alternateColor;
 
-	public void StartGame()
+    private void Start()
+    {
+        StartGame();
+    }
+
+    public void StartGame()
 	{
 		InitVariables();
 		gameUI.StartGame();
