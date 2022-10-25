@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 public class GameController : MonoBehaviour, IPointerClickHandler
 {
 	[SerializeField] public GameObject WordPrefab;
-	[SerializeField] public Canvas Canvas;
+    [SerializeField] public Canvas Canvas;
 	[SerializeField] private GameObject Hack1;
 	[SerializeField] private GameObject Hack2;
 
@@ -33,7 +33,12 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 	private int currentStage;
 	private bool alternateColor;
 
-	public void StartGame()
+    private void Start()
+    {
+        StartGame();
+    }
+
+    public void StartGame()
 	{
 		InitVariables();
 		gameUI.StartGame();
@@ -227,7 +232,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 		{
 			gameUI.DisplayWarning(false);
 		}
-		if (playerPoints >= 10000 & currentStage == 1)
+		if (playerPoints >= 10 & currentStage == 1)
 		{
 			WordsManager.Instance.ChangePossibleWordLength("4,5,6");
 			SoundEffectsManager.Instance.PlayOneShotSFX("StageEnded");
@@ -235,7 +240,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 			currentStage += 1;
 			gameUI.OnStageComplete(currentStage);
 		}
-		else if (playerPoints >= 25000 & currentStage == 2)
+		else if (playerPoints >= 25 & currentStage == 2)
 		{
 			WordsManager.Instance.ChangePossibleWordLength("5,6,7");
 			SoundEffectsManager.Instance.PlayOneShotSFX("StageEnded");
@@ -243,7 +248,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 			currentStage += 1;
 			gameUI.OnStageComplete(currentStage);
 		}
-		else if (playerPoints >= 50000 & currentStage == 3)
+		else if (playerPoints >= 50 & currentStage == 3)
 		{
 			SoundEffectsManager.Instance.PlayOneShotSFX("StageEnded");
 			ChangeSubState(Constants.SubState.Hack);

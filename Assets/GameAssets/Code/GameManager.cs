@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,13 +11,6 @@ public class GameManager : MonoBehaviour
 	[SerializeField] public Canvas Canvas;
 	[SerializeField] public Constants.GameStates GameState;
 	[SerializeField] public Texture2D crosshair;
-
-	[SerializeField, Header("Controllers")] private GameController gameController;
-	[SerializeField] private TitleScreenController titleController;
-
-	[SerializeField, Header("Screens")] private GameObject titleScreen;
-	[SerializeField] private GameObject gameScreen;
-	[SerializeField] private GameObject creditsScreen;
 
 	private void Awake()
 	{
@@ -27,29 +21,38 @@ public class GameManager : MonoBehaviour
 		else
 		{
 			Instance = this;
-		}
+            DontDestroyOnLoad(this.gameObject);
+        }
 
-		Cursor.SetCursor(crosshair, Vector2.zero, CursorMode.Auto);
+        Cursor.SetCursor(crosshair, Vector2.zero, CursorMode.Auto);
 
 		GameState = Constants.GameStates.MainMenu;
-	}
 
-	public void ChangeState(Constants.GameStates newState)
+
+    }
+
+    public void ChangeState(Constants.GameStates newState)
 	{
 		GameState = newState;
 
-		titleScreen.SetActive(newState == Constants.GameStates.MainMenu);
-		gameScreen.SetActive(newState == Constants.GameStates.Game);
-		creditsScreen.SetActive(newState == Constants.GameStates.Credits);
-
-		if (GameState == Constants.GameStates.Game)
+        if (GameState == Constants.GameStates.Game)
 		{
 			SoundEffectsManager.Instance.PlayGameMusic();
-			gameController.StartGame();
+            SceneManager.LoadScene("GameScene");
 		}
 		else if (GameState == Constants.GameStates.MainMenu)
 		{
-			SoundEffectsManager.Instance.PlayMainMenuMusic();
-		}
-	}
+            SoundEffectsManager.Instance.PlayMainMenuMusic();
+            SceneManager.LoadScene("TitleScene");
+		} else if (GameState == Constants.GameStates.Credits)
+        {
+            SoundEffectsManager.Instance.PlayMainMenuMusic();
+            SceneManager.LoadScene("CreditScene");
+        }
+    }
+
+    private void OnLevelWasLoaded(int level)
+    {
+        Canvas = FindObjectOfType<Canvas>();
+    }
 }

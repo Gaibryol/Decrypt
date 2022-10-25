@@ -8,14 +8,8 @@ public class SettingsManager : MonoBehaviour
 {
 	public static SettingsManager Instance { get; private set; }
 
-	[SerializeField, Header("Title Screen")] private Toggle tMusicToggle;
-	[SerializeField] private Toggle tSoundToggle;
-
-	[SerializeField, Header("Credit Screen")] private Toggle cMusicToggle;
-	[SerializeField] private Toggle cSoundToggle;
-
-	[SerializeField, Header("Game Screen")] private Toggle gMusicToggle;
-	[SerializeField] private Toggle gSoundToggle;
+	[SerializeField, Header("Game Screen")] private Toggle MusicToggle;
+	[SerializeField] private Toggle SoundToggle;
 
 	[SerializeField, Header("Audio")] private AudioMixer mixer;
 	[SerializeField] private AudioClip theme;
@@ -34,21 +28,20 @@ public class SettingsManager : MonoBehaviour
 		else
 		{
 			Instance = this;
-		}
+            DontDestroyOnLoad(this.gameObject);
 
-		musicState = true;
+        }
+
+        musicState = true;
 		soundState = true;
 
-		tMusicToggle.onValueChanged.AddListener((isOn) => ToggleMusic(isOn));
-		cMusicToggle.onValueChanged.AddListener((isOn) => ToggleMusic(isOn));
-		gMusicToggle.onValueChanged.AddListener((isOn) => ToggleMusic(isOn));
+        MusicToggle.onValueChanged.AddListener((isOn) => ToggleMusic(isOn));
+        SoundToggle.onValueChanged.AddListener((isOn) => ToggleSound(isOn));
 
-		tSoundToggle.onValueChanged.AddListener((isOn) => ToggleSound(isOn));
-		cSoundToggle.onValueChanged.AddListener((isOn) => ToggleSound(isOn));
-		gSoundToggle.onValueChanged.AddListener((isOn) => ToggleSound(isOn));
-	}
 
-	private void Start()
+    }
+
+    private void Start()
 	{
 		mixer.SetFloat("Music", normalMusicVolume);
 		mixer.SetFloat("Sound", normalSoundVolume);
@@ -56,13 +49,8 @@ public class SettingsManager : MonoBehaviour
 
 	private void AdjustUI()
 	{
-		tMusicToggle.isOn = musicState;
-		cMusicToggle.isOn = musicState;
-		gMusicToggle.isOn = musicState;
-
-		tSoundToggle.isOn = soundState;
-		cSoundToggle.isOn = soundState;
-		gSoundToggle.isOn = soundState;
+		MusicToggle.isOn = musicState;
+		SoundToggle.isOn = soundState;
 	}
 
 	public void ToggleMusic(bool isOn)
@@ -84,4 +72,13 @@ public class SettingsManager : MonoBehaviour
 
 		AdjustUI();
 	}
+
+    private void OnLevelWasLoaded(int level)
+    {
+        SoundToggle = GameObject.FindGameObjectWithTag("SoundToggle").GetComponent<Toggle>();
+        MusicToggle = GameObject.FindGameObjectWithTag("MusicToggle").GetComponent<Toggle>();
+        MusicToggle.onValueChanged.AddListener((isOn) => ToggleMusic(isOn));
+        SoundToggle.onValueChanged.AddListener((isOn) => ToggleSound(isOn));
+        AdjustUI();
+    }
 }
