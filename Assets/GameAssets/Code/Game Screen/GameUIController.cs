@@ -141,7 +141,6 @@ public class GameUIController : MonoBehaviour
 
 	public void CompleteGame()
 	{
-		gameController.ChangeSubState(Constants.SubState.Complete);
 		complete.transform.SetAsLastSibling();
 		complete.SetActive(true);
 		pointsCompleted.text = score.text;

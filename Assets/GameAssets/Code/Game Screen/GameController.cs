@@ -33,6 +33,9 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 	private int currentStage;
 	private bool alternateColor;
 
+	public List<string> SolvedWords;
+	public List<string> WordsOnDeath;
+
 	public void StartGame()
 	{
 		InitVariables();
@@ -49,6 +52,9 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 		playerPoints = 0f;
 		countDownTime = Constants.MaxTime;
 		decryptTime = Constants.DecryptTime;
+
+		SolvedWords = new List<string>();
+		WordsOnDeath = new List<string>();
 
 		currentStage = 1;
 		alternateColor = false;
@@ -81,6 +87,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 		if (lines.Count > MaximumNumLines)
 		{
 			StopAllCoroutines();
+			CompleteGame();
 			gameUI.CompleteGame();
 		}
 		else if (lines.Count > MaximumNumLines - warningLimit)
@@ -88,6 +95,13 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 			SoundEffectsManager.Instance.PlayOneShotSFX("Warning");
 			gameUI.DisplayWarning(true);
 		}
+
+		WordsOnDeath.Add(words[0]);
+	}
+
+	private void CompleteGame()
+	{
+		ChangeSubState(Constants.SubState.Complete);
 	}
 
 	private void ResetList()
@@ -255,6 +269,10 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 	public void CorrectWord(GameObject word)
 	{
 		StartCoroutine(CorrectWordAnim(word));
+
+		string realWord = word.GetComponent<Word>().realWord;
+		SolvedWords.Add(realWord);
+		WordsOnDeath.Remove(realWord);
 	}
 
 	public void SetMultiplier(float multiplier)
@@ -327,7 +345,6 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 			}
 		}
 	}
-
 
 	private void Update()
 	{
