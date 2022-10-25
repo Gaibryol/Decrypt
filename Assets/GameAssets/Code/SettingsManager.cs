@@ -8,7 +8,7 @@ public class SettingsManager : MonoBehaviour
 {
 	public static SettingsManager Instance { get; private set; }
 
-	[SerializeField, Header("Game Screen")] private Toggle MusicToggle;
+	[SerializeField, Header("Audio Toggles")] private Toggle MusicToggle;
 	[SerializeField] private Toggle SoundToggle;
 
 	[SerializeField, Header("Audio")] private AudioMixer mixer;
