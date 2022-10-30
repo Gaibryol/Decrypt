@@ -51,35 +51,14 @@ public class Word : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 		{
 			color = Constants.LetterColors.Purple;
 		}
-		int randomNumber = Random.Range(0,realWord.Length);
 		for (int i = 0; i < scrambledWord.Length; i++)
 		{
 			GameObject newObj = Instantiate(letterPrefab, transform);
 			letters.Add(newObj);
 			Letter lScript = newObj.GetComponent<Letter>();
-			bool covered = true;
-			if(HacksManager.Instance.ActivatedF){
-				covered = false;
-			}
-			if(HacksManager.Instance.ActivatedA & i == 0){
-				lScript.Construct(scrambledWord[i].ToString(), false, false, color,false);
-			}
-			else if(HacksManager.Instance.ActivatedB & i == scrambledWord.Length -1)
-			{
-				lScript.Construct(scrambledWord[i].ToString(), false, false, color,false);
-			}
-			else if(HacksManager.Instance.ActivatedC & i == randomNumber & Random.Range(0,4) == 3)
-			{
-				lScript.Construct(scrambledWord[i].ToString(), true, true, color,true);
-			}
-			else if(HacksManager.Instance.ActivatedE)
-			{
-				lScript.Construct(scrambledWord[i].ToString(), covered, true, color,true);
-			}
-			else
-			{
-				lScript.Construct(scrambledWord[i].ToString(), covered, true, color,false);
-			}
+			lScript.Construct(scrambledWord[i].ToString(),color);
+
+
 		}
 		horizontalLayoutGroup = GetComponent<HorizontalLayoutGroup>();
 	}
@@ -108,15 +87,6 @@ public class Word : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 		}
 
 		return transform.childCount;
-	}
-
-	public void solveWord(){
-		int i = 0;
-		foreach(Transform obj in transform)
-		{
-			obj.gameObject.GetComponent<Letter>().ReplaceLetter(realWord[i].ToString());
-			i++;
-		}
 	}
 
 	public void CheckIsCorrect()
@@ -165,26 +135,24 @@ public class Word : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 	{
 		if(eventData.button == PointerEventData.InputButton.Right)
 		{
-			if(HacksManager.Instance.ActivatedE & IsInteractable)
+			if(Constants.Hack4.activated & IsInteractable)
 			{
-				gameController.DecryptWord(this.gameObject);
+				Constants.Hack4.RightClick(this.gameObject);
 			}
 		}
 	}
 
-	public void ReplaceLetter(){
-		
+	public void SolveWord(){
+		int i = 0;
+		foreach (Transform obj in transform)
+		{
+			obj.GetComponent<Letter>().ReplaceLetter(realWord[i].ToString());
+			i++;
+		}
 	}
-
-	public int GetWordLength()
-	{
-		return realWord.Length;
-	}
-
 	public void ShowIsCorrect()
 	{
 		IsInteractable = false;
-
 		foreach (Transform obj in transform)
 		{
 			obj.GetComponent<Letter>().ChangeToCorrect();

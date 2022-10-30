@@ -4,19 +4,18 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using TMPro;
 
-public class Hack : MonoBehaviour , IPointerEnterHandler, IPointerExitHandler
+public class ChooseHack : MonoBehaviour , IPointerEnterHandler, IPointerExitHandler
 {
-    private string hack;
+    private Hack hack;
     private int stage;
-    private GameController gc;
+    private GameController gameController;
     [SerializeField] private TMP_Text positiveText;
     [SerializeField] private TMP_Text negativeText;
     [SerializeField] private GameObject arrow;
-    public void SetHack(string hackLetter, int stageLevel, GameController gameController){
-        hack = hackLetter;
-        stage = stageLevel;
-        gc = gameController;
-        string[] decription = HacksManager.Instance.GetDescription(hackLetter).Split("|");
+    public void SetHack(Hack h,GameController gC){
+        hack = h;
+        gameController = gC;
+        string[] decription = hack.GetDescription().Split("|");
         positiveText.text = decription[0];
         negativeText.text = decription[1];
 
@@ -33,14 +32,7 @@ public class Hack : MonoBehaviour , IPointerEnterHandler, IPointerExitHandler
         this.gameObject.transform.localScale = new Vector3(0.6f,0.6f,0.6f);
 	}
     public void Clicked(){
-        if(stage != 3)
-        {
-            HacksManager.Instance.AddEarlyHack(hack);
-        }
-        else
-        {
-            HacksManager.Instance.AddLateHack(hack);
-        }
-        gc.ChangeSubState(Constants.SubState.Playing);
+        HacksManager.Instance.AddHack(hack);
+        gameController.ChangeSubState(Constants.SubState.Playing);
     }
 }
