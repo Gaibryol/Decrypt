@@ -146,7 +146,7 @@ public class GameUIController : MonoBehaviour
 		complete.SetActive(true);
 		pointsCompleted.text = score.text;
 		stageCompleted.text = stage.text;
-		List<string> hacks = HacksManager.Instance.ActivatedHacks;
+		List<Hack> hacks = HacksManager.Instance.ActivatedHacks;
 
 		for(int i = 0; i < hacks.Count; i++)
 		{
@@ -157,10 +157,13 @@ public class GameUIController : MonoBehaviour
 
 	public void CoverWords(int numLinesShowing)
 	{
-		cover.transform.localPosition = new Vector3(cover.transform.localPosition.x, 460);
-		float newYAddition = (((gameController.WordPrefab.GetComponent<RectTransform>().rect.height + gameController.WordsYOffset) * (8 - gameController.MaximumNumLines)) + (gameController.WordPrefab.GetComponent<RectTransform>().rect.height + gameController.WordsYOffset) * (numLinesShowing - 1));
-		cover.SetActive(true);
-		cover.transform.localPosition = new Vector3(cover.transform.localPosition.x, cover.transform.localPosition.y + newYAddition);
+		if(numLinesShowing != 0)
+		{
+			cover.transform.localPosition = new Vector3(cover.transform.localPosition.x, 460);
+			float newYAddition = (((gameController.WordPrefab.GetComponent<RectTransform>().rect.height + gameController.WordsYOffset) * (8 - gameController.MaximumNumLines)) + (gameController.WordPrefab.GetComponent<RectTransform>().rect.height + gameController.WordsYOffset) * (numLinesShowing - 1));
+			cover.SetActive(true);
+			cover.transform.localPosition = new Vector3(cover.transform.localPosition.x, cover.transform.localPosition.y + newYAddition);	
+		}
 	}
 
 	public void PauseGame()

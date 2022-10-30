@@ -18,8 +18,9 @@ public class Letter : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 	private float originalX;
 
 	private bool isCovered;
-	private bool canMove;
-	private bool specialLetter;
+	private bool isCorrect;
+	private bool neverReveal;
+	private bool isHover;
 	private Constants.LetterColors characterColor;
 
 	private void Awake()
@@ -29,7 +30,10 @@ public class Letter : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 		rectTransform = GetComponent<RectTransform>();
         animator = GetComponentInChildren<Animator>();
 		isDown = true;
-		isCovered = false;
+		isCovered = true;
+		isCorrect = false;
+		neverReveal = false;
+		isHover = false;
 	}
 
 	private void Update()
@@ -40,29 +44,11 @@ public class Letter : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 		}
 	}
 
-	public void Construct(string letter, bool covered, bool move, Constants.LetterColors color, bool special)
+	public void Construct(string letter,Constants.LetterColors color)
 	{
-		specialLetter = special;
 		Character = letter;
-		isCovered = covered;
-		canMove = move;
-		if(!canMove)
-		{
-			characterColor = Constants.LetterColors.Green;
-		}
-		else
-		{
-			characterColor = color;
-		}
-
-		if (!isCovered)
-		{
-			RevealLetter();
-		}
-		else
-		{
-			image.sprite = LettersManager.Instance.GetTileCoverSprite();
-		}
+		characterColor = color;
+		image.sprite = LettersManager.Instance.GetTileCoverSprite();
 	}
 
 	public void OnBeginDrag(PointerEventData eventData)
@@ -107,32 +93,48 @@ public class Letter : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
         LettersManager.Instance.placeHolder.transform.SetSiblingIndex(currentIndex);
     }
 
-	public void RevealLetter()
+	public void ReplaceLetter(string character)
 	{
-		if(!specialLetter)
-			image.sprite = LettersManager.Instance.GetSprite(characterColor, Character);
-	}
-	public void ReplaceLetter(string correctCharacter)
-	{
-		Character = correctCharacter;
+		Character = character;
 	}
 
+	public void NeverReveal(){
+		neverReveal = true;
+	}
+
+	public void IsHover(){
+		isHover = true;
+	}
+
+	public void RevealLetter()
+	{
+		if(!isCorrect && !neverReveal &&!isHover)
+		{
+			isCovered = false;
+			image.sprite = LettersManager.Instance.GetSprite(characterColor, Character);
+		}
+	}
 	public void ChangeToCorrect()
 	{
 		isCovered = false;
+		isCorrect = true;
 		image.sprite = LettersManager.Instance.GetSprite(Constants.LetterColors.Green, Character);
 	}
 
 	public void OnPointerEnter(PointerEventData eventData)
 	{
-		if(HacksManager.Instance.ActivatedE & isCovered == true){
-			image.sprite = LettersManager.Instance.GetSprite(characterColor, Character);
+		if(!word.IsMoving && isCovered)
+		{
+			if(!neverReveal)
+			{
+				image.sprite = LettersManager.Instance.GetSprite(characterColor, Character);
+			}
 		}
 	}
 
 	public void OnPointerExit(PointerEventData eventData)
 	{
-		if(HacksManager.Instance.ActivatedE & isCovered == true)
+		if(isCovered == true)
 		{
 			image.sprite = LettersManager.Instance.GetTileCoverSprite();
 		}
