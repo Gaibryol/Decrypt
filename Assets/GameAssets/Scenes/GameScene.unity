@@ -1018,8 +1018,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c11dd3c149f15474fb26b1c15bddcfea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  positive: {fileID: 0}
-  negative: {fileID: 0}
+  positive: {fileID: 451851164}
+  negative: {fileID: 76376874}
 --- !u!114 &264627631
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4274,6 +4274,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cbfc7e25f5b31641b8f8e50859def96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowAmount: 0
   gameController: {fileID: 658680611}
   gameUIController: {fileID: 658680612}
 --- !u!4 &1027605222
