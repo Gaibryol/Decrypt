@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
+using ExitGames.Client.Photon;
 
 public class PhotonServerManager : MonoBehaviourPunCallbacks
 {
@@ -22,6 +23,12 @@ public class PhotonServerManager : MonoBehaviourPunCallbacks
 
         PhotonNetwork.ConnectUsingSettings();
         PhotonNetwork.AutomaticallySyncScene = true;
+        PhotonPeer.RegisterType(typeof(GamePrefs), (byte)'M', GamePrefs.Serialize, GamePrefs.Deserialize);
+    }
+
+    private void Start()
+    {
+        PhotonController.Instance.ShowLoading();
     }
 
     public override void OnConnectedToMaster()
@@ -32,5 +39,6 @@ public class PhotonServerManager : MonoBehaviourPunCallbacks
     public override void OnJoinedLobby()
     {
         Debug.Log("joined lobby");
+        PhotonController.Instance.HideLoading();
     }
 }

@@ -16,6 +16,7 @@ public class TitleScreenController : MonoBehaviour
 
 	private void StartGame()
 	{
+        GameManager.Instance.ChangePlayMode(Constants.PlayMode.Single);
 		GameManager.Instance.ChangeState(Constants.GameStates.Game);
 
 		SoundEffectsManager.Instance.PlayOneShotSFX("StartGame");
@@ -23,14 +24,17 @@ public class TitleScreenController : MonoBehaviour
 
     private void EnterLobby()
     {
+        GameManager.Instance.ChangePlayMode(Constants.PlayMode.Multi);
         GameManager.Instance.ChangeState(Constants.GameStates.Lobby);
+
         SoundEffectsManager.Instance.PlayOneShotSFX("ClickSound");
 
     }
 
     private void OpenCredits()
 	{
-		GameManager.Instance.ChangeState(Constants.GameStates.Credits);
+        GameManager.Instance.ChangePlayMode(Constants.PlayMode.Single);
+        GameManager.Instance.ChangeState(Constants.GameStates.Credits);
 
 		SoundEffectsManager.Instance.PlayOneShotSFX("ClickSound");
 	}

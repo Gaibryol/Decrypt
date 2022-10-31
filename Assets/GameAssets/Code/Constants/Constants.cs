@@ -2,9 +2,9 @@ using System.Collections.Generic;
 
 public static class Constants
 {
-    public enum GameStates { MainMenu = 0, Credits = 1, Settings = 2, Game = 3, Lobby = 4,}
+    public enum GameStates { MainMenu = 0, Credits = 1, Settings = 2, Game = 3, Lobby = 4, Room = 5,}
 
-	public enum SubState{Playing = 0,Pause = 1, Help = 2, Hack = 3,Complete = 4}
+	public enum SubState{Playing = 0,Pause = 1, Help = 2, Hack = 3,Complete = 4, Loading = 5}
 
     public enum GameType { Default = 0, Timed = 1}
 
@@ -55,7 +55,8 @@ public static class Constants
 
 	public const int WarningLimit = 1;
 
-
+    public const byte GameStartEventCode = 1;
+    public const byte PlayerReadyEventCode = 2;
 
     //H(Destroy a word every 25 seconds - Two words come down every 10 seconds)
     //I(2x the Points - Lose 2 Lines)

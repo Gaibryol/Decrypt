@@ -1,63 +1,53 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 using Photon.Pun;
 using Photon.Realtime;
 
 public class LobbyScreenController : MonoBehaviourPunCallbacks
 {
-    [SerializeField] private PlayerListing playerListingPrefab;
-    [SerializeField] private Transform playerListingMenu;
+    [Header("Buttons")]
+    [SerializeField] private Button createButton;
+    [SerializeField] private Button joinButton;
 
-    private List<PlayerListing> listings = new List<PlayerListing>();
-    ExitGames.Client.Photon.Hashtable gamePrefs = new ExitGames.Client.Photon.Hashtable();
+    [Header("Inputs")]
+    [SerializeField] private TMP_InputField createInput;
+    [SerializeField] private TMP_InputField joinInput;
+    [SerializeField] private TMP_InputField nicknameInput;
 
-    private void Awake()
+    public void CreateRoom()
     {
-        GetRoomPlayers();
+        Debug.Log(createInput.text);
+        RoomOptions roomOptions = new RoomOptions();
+        roomOptions.PublishUserId = true;
+        PhotonNetwork.NickName = nicknameInput.text;
+
+        PhotonNetwork.CreateRoom(createInput.text, roomOptions);
+        createButton.gameObject.SetActive(false);
     }
 
-    public void StartGame()
+    public void JoinRoom()
     {
-        if (!PhotonNetwork.IsMasterClient) return;
-        gamePrefs.Add("GameType", Constants.GameType.Timed);
-        gamePrefs.Add("Seed", System.Environment.TickCount);
-        PhotonNetwork.CurrentRoom.SetCustomProperties(gamePrefs);
-        PhotonNetwork.LoadLevel("GameScene");
-        
-    }
-    
-
-
-    public void GetRoomPlayers()
-    {
-        foreach (KeyValuePair<int, Player> playerInfo in PhotonNetwork.CurrentRoom.Players)
-        {
-            AddPlayerListing(playerInfo.Value);
-        }
+        PhotonNetwork.NickName = nicknameInput.text;
+        PhotonNetwork.JoinRoom(joinInput.text);
     }
 
-    public void AddPlayerListing(Player player)
+    public override void OnCreatedRoom()
     {
-        PlayerListing listing = Instantiate(playerListingPrefab, playerListingMenu);
-        if (listing != null)
-        {
-            listing.SetPlayerInfo(player);
-            listings.Add(listing);
-        }
-    }
-    public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
-    {
-        AddPlayerListing(newPlayer);
+        Debug.Log("Create Room Success");
+        GameManager.Instance.ChangeState(Constants.GameStates.Room);
     }
 
-    public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
+    public override void OnCreateRoomFailed(short returnCode, string message)
     {
-        int idx = listings.FindIndex(x => x.Player == otherPlayer);
-        if (idx != -1)
-        {
-            Destroy(listings[idx].gameObject);
-            listings.RemoveAt(idx);
-        }
+        Debug.Log($"Room Creation Failed: {message}");
+    }
+
+    public override void OnJoinRoomFailed(short returnCode, string message)
+    {
+        Debug.Log($"Join Room Failed: {message}");
+
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Photon.Pun;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,9 +11,12 @@ public class GameManager : MonoBehaviour
 
 	[SerializeField] public Canvas Canvas;
 	[SerializeField] public Constants.GameStates GameState;
+    [SerializeField] public Constants.PlayMode PlayMode;
 	[SerializeField] public Texture2D crosshair;
 
-	private void Awake()
+    [SerializeField] public GamePrefs GamePrefs;
+
+    private void Awake()
 	{
 		if (Instance != null && Instance != this)
 		{
@@ -27,6 +31,12 @@ public class GameManager : MonoBehaviour
         Cursor.SetCursor(crosshair, Vector2.zero, CursorMode.Auto);
 
 		GameState = Constants.GameStates.MainMenu;
+        GamePrefs = new GamePrefs();
+    }
+
+    public void ChangePlayMode(Constants.PlayMode playMode)
+    {
+        PlayMode = playMode;
     }
 
     public void ChangeState(Constants.GameStates newState)
@@ -36,8 +46,14 @@ public class GameManager : MonoBehaviour
         if (GameState == Constants.GameStates.Game)
 		{
 			SoundEffectsManager.Instance.PlayGameMusic();
-            SceneManager.LoadScene("GameScene");
-		}
+            if (PlayMode == Constants.PlayMode.Single)
+            {
+                SceneManager.LoadScene("GameScene");
+            } else
+            {
+                PhotonNetwork.LoadLevel("GameScene");
+            }
+        }
 		else if (GameState == Constants.GameStates.MainMenu)
 		{
             SoundEffectsManager.Instance.PlayMainMenuMusic();
@@ -48,12 +64,15 @@ public class GameManager : MonoBehaviour
             SceneManager.LoadScene("CreditScene");
         } else if (GameState == Constants.GameStates.Lobby)
         {
-            SceneManager.LoadScene("ConnectionScene");
+            PhotonNetwork.LoadLevel("LobbyScene");
+        } else if (GameState == Constants.GameStates.Room)
+        {
+            PhotonNetwork.LoadLevel("RoomScene");
         }
     }
 
     private void OnLevelWasLoaded(int level)
     {
-        Canvas = FindObjectOfType<Canvas>();
+        Canvas = GameObject.FindGameObjectWithTag("MainCanvas").GetComponent<Canvas>();
     }
 }

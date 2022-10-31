@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LobbyScreenUI : MonoBehaviour
+public class RoomScreenUI : MonoBehaviour
 {
     [SerializeField] private GameObject GamePreferences;
 

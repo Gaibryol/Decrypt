@@ -4,8 +4,9 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using Photon.Pun;
 using ExitGames.Client.Photon;
+using Photon.Realtime;
 
-public class GameController : MonoBehaviourPunCallbacks, IPointerClickHandler
+public class GameController : MonoBehaviourPunCallbacks, IPointerClickHandler, IOnEventCallback
 {
 	[SerializeField] public GameObject WordPrefab;
     [SerializeField] public Canvas Canvas;
@@ -35,26 +36,39 @@ public class GameController : MonoBehaviourPunCallbacks, IPointerClickHandler
 	private float pointsMultiplier;
 
 	private Constants.SubState subState;
-    private Constants.GameType gameType;
 
 	private int currentStage;
 	private bool alternateColor;
 
+    private List<Player> loadedPlayers = new List<Player>();
+
     private void Start()
     {
-        if (PhotonNetwork.InRoom)
-        {
-            InitPhotonRoomPrefs();
-        } else
+        subState = Constants.SubState.Loading;
+        if (GameManager.Instance.PlayMode == Constants.PlayMode.Single)
         {
             StartGame();
         }
     }
-	private void Update()
+
+    private void OnEnable()
+    {
+        PhotonNetwork.AddCallbackTarget(this);
+    }
+
+    private void OnDisable()
+    {
+        PhotonNetwork.RemoveCallbackTarget(this);
+    }
+
+    private void Update()
 	{
 		if(subState != Constants.SubState.Playing) return;
-		
-		countDownTime -= Time.deltaTime;
+
+        GamePrefs prefs = GameManager.Instance.GamePrefs;
+
+
+        countDownTime -= Time.deltaTime;
         decryptTime -= Time.deltaTime;
         gameTime += Time.deltaTime;
 
@@ -65,7 +79,7 @@ public class GameController : MonoBehaviourPunCallbacks, IPointerClickHandler
 			gameUI.ResetTimer();
 		}
 
-        if (gameType == Constants.GameType.Timed && gameTime >= 30f)
+        if (prefs.GameType == Constants.GameType.Timed && gameTime >= prefs.Timer)
         {
             StopAllCoroutines();
             gameUI.CompleteGame();
@@ -77,33 +91,6 @@ public class GameController : MonoBehaviourPunCallbacks, IPointerClickHandler
 		InitVariables();
 		gameUI.StartGame();
 	}
-    
-    private void InitPhotonRoomPrefs()
-    {
-        object val = GetRoomCustomProperty("GameType");
-        if (val == null) return;
-        gameType = (Constants.GameType)val;
-
-
-        val = GetRoomCustomProperty("Seed");
-        if (val == null) return;
-        seed = (int) val;
-        WordsManager.Instance.SetSeed(seed);
-
-        StartGame();
-
-    }
-
-    private object GetRoomCustomProperty(string key)
-    {
-        ExitGames.Client.Photon.Hashtable hash = PhotonNetwork.CurrentRoom.CustomProperties;
-        object temp;
-        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(key, out temp))
-        {
-            return temp;
-        }
-        return null;
-    }
 
 	private void InitVariables()
 	{
@@ -123,7 +110,9 @@ public class GameController : MonoBehaviourPunCallbacks, IPointerClickHandler
 		warningLimit = Constants.WarningLimit;
 		pointsMultiplier = 1f;
 
-		ChangeSubState(Constants.SubState.Playing);
+        WordsManager.Instance.UpdatePrefs();
+
+        ChangeSubState(Constants.SubState.Playing);
 
 		gameUI = GetComponent<GameUIController>();
 	}
@@ -391,10 +380,8 @@ public class GameController : MonoBehaviourPunCallbacks, IPointerClickHandler
 		randomWord.GetComponent<Word>().SolveWord();
 		CorrectWord(randomWord);
 	}
-    public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable propertiesThatChanged)
-    {
-        InitPhotonRoomPrefs();
-    }
+
+
     public void OnPointerClick(PointerEventData eventData)
 	{
 		if(eventData.button == PointerEventData.InputButton.Right)
@@ -409,4 +396,23 @@ public class GameController : MonoBehaviourPunCallbacks, IPointerClickHandler
 		}
 
 	}
+
+    public void OnEvent(EventData photonEvent)
+    {
+        if (photonEvent.Code == Constants.PlayerReadyEventCode)
+        {
+            if (!loadedPlayers.Contains((Player) photonEvent.CustomData))
+            {
+                loadedPlayers.Add((Player)photonEvent.CustomData);
+                if (loadedPlayers.Count == PhotonController.Instance.players.Count)
+                {
+                    PhotonController.Instance.SendPhotonEvent(Constants.GameStartEventCode, true, ReceiverGroup.All);
+                }
+            }
+        } else if (photonEvent.Code == Constants.GameStartEventCode)
+        {
+            StartGame();
+        }
+
+    }
 }
