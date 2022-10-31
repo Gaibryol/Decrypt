@@ -37,49 +37,16 @@ public static class Constants
 	"security", "sensible", "sentence", "separate", "sequence", "sergeant", "shipping", "shortage", "shoulder", "simplify", "situated", "slightly", "software", "solution", "somebody", "southern", "speaking", "specific", "spectrum", "sporting", "standard", "standing", "standout", "sterling", "straight", "strategy", "strength", "striking", "struggle", "stunning", "suburban", "suitable", "superior", "supposed", "surgical", "surprise", "survival", "sweeping", "swimming", "symbolic", "sympathy", "syndrome",
 	"tactical", "tailored", "takeover", "tangible", "taxation", "taxpayer", "teaching", "tendency", "terminal", "terrible", "thinking", "thirteen", "thorough", "thousand", "together", "tomorrow", "touching", "tracking", "training", "transfer", "traveled", "treasury", "triangle", "tropical", "turnover", "ultimate", "umbrella", "universe", "unlawful", "unlikely", "valuable", "variable", "vertical", "victoria", "violence", "volatile", "warranty", "weakness", "weighted", "whatever", "whenever", "wherever", "wildlife", "wireless", "withdraw", "woodland", "workshop", "yourself"};
 
-	public const string ThreeFourFive = "3,4,5";
-	public const string FourFiveSix = "4,5,6";
-	public const string FiveSixSeven = "5,6,7";
-	public const string ThreeFiveSixSeven = "3,5,6,7";
-	public const string FourFiveSixSeven = "4,5,6,7";
-	public const string FiveSixSevenEight = "5,6,7,8";
-	public const string SixSeven = "6,7";
-	public const string Seven = "7";
-	public const string SevenEight = "7,8";
-	public const string Eight = "8";
+	public static Hack0 Hack0= new Hack0(); //  "The first letter of each word is in the correct position|Only the bottom row can be seen";
+	public static Hack1 Hack1= new Hack1(); //  "The last letter of each word is in the correct position|Only the bottom row can be seen";
+	public static Hack2 Hack2= new Hack2(); //"Decrypt the longest words every 25 seconds|Each word has a chance of having a letter obscured";
+	public static Hack3 Hack3= new Hack3(); // "Increase the maximum amount of rows by 2|Only the bottom three rows can be seen";
+	public static Hack4 Hack4= new Hack4(); // "Right-click to decrypt a word instantly (Up to 4 uses in a game)|Letters only appear when hovering over the letter tile";
+	public static Hack5 Hack5= new Hack5(); //"Letters can be seen as they’re falling down|See 1 less row";
+	public static Hack6 Hack6= new Hack6(); // "Right-click instantly drops the falling word|See 1 less row";
+	public static Hack7 Hack7= new Hack7(); // "Decrypt a random word every 25 seconds|See 3 less row";
+	public static Hack8 Hack8= new Hack8(); //"Decrypt all words (One use per game)|See 2 less lines";
 
-	public const string HackA = "A";
-	public const string HackB = "B";
-	public const string HackC = "C";
-	public const string HackD = "D";
-	public const string HackE = "E";
-	public const string HackF = "F";
-	public const string HackG = "G";
-	public const string HackH = "H";
-	public const string HackI = "I";
-	public const string HackJ = "J";
-	public const string HackK = "K";
-	public const string HackL = "L";
-	public const string HackM = "M";
-	public const string HackN = "N";
-	public const string HackO = "O";
-	public const string HackP = "P";
-	public const string DescriptionA = "The first letter of each word is in the correct position|Only the bottom row can be seen";
-	public const string DescriptionB = "The last letter of each word is in the correct position|Only the bottom row can be seen";
-	public const string DescriptionC = "Decrypt the longest words every 25 seconds|Each word has a chance of having a letter obscured";
-	public const string DescriptionD = "Increase the maximum amount of rows by 2|Only the bottom three rows can be seen";
-	public const string DescriptionE = "Right-click to decrypt a word instantly (Up to 4 uses in a game)|Letters only appear when hovering over the letter tile";
-	public const string DescriptionF = "Letters can be seen as they’re falling down|See 1 less row";
-	public const string DescriptionG = "Right-click instantly drops the falling word|See 1 less row";
-	public const string DescriptionH = "Decrypt a random word every 25 seconds|See 3 less row";
-	public const string DescriptionI = "Decrypt all words (One use per game)|See 2 less lines";
-	public const string DescriptionJ = "Add the possibility of 3 letter words|0.75x the points for each word decrypted";
-	public const string DescriptionK = "Add the possibility of 4 letter words|0.85x the points for each word decrypted";
-	public const string DescriptionL = "1.50x the points for each word decrypted|Add the possibility of 8 letter words";
-	public const string DescriptionM = "1.20x the points for each word decrypted|Remove the possibility of 5 letter words";
-	public const string DescriptionN = "2.00x the points for each word decrypted|It is only possible to get 7 letter words";
-	public const string DescriptionO = "2.50x the points for each word decrypted|It is only possible to get 7 and 8 letter words";
-	public const string DescriptionP = "4.00x the points for each word decrypted|It is only possible to get 8 letter words";
 
 	public const float MaxTime = 10f;
 	public const float PointsPerLetter = 200;

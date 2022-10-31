@@ -1018,8 +1018,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c11dd3c149f15474fb26b1c15bddcfea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  positive: {fileID: 0}
-  negative: {fileID: 0}
+  positive: {fileID: 451851164}
+  negative: {fileID: 76376874}
 --- !u!114 &264627631
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1204,8 +1204,8 @@ GameObject:
   - component: {fileID: 402058143}
   - component: {fileID: 402058145}
   - component: {fileID: 402058144}
-  - component: {fileID: 402058148}
   - component: {fileID: 402058149}
+  - component: {fileID: 402058150}
   m_Layer: 5
   m_Name: Hack1
   m_TagString: Untagged
@@ -1273,21 +1273,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 402058142}
   m_CullTransparentMesh: 1
---- !u!114 &402058148
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 402058142}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 66880bac45c708f41bebbae002475949, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  positiveText: {fileID: 2015571791}
-  negativeText: {fileID: 1461473911}
-  arrow: {fileID: 264446457}
 --- !u!114 &402058149
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1332,8 +1317,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 402058148}
-        m_TargetAssemblyTypeName: Hack, Assembly-CSharp
+      - m_Target: {fileID: 402058150}
+        m_TargetAssemblyTypeName: ChooseHack, Assembly-CSharp
         m_MethodName: Clicked
         m_Mode: 1
         m_Arguments:
@@ -1356,6 +1341,21 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &402058150
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 402058142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 811a02a024cb3a24b97e21baad6d009c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  positiveText: {fileID: 2015571791}
+  negativeText: {fileID: 1461473911}
+  arrow: {fileID: 264446457}
 --- !u!1 &433760046
 GameObject:
   m_ObjectHideFlags: 0
@@ -3566,8 +3566,8 @@ GameObject:
   - component: {fileID: 886511951}
   - component: {fileID: 886511953}
   - component: {fileID: 886511952}
-  - component: {fileID: 886511955}
   - component: {fileID: 886511956}
+  - component: {fileID: 886511957}
   m_Layer: 5
   m_Name: Hack2
   m_TagString: Untagged
@@ -3635,21 +3635,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 886511950}
   m_CullTransparentMesh: 1
---- !u!114 &886511955
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 886511950}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 66880bac45c708f41bebbae002475949, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  positiveText: {fileID: 492831613}
-  negativeText: {fileID: 1202526126}
-  arrow: {fileID: 602897665}
 --- !u!114 &886511956
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3694,8 +3679,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 886511955}
-        m_TargetAssemblyTypeName: Hack, Assembly-CSharp
+      - m_Target: {fileID: 886511957}
+        m_TargetAssemblyTypeName: ChooseHack, Assembly-CSharp
         m_MethodName: Clicked
         m_Mode: 1
         m_Arguments:
@@ -3718,6 +3703,21 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &886511957
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 886511950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 811a02a024cb3a24b97e21baad6d009c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  positiveText: {fileID: 492831613}
+  negativeText: {fileID: 1202526126}
+  arrow: {fileID: 602897665}
 --- !u!1 &957536572
 GameObject:
   m_ObjectHideFlags: 0
@@ -4274,36 +4274,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cbfc7e25f5b31641b8f8e50859def96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  possibleEarlyHacks:
-  - A
-  - B
-  - C
-  - D
-  - E
-  - F
-  - G
-  - H
-  - I
-  possibleLateHacks:
-  - J
-  - K
-  - L
-  - M
-  - N
-  - O
-  - P
-  ActivatedHacks: []
+  ShowAmount: 0
   gameController: {fileID: 658680611}
   gameUIController: {fileID: 658680612}
-  ActivatedA: 0
-  ActivatedB: 0
-  ActivatedC: 0
-  ActivatedD: 0
-  ActivatedE: 0
-  ActivatedF: 0
-  ActivatedG: 0
-  ActivatedH: 0
-  ActivatedI: 0
 --- !u!4 &1027605222
 Transform:
   m_ObjectHideFlags: 0
