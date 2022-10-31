@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Photon.Pun;
+using ExitGames.Client.Photon;
 
-public class GameController : MonoBehaviour, IPointerClickHandler
+public class GameController : MonoBehaviourPunCallbacks, IPointerClickHandler
 {
 	[SerializeField] public GameObject WordPrefab;
     [SerializeField] public Canvas Canvas;
@@ -24,18 +26,28 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 	private float playerPoints;
 	private float countDownTime;
 	private float decryptTime;
+    private float gameTime;
+
+    private int seed;
 
 	private int warningLimit;
 	private float pointsMultiplier;
 
 	private Constants.SubState subState;
+    private Constants.GameType gameType;
 
 	private int currentStage;
 	private bool alternateColor;
 
     private void Start()
     {
-        StartGame();
+        if (PhotonNetwork.InRoom)
+        {
+            InitPhotonRoomPrefs();
+        } else
+        {
+            StartGame();
+        }
     }
 
     public void StartGame()
@@ -43,6 +55,33 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 		InitVariables();
 		gameUI.StartGame();
 	}
+    
+    private void InitPhotonRoomPrefs()
+    {
+        object val = GetRoomCustomProperty("GameType");
+        if (val == null) return;
+        gameType = (Constants.GameType)val;
+
+
+        val = GetRoomCustomProperty("Seed");
+        if (val == null) return;
+        seed = (int) val;
+        WordsManager.Instance.SetSeed(seed);
+
+        StartGame();
+
+    }
+
+    private object GetRoomCustomProperty(string key)
+    {
+        ExitGames.Client.Photon.Hashtable hash = PhotonNetwork.CurrentRoom.CustomProperties;
+        object temp;
+        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(key, out temp))
+        {
+            return temp;
+        }
+        return null;
+    }
 
 	private void InitVariables()
 	{
@@ -54,6 +93,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 		playerPoints = 0f;
 		countDownTime = Constants.MaxTime;
 		decryptTime = Constants.DecryptTime;
+        gameTime = 0f;
 
 		currentStage = 1;
 		alternateColor = false;
@@ -333,13 +373,19 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 		}
 	}
 
+    public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable propertiesThatChanged)
+    {
+        InitPhotonRoomPrefs();
+    }
 
-	private void Update()
+
+    private void Update()
 	{
 		if(subState != Constants.SubState.Playing) return;
 		
 		decryptTime -= Time.deltaTime;
 		countDownTime -= Time.deltaTime;
+        gameTime += Time.deltaTime;
 
 		if (countDownTime <= 0 || lines.Count == 0)
 		{
@@ -370,5 +416,11 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 				}
 			}
 		}
+
+        if (gameType == Constants.GameType.Timed && gameTime >= 30f)
+        {
+            StopAllCoroutines();
+            gameUI.CompleteGame();
+        }
 	}
 }

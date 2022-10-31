@@ -20,6 +20,12 @@ public class WordsManager : MonoBehaviour
         possibleWordLengths = "3,4,5";
         spawnedList = new List<string>();
     }
+
+    public void SetSeed(int seed)
+    {
+        Random.InitState(seed);
+    }
+
     private int GetNumOfLetters()
     {
         switch (possibleWordLengths)

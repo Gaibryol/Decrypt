@@ -27,8 +27,6 @@ public class GameManager : MonoBehaviour
         Cursor.SetCursor(crosshair, Vector2.zero, CursorMode.Auto);
 
 		GameState = Constants.GameStates.MainMenu;
-
-
     }
 
     public void ChangeState(Constants.GameStates newState)
@@ -48,6 +46,9 @@ public class GameManager : MonoBehaviour
         {
             SoundEffectsManager.Instance.PlayMainMenuMusic();
             SceneManager.LoadScene("CreditScene");
+        } else if (GameState == Constants.GameStates.Lobby)
+        {
+            SceneManager.LoadScene("ConnectionScene");
         }
     }
 
