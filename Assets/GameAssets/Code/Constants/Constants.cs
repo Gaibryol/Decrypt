@@ -57,6 +57,7 @@ public static class Constants
 
     public const byte GameStartEventCode = 1;
     public const byte PlayerReadyEventCode = 2;
+    public const byte PlayerEndEventCode = 3;
 
     //H(Destroy a word every 25 seconds - Two words come down every 10 seconds)
     //I(2x the Points - Lose 2 Lines)

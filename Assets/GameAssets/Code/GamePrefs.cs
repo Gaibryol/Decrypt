@@ -26,13 +26,11 @@ public class GamePrefs
     }
 
     /// <summary>
-    /// Default Settings
+    /// Keep empty
     /// </summary>
     public GamePrefs()
     {
-        //GameType = Constants.GameType.Default;
-        //Seed = System.Environment.TickCount;
-        //WordLengths = new List<int>() { 2, 3, 4 };
+
     }
 
     public void UpdatePrefs(GamePrefs prefs)

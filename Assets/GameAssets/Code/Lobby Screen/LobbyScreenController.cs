@@ -19,7 +19,6 @@ public class LobbyScreenController : MonoBehaviourPunCallbacks
 
     public void CreateRoom()
     {
-        Debug.Log(createInput.text);
         RoomOptions roomOptions = new RoomOptions();
         roomOptions.PublishUserId = true;
         PhotonNetwork.NickName = nicknameInput.text;

@@ -29,9 +29,9 @@ public class RoomScreenController : MonoBehaviourPunCallbacks
     public void SetPreferences()
     {
         GameManager.Instance.GamePrefs.GameType = Constants.GameType.Timed;
-        GameManager.Instance.GamePrefs.Seed = 1;
-        GameManager.Instance.GamePrefs.Timer = 30;
-        GameManager.Instance.GamePrefs.WordLengths = new List<int>() { 3, 4 };
+        GameManager.Instance.GamePrefs.Seed = System.Environment.TickCount;
+        //GameManager.Instance.GamePrefs.Timer = 30;
+        //GameManager.Instance.GamePrefs.WordLengths = new List<int>() { 3, 4 };
 
         ExitGames.Client.Photon.Hashtable gamePrefs = new ExitGames.Client.Photon.Hashtable();
         gamePrefs.Add("GamePrefs", GameManager.Instance.GamePrefs);

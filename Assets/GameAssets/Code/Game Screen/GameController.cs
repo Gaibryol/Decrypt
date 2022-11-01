@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 using Photon.Pun;
 using ExitGames.Client.Photon;
 using Photon.Realtime;
+using System.Linq;
 
 public class GameController : MonoBehaviourPunCallbacks, IPointerClickHandler, IOnEventCallback
 {
@@ -110,7 +111,10 @@ public class GameController : MonoBehaviourPunCallbacks, IPointerClickHandler, I
 		warningLimit = Constants.WarningLimit;
 		pointsMultiplier = 1f;
 
-        WordsManager.Instance.UpdatePrefs();
+        if (GameManager.Instance.PlayMode == Constants.PlayMode.Multi)
+        {
+            WordsManager.Instance.UpdatePrefs();
+        }
 
         ChangeSubState(Constants.SubState.Playing);
 
@@ -140,6 +144,10 @@ public class GameController : MonoBehaviourPunCallbacks, IPointerClickHandler, I
 		{
 			StopAllCoroutines();
 			gameUI.CompleteGame();
+            if (GameManager.Instance.PlayMode == Constants.PlayMode.Multi)
+            {
+                TallyScore();
+            }
 		}
 		else if (lines.Count > MaximumNumLines - warningLimit)
 		{
@@ -218,6 +226,14 @@ public class GameController : MonoBehaviourPunCallbacks, IPointerClickHandler, I
 		// 	gameUI.OnStageComplete(currentStage);
 		// }
 	}
+
+    private void TallyScore()
+    {
+        ExitGames.Client.Photon.Hashtable hashTable = new ExitGames.Client.Photon.Hashtable();
+        hashTable.Add("Score", playerPoints);
+        hashTable.Add("Hacks", HacksManager.Instance.ActivatedHacks.Select(x => x.GetDescription()).ToArray());
+        PhotonNetwork.LocalPlayer.SetCustomProperties(hashTable);
+    }
 
 	public void NewGame()
 	{
@@ -406,7 +422,7 @@ public class GameController : MonoBehaviourPunCallbacks, IPointerClickHandler, I
                 loadedPlayers.Add((Player)photonEvent.CustomData);
                 if (loadedPlayers.Count == PhotonController.Instance.players.Count)
                 {
-                    PhotonController.Instance.SendPhotonEvent(Constants.GameStartEventCode, true, ReceiverGroup.All);
+                    PhotonController.Instance.SendPhotonEvent(Constants.GameStartEventCode, PhotonNetwork.Time, ReceiverGroup.All);
                 }
             }
         } else if (photonEvent.Code == Constants.GameStartEventCode)

@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
 	[SerializeField] public Texture2D crosshair;
 
     [SerializeField] public GamePrefs GamePrefs;
-
+    
     private void Awake()
 	{
 		if (Instance != null && Instance != this)
