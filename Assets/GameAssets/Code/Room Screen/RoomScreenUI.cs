@@ -5,25 +5,39 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 using System.Linq;
+using Photon.Pun;
 
 public class RoomScreenUI : MonoBehaviour
 {
     [SerializeField] private GameObject GamePreferences;
-    [SerializeField] private Button DefaultButton;
-    [SerializeField] private Button TimedButton;
+    [SerializeField] private Toggle DefaultButton;
+    [SerializeField] private Toggle TimedButton;
 
     [SerializeField] private GameObject TimeLimitOption;
     [SerializeField] private GameObject CountDownTimeOption;
     [SerializeField] private GameObject WordLengthOption;
 
+    [SerializeField] private GameObject StartButton;
+
     [SerializeField] private TMP_InputField TimeLimitInput;
     [SerializeField] private TMP_InputField CountDownInput;
     [SerializeField] private TMP_InputField WordLengthInput;
 
+    [SerializeField] private TMP_Text RoomName;
+
+    private void Start()
+    {
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            StartButton.SetActive(false);
+            GamePreferences.SetActive(false); // for now
+        }
+    }
+
     public void ToggleGamePreferences()
     {
         GamePreferences.SetActive(!GamePreferences.activeInHierarchy);
-        DefaultMode();
+        
         if (!GamePreferences.activeInHierarchy)
         {
             ParseInput();
@@ -31,6 +45,17 @@ public class RoomScreenUI : MonoBehaviour
         {
             FillInput();
         }
+    }
+
+    public void UpdateRoomName(string name)
+    {
+        RoomName.text = name;
+    }
+
+    public void LeaveRoom()
+    {
+        PhotonNetwork.LeaveRoom();
+        GameManager.Instance.ChangeState(Constants.GameStates.Lobby);
     }
 
     public void DefaultMode()
@@ -52,6 +77,7 @@ public class RoomScreenUI : MonoBehaviour
         GameManager.Instance.GamePrefs.Timer = Int32.Parse(TimeLimitInput.text);
         List<int> wordLengths = WordLengthInput.text.Split(',').Select(i => Int32.Parse(i)).ToList();
         GameManager.Instance.GamePrefs.WordLengths = wordLengths;
+        GameManager.Instance.GamePrefs.GameType = DefaultButton.isOn ? Constants.GameType.Default : Constants.GameType.Timed;
 
     }
 
@@ -59,5 +85,15 @@ public class RoomScreenUI : MonoBehaviour
     {
         TimeLimitInput.text = GameManager.Instance.GamePrefs.Timer.ToString();
         WordLengthInput.text = string.Join(',', GameManager.Instance.GamePrefs.WordLengths);
+        TimedButton.isOn = GameManager.Instance.GamePrefs.GameType == Constants.GameType.Timed ? true : false;
+        
+        if (DefaultButton.isOn)
+        {
+            DefaultMode();
+        }
+        else
+        {
+            TimedMode();
+        }
     }
 }

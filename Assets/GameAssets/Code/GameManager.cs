@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour
         Cursor.SetCursor(crosshair, Vector2.zero, CursorMode.Auto);
 
 		GameState = Constants.GameStates.MainMenu;
-        GamePrefs = new GamePrefs();
+        GamePrefs = new GamePrefs(new List<int>() { 3, 4 }, 300);
     }
 
     public void ChangePlayMode(Constants.PlayMode playMode)
@@ -41,8 +41,9 @@ public class GameManager : MonoBehaviour
 
     public void ChangeState(Constants.GameStates newState)
 	{
+        Constants.GameStates PrevState = GameState;
 		GameState = newState;
-
+        Debug.Log($"Going from {PrevState} to {newState}");
         if (GameState == Constants.GameStates.Game)
 		{
 			SoundEffectsManager.Instance.PlayGameMusic();
@@ -64,7 +65,7 @@ public class GameManager : MonoBehaviour
             SceneManager.LoadScene("CreditScene");
         } else if (GameState == Constants.GameStates.Lobby)
         {
-            PhotonNetwork.LoadLevel("LobbyScene");
+            SceneManager.LoadScene("LobbyScene");
         } else if (GameState == Constants.GameStates.Room)
         {
             PhotonNetwork.LoadLevel("RoomScene");

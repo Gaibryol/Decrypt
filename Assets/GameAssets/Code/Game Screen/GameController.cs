@@ -41,25 +41,48 @@ public class GameController : MonoBehaviourPunCallbacks, IPointerClickHandler, I
 	private int currentStage;
 	private bool alternateColor;
 
+    // Keep track of when players load into the scene
     private List<Player> loadedPlayers = new List<Player>();
 
     private void Start()
     {
         subState = Constants.SubState.Loading;
+        
         if (GameManager.Instance.PlayMode == Constants.PlayMode.Single)
         {
             StartGame();
+        } else
+        {
+            InitPhotonState();
         }
     }
 
-    private void OnEnable()
+    private void InitPhotonState()
     {
-        PhotonNetwork.AddCallbackTarget(this);
+        loadedPlayers.Clear();
+        // Update player state to be in game. Updates player custom property.
+        PhotonController.Instance.UpdatePlayerState("PlayerState", "Game");
+
+        // Clients automatically sync with master. Conventional method of ChangeState doesn't work
+        GameManager.Instance.GameState = Constants.GameStates.Game;
+
+        // Stop syncing scenes and set next scene to room scene. Allows navigation to room scene without sync.
+        PhotonNetwork.AutomaticallySyncScene = false;
+        PhotonController.Instance.SetNextScene("RoomScene");
     }
 
-    private void OnDisable()
+    public override void OnEnable()
     {
+        base.OnEnable();
+        PhotonNetwork.AddCallbackTarget(this);
+
+    }
+
+    public override void OnDisable()
+    {
+        base.OnDisable();
         PhotonNetwork.RemoveCallbackTarget(this);
+
     }
 
     private void Update()
@@ -113,6 +136,7 @@ public class GameController : MonoBehaviourPunCallbacks, IPointerClickHandler, I
 
         if (GameManager.Instance.PlayMode == Constants.PlayMode.Multi)
         {
+            // Currently word customization only in multiplayer
             WordsManager.Instance.UpdatePrefs();
         }
 
@@ -146,7 +170,7 @@ public class GameController : MonoBehaviourPunCallbacks, IPointerClickHandler, I
 			gameUI.CompleteGame();
             if (GameManager.Instance.PlayMode == Constants.PlayMode.Multi)
             {
-                TallyScore();
+                SyncScores();
             }
 		}
 		else if (lines.Count > MaximumNumLines - warningLimit)
@@ -202,8 +226,9 @@ public class GameController : MonoBehaviourPunCallbacks, IPointerClickHandler, I
 		{
 			gameUI.DisplayWarning(false);
 		}
-		if (playerPoints >= 10000 & currentStage == 1)
+		if (playerPoints >= 10 & currentStage == 1)
 		{
+            // TODO: Do we keep this if user can customize word lengths
 			WordsManager.Instance.ChangeWordLengths(new List<int>(){3,4,5});
 			SoundEffectsManager.Instance.PlayOneShotSFX("StageEnded");
 			ChangeSubState(Constants.SubState.Hack);
@@ -227,12 +252,10 @@ public class GameController : MonoBehaviourPunCallbacks, IPointerClickHandler, I
 		// }
 	}
 
-    private void TallyScore()
+    private void SyncScores()
     {
-        ExitGames.Client.Photon.Hashtable hashTable = new ExitGames.Client.Photon.Hashtable();
-        hashTable.Add("Score", playerPoints);
-        hashTable.Add("Hacks", HacksManager.Instance.ActivatedHacks.Select(x => x.GetDescription()).ToArray());
-        PhotonNetwork.LocalPlayer.SetCustomProperties(hashTable);
+        PhotonController.Instance.UpdatePlayerState("Score", playerPoints);
+        PhotonController.Instance.UpdatePlayerState("Hacks", HacksManager.Instance.ActivatedHacks.Select(x => x.GetDescription()).ToArray());
     }
 
 	public void NewGame()
@@ -415,13 +438,15 @@ public class GameController : MonoBehaviourPunCallbacks, IPointerClickHandler, I
 
     public void OnEvent(EventData photonEvent)
     {
+        // Start game when all players have loaded into the scene
         if (photonEvent.Code == Constants.PlayerReadyEventCode)
         {
             if (!loadedPlayers.Contains((Player) photonEvent.CustomData))
             {
                 loadedPlayers.Add((Player)photonEvent.CustomData);
-                if (loadedPlayers.Count == PhotonController.Instance.players.Count)
+                if (loadedPlayers.Count == PhotonNetwork.CurrentRoom.PlayerCount)
                 {
+                    // All players loaded, send start code
                     PhotonController.Instance.SendPhotonEvent(Constants.GameStartEventCode, PhotonNetwork.Time, ReceiverGroup.All);
                 }
             }

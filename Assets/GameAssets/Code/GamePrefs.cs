@@ -33,6 +33,13 @@ public class GamePrefs
 
     }
 
+    public GamePrefs(List<int> wordLengths, int timer)
+    {
+        WordLengths = wordLengths;
+        Timer = timer;
+        GameType = Constants.GameType.Default;
+    }
+
     public void UpdatePrefs(GamePrefs prefs)
     {
         GameType = prefs.GameType;

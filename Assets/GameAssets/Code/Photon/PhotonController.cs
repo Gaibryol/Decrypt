@@ -13,8 +13,6 @@ public class PhotonController : MonoBehaviourPunCallbacks
 
     public static PhotonController Instance { get; private set; }
 
-    public List<Player> players = new List<Player>();
-
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -28,7 +26,7 @@ public class PhotonController : MonoBehaviourPunCallbacks
         }
 
     }
-
+ 
     public void ShowLoading()
     {
         if (activeLoadingScreen == null)
@@ -42,7 +40,18 @@ public class PhotonController : MonoBehaviourPunCallbacks
 
     public void HideLoading()
     {
+        if (activeLoadingScreen == null)
+        {
+            return;
+        }
         activeLoadingScreen.SetActive(false);
+    }
+
+    public void SetNextScene(string scene)
+    {
+        ExitGames.Client.Photon.Hashtable setScene = new ExitGames.Client.Photon.Hashtable();
+        setScene["curScn"] = scene;
+        PhotonNetwork.CurrentRoom.SetCustomProperties(setScene);
     }
 
     public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable propertiesThatChanged)
@@ -59,5 +68,35 @@ public class PhotonController : MonoBehaviourPunCallbacks
     {
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = receiverGroup };
         PhotonNetwork.RaiseEvent(eventCode, content, raiseEventOptions, SendOptions.SendReliable);
+    }
+
+    public void UpdatePlayerState(string key, object state)
+    {
+        ExitGames.Client.Photon.Hashtable props = PhotonNetwork.LocalPlayer.CustomProperties;
+        if (props.ContainsKey(key))
+        {
+            props[key] = state;
+        } else
+        {
+            props.Add(key, state);
+        }
+        PhotonNetwork.LocalPlayer.SetCustomProperties(props);
+    }
+
+    public void UpdateRoomProperties(string key, object state)
+    {
+        if (!PhotonNetwork.IsConnected || !PhotonNetwork.InRoom) return;
+
+        ExitGames.Client.Photon.Hashtable props = PhotonNetwork.CurrentRoom.CustomProperties;
+        if (props.ContainsKey(key))
+        {
+            props[key] = state;
+        }
+        else
+        {
+            props.Add(key, state);
+        }
+
+        PhotonNetwork.CurrentRoom.SetCustomProperties(props);
     }
 }

@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Photon.Pun;
 
-public class GameUIController : MonoBehaviour
+public class GameUIController : MonoBehaviourPunCallbacks
 {
 	[SerializeField, Header("Objects")] private GameObject brackets;
 	[SerializeField] private GameObject topBanner;
@@ -15,6 +16,7 @@ public class GameUIController : MonoBehaviour
 	[SerializeField] private GameObject pause;
 	[SerializeField] private GameObject hack;
 	[SerializeField] private GameObject complete;
+    [SerializeField] private GameObject room;
 	[SerializeField] private GameObject abilityPrefab;
 	[SerializeField] private GameObject abilityParent;
 	[SerializeField] private List<GameObject> displayHacks;
@@ -42,7 +44,7 @@ public class GameUIController : MonoBehaviour
 	private GameController gameController;
 	private List<GameObject> abilityUses;
 
-	public void StartGame()
+    public void StartGame()
 	{
 		InitVariables();
 		DisplayBaseline();
@@ -111,7 +113,7 @@ public class GameUIController : MonoBehaviour
 	{
 		float newYAddition = ((gameController.WordPrefab.GetComponent<RectTransform>().rect.height + gameController.WordsYOffset) * (8 - gameController.MaximumNumLines));
 
-		baseLine.transform.localPosition = new Vector3(baseLine.transform.localPosition.x, startingBaselineY + newYAddition);
+        baseLine.transform.localPosition = new Vector3(baseLine.transform.localPosition.x, startingBaselineY + newYAddition);
 	}
 
 	public void DisplayHacks()
@@ -144,6 +146,10 @@ public class GameUIController : MonoBehaviour
 		gameController.ChangeSubState(Constants.SubState.Complete);
 		complete.transform.SetAsLastSibling();
 		complete.SetActive(true);
+        if (GameManager.Instance.PlayMode == Constants.PlayMode.Multi)
+        {
+            room.SetActive(true);
+        }
 		pointsCompleted.text = score.text;
 		stageCompleted.text = stage.text;
 		List<Hack> hacks = HacksManager.Instance.ActivatedHacks;
@@ -247,6 +253,29 @@ public class GameUIController : MonoBehaviour
 		SoundEffectsManager.Instance.PlayOneShotSFX("ClickSound");
 		pauseButton.isOn = false;
 		gameController.NewGame();
-		GameManager.Instance.ChangeState(Constants.GameStates.MainMenu);
-	}
+
+        if (GameManager.Instance.PlayMode == Constants.PlayMode.Multi)
+        {
+            
+            PhotonNetwork.LeaveRoom();
+        } else
+        {
+            GameManager.Instance.ChangeState(Constants.GameStates.MainMenu);
+
+        }
+
+    }
+
+    public void ToRoom()
+    {
+        GameManager.Instance.ChangeState(Constants.GameStates.Room);
+    }
+
+    public override void OnLeftRoom()
+    {
+        Debug.Log("left room");
+        GameManager.Instance.ChangeState(Constants.GameStates.MainMenu);
+
+
+    }
 }

@@ -22,7 +22,7 @@ public class PhotonServerManager : MonoBehaviourPunCallbacks
         }
 
         PhotonNetwork.ConnectUsingSettings();
-        PhotonNetwork.AutomaticallySyncScene = true;
+        PhotonNetwork.AutomaticallySyncScene = false;
         PhotonPeer.RegisterType(typeof(GamePrefs), (byte)'M', GamePrefs.Serialize, GamePrefs.Deserialize);
     }
 
