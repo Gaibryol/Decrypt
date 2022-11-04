@@ -4308,6 +4308,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GamePreferences: {fileID: 1978844834}
+  GamePreferencesButton: {fileID: 1950798930}
   DefaultButton: {fileID: 1215572377}
   TimedButton: {fileID: 990506495}
   TimeLimitOption: {fileID: 706017076}

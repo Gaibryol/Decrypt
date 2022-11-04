@@ -4,6 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using ExitGames.Client.Photon;
+using System.Linq;
 
 public class PhotonController : MonoBehaviourPunCallbacks
 {
@@ -45,6 +46,20 @@ public class PhotonController : MonoBehaviourPunCallbacks
             return;
         }
         activeLoadingScreen.SetActive(false);
+    }
+
+    public Player UpdateMasterClient()
+    {
+        if (!PhotonNetwork.IsMasterClient) return null;
+
+        Player[] players = PhotonNetwork.PlayerList;
+
+        if (players.Length < 2) return null;
+
+        Player newMaster = players.First(x => x != PhotonNetwork.LocalPlayer);
+
+        PhotonNetwork.SetMasterClient(newMaster);
+        return newMaster;
     }
 
     public void SetNextScene(string scene)

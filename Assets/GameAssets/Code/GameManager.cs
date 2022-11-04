@@ -41,9 +41,8 @@ public class GameManager : MonoBehaviour
 
     public void ChangeState(Constants.GameStates newState)
 	{
-        Constants.GameStates PrevState = GameState;
 		GameState = newState;
-        Debug.Log($"Going from {PrevState} to {newState}");
+
         if (GameState == Constants.GameStates.Game)
 		{
 			SoundEffectsManager.Instance.PlayGameMusic();

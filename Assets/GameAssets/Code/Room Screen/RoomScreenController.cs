@@ -24,7 +24,6 @@ public class RoomScreenController : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        Debug.Log($"Joined Room {PhotonNetwork.CurrentRoom.Name}");
         UI.UpdateRoomName($"Room Name: {PhotonNetwork.CurrentRoom.Name}");
 
         // Set scene sync to true for when master clicks start
@@ -74,18 +73,26 @@ public class RoomScreenController : MonoBehaviourPunCallbacks
 
     // <-------       Callbacks       ------->
 
-    public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
+    public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         AddPlayerListing(newPlayer);
     }
 
-    public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
+    public override void OnPlayerLeftRoom(Player otherPlayer)
     {
+        // Destroy player listing, and remove from list
         int idx = listings.FindIndex(x => x.Player == otherPlayer);
         if (idx != -1)
         {
             Destroy(listings[idx].gameObject);
             listings.RemoveAt(idx);
+        }
+        
+        // Update UI indicators and enable UI buttons for master client
+        listings.Find(x => x.Player == PhotonNetwork.MasterClient).UpdateUIIndicators();
+        if (PhotonNetwork.LocalPlayer == PhotonNetwork.MasterClient)
+        {
+            UI.UpdateMasterButtons();
         }
     }
 
@@ -94,4 +101,8 @@ public class RoomScreenController : MonoBehaviourPunCallbacks
         listings.First(x => x.Player == targetPlayer).UpdatePlayerInfo();
     }
 
+    public override void OnLeftRoom()
+    {
+        GameManager.Instance.ChangeState(Constants.GameStates.Lobby);
+    }
 }

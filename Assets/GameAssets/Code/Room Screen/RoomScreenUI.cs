@@ -6,10 +6,15 @@ using TMPro;
 using System;
 using System.Linq;
 using Photon.Pun;
+using Photon.Realtime;
 
+/// <summary>
+/// Subject to all be changed as UI updates.
+/// </summary>
 public class RoomScreenUI : MonoBehaviour
 {
     [SerializeField] private GameObject GamePreferences;
+    [SerializeField] private GameObject GamePreferencesButton;
     [SerializeField] private Toggle DefaultButton;
     [SerializeField] private Toggle TimedButton;
 
@@ -30,7 +35,8 @@ public class RoomScreenUI : MonoBehaviour
         if (!PhotonNetwork.IsMasterClient)
         {
             StartButton.SetActive(false);
-            GamePreferences.SetActive(false); // for now
+            GamePreferences.SetActive(false); // master can only edit?
+            GamePreferencesButton.SetActive(false);
         }
     }
 
@@ -55,7 +61,10 @@ public class RoomScreenUI : MonoBehaviour
     public void LeaveRoom()
     {
         PhotonNetwork.LeaveRoom();
-        GameManager.Instance.ChangeState(Constants.GameStates.Lobby);
+        if (PhotonNetwork.IsMasterClient)
+        {
+            Player newMaster = PhotonController.Instance.UpdateMasterClient();
+        }
     }
 
     public void DefaultMode()
@@ -70,6 +79,12 @@ public class RoomScreenUI : MonoBehaviour
         WordLengthOption.SetActive(true);
         TimeLimitOption.SetActive(true);
         CountDownTimeOption.SetActive(false);   // not supported
+    }
+
+    public void UpdateMasterButtons()
+    {
+        StartButton.SetActive(true);
+        GamePreferencesButton.SetActive(true);
     }
 
     private void ParseInput()

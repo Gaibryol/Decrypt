@@ -38,7 +38,6 @@ public class PhotonServerManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinedLobby()
     {
-        Debug.Log("joined lobby");
         PhotonController.Instance.HideLoading();
     }
 }
