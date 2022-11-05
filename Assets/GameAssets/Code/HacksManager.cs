@@ -9,7 +9,7 @@ public class HacksManager : MonoBehaviour
     public int ShowAmount;
     public static HacksManager Instance { get; private set; }
 
-	[SerializeField] private GameController gameController;
+	//[SerializeField] private GameController gameController;
 	[SerializeField] private GameUIController gameUIController;
 
 

@@ -111,10 +111,10 @@ public class GameUIController : MonoBehaviourPunCallbacks
 
 	public void DisplayBaseline()
 	{
-		float newYAddition = ((gameController.WordPrefab.GetComponent<RectTransform>().rect.height + gameController.WordsYOffset) * (8 - gameController.MaximumNumLines));
+        float newYAddition = ((gameController.WordPrefab.GetComponent<RectTransform>().rect.height + gameController.WordsYOffset) * (8 - gameController.MaximumNumLines));
 
         baseLine.transform.localPosition = new Vector3(baseLine.transform.localPosition.x, startingBaselineY + newYAddition);
-	}
+    }
 
 	public void DisplayHacks()
 	{

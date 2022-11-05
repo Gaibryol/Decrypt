@@ -2647,8 +2647,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 658680610}
-  - component: {fileID: 658680611}
   - component: {fileID: 658680612}
+  - component: {fileID: 658680613}
+  - component: {fileID: 658680614}
+  - component: {fileID: 658680615}
   m_Layer: 5
   m_Name: GameScreen
   m_TagString: Untagged
@@ -2693,26 +2695,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &658680611
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 658680609}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: efa22ba346f82ac498cabcdbe2f9cc6a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  WordPrefab: {fileID: 4985149896092325078, guid: 475606172ae7a5743966a0b0c64ea201, type: 3}
-  Canvas: {fileID: 826842866}
-  Hack1: {fileID: 402058142}
-  Hack2: {fileID: 886511950}
-  WordsYOffset: 10
-  bottomLineY: -340
-  spawnY: 440
-  MaximumNumLines: 0
 --- !u!114 &658680612
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2755,6 +2737,60 @@ MonoBehaviour:
   pauseButton: {fileID: 959281391}
   timer: {fileID: 1927353636}
   secondHelpToggle: {fileID: 1341507536}
+--- !u!114 &658680613
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 658680609}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f481b5bbe5a36b84ab74dbdd28c383a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  singleController: {fileID: 658680615}
+  multiController: {fileID: 658680614}
+--- !u!114 &658680614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 658680609}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93a3efd35869c4a4cbafa8c242de8d8a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  WordPrefab: {fileID: 4985149896092325078, guid: 475606172ae7a5743966a0b0c64ea201, type: 3}
+  Canvas: {fileID: 826842866}
+  Hack1: {fileID: 402058142}
+  Hack2: {fileID: 886511950}
+  WordsYOffset: 10
+  bottomLineY: -340
+  spawnY: 440
+  MaximumNumLines: 0
+--- !u!114 &658680615
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 658680609}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 213600ee14dde634582ac74dce413ef3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  WordPrefab: {fileID: 4985149896092325078, guid: 475606172ae7a5743966a0b0c64ea201, type: 3}
+  Canvas: {fileID: 826842866}
+  Hack1: {fileID: 402058142}
+  Hack2: {fileID: 886511950}
+  WordsYOffset: 10
+  bottomLineY: -340
+  spawnY: 440
+  MaximumNumLines: 0
 --- !u!1 &680118127
 GameObject:
   m_ObjectHideFlags: 0
@@ -4277,7 +4313,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowAmount: 0
-  gameController: {fileID: 658680611}
   gameUIController: {fileID: 658680612}
 --- !u!4 &1027605222
 Transform:
