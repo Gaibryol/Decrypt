@@ -87,6 +87,7 @@ public class PhotonController : MonoBehaviourPunCallbacks
 
     public void UpdatePlayerState(string key, object state)
     {
+        if (!PhotonNetwork.IsConnectedAndReady) return;
         ExitGames.Client.Photon.Hashtable props = PhotonNetwork.LocalPlayer.CustomProperties;
         if (props.ContainsKey(key))
         {

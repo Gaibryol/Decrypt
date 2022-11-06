@@ -49,7 +49,6 @@ public class MultiPlayerGameController : GameController, IOnEventCallback
 
         // Stop syncing scenes and set next scene to room scene. Allows navigation to room scene without sync.
         PhotonNetwork.AutomaticallySyncScene = false;
-        PhotonController.Instance.SetNextScene("RoomScene");
     }
 
     public override void StartGame()
@@ -102,6 +101,7 @@ public class MultiPlayerGameController : GameController, IOnEventCallback
         else if (photonEvent.Code == Constants.GameStartEventCode)
         {
             StartGame();
+            PhotonController.Instance.SetNextScene("RoomScene");
         }
 
     }
