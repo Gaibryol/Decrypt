@@ -248,6 +248,7 @@ public class GameUIController : MonoBehaviourPunCallbacks
 		gameController.NewGame();
 	}
 
+
 	public void ToMainMenu()
 	{
 		SoundEffectsManager.Instance.PlayOneShotSFX("ClickSound");
@@ -265,7 +266,7 @@ public class GameUIController : MonoBehaviourPunCallbacks
         }
 
     }
-
+    // Moved to End controller
     public void ToRoom()
     {
         GameManager.Instance.ChangeState(Constants.GameStates.Room);

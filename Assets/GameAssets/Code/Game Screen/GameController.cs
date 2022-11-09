@@ -246,7 +246,7 @@ public abstract class GameController : MonoBehaviourPunCallbacks, IPointerClickH
 
     protected virtual void CheckPlayerPoints()
     {
-        if (playerPoints >= 10 & currentStage == 1)
+        if (playerPoints >= 10000 & currentStage == 1)
         {
             // TODO: Do we keep this if user can customize word lengths
             WordsManager.Instance.ChangeWordLengths(new List<int>() { 3, 4, 5 });

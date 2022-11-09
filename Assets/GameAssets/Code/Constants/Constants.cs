@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 public static class Constants
 {
-    public enum GameStates { MainMenu = 0, Credits = 1, Settings = 2, Game = 3, Lobby = 4, Room = 5,}
+    public enum GameStates { MainMenu = 0, Credits = 1, Settings = 2, Game = 3, Lobby = 4, Room = 5, End = 6}
 
 	public enum SubState{Playing = 0,Pause = 1, Help = 2, Hack = 3,Complete = 4, Loading = 5}
 

@@ -21,8 +21,9 @@ public class GameManager : MonoBehaviour
 		if (Instance != null && Instance != this)
 		{
 			Destroy(this.gameObject);
-		}
-		else
+            return;
+        }
+        else
 		{
 			Instance = this;
             DontDestroyOnLoad(this.gameObject);
@@ -68,6 +69,9 @@ public class GameManager : MonoBehaviour
         } else if (GameState == Constants.GameStates.Room)
         {
             PhotonNetwork.LoadLevel("RoomScene");
+        } else if (GameState == Constants.GameStates.End)
+        {
+            SceneManager.LoadScene("EndScene");
         }
     }
 

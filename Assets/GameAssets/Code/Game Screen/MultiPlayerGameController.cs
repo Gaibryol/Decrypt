@@ -82,6 +82,11 @@ public class MultiPlayerGameController : GameController, IOnEventCallback
         PhotonController.Instance.UpdatePlayerState("Hacks", HacksManager.Instance.ActivatedHacks.Select(x => x.GetDescription()).ToArray());
     }
 
+    protected override void EndGame()
+    {
+        StopAllCoroutines();
+        GameManager.Instance.ChangeState(Constants.GameStates.End);
+    }
 
     public void OnEvent(EventData photonEvent)
     {
@@ -101,7 +106,7 @@ public class MultiPlayerGameController : GameController, IOnEventCallback
         else if (photonEvent.Code == Constants.GameStartEventCode)
         {
             StartGame();
-            PhotonController.Instance.SetNextScene("RoomScene");
+            PhotonController.Instance.SetNextScene("EndScene");
         }
 
     }

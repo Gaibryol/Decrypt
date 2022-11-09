@@ -14,6 +14,7 @@ public class PhotonServerManager : MonoBehaviourPunCallbacks
         if (Instance != null && Instance != this)
         {
             Destroy(this.gameObject);
+            return;
         }
         else
         {
@@ -33,7 +34,16 @@ public class PhotonServerManager : MonoBehaviourPunCallbacks
 
     public override void OnConnectedToMaster()
     {
+        PhotonController.Instance.HideLoading();
+    }
+
+    public bool JoinLobby()
+    {
+        if (!PhotonNetwork.IsConnectedAndReady || PhotonNetwork.InLobby) return false;
+
+        PhotonController.Instance.ShowLoading();
         PhotonNetwork.JoinLobby();
+        return true;
     }
 
     public override void OnJoinedLobby()

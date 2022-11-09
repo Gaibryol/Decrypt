@@ -19,15 +19,15 @@ public class PhotonController : MonoBehaviourPunCallbacks
         if (Instance != null && Instance != this)
         {
             Destroy(this.gameObject);
+            return;
         }
         else
         {
             Instance = this;
             DontDestroyOnLoad(this.gameObject);
         }
-
     }
- 
+
     public void ShowLoading()
     {
         if (activeLoadingScreen == null)

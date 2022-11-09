@@ -27,6 +27,7 @@ public class RoomScreenController : MonoBehaviourPunCallbacks
         UI.UpdateRoomName($"Room Name: {PhotonNetwork.CurrentRoom.Name}");
 
         // Set scene sync to true for when master clicks start
+        
         PhotonNetwork.AutomaticallySyncScene = true;
     }
 
@@ -105,4 +106,5 @@ public class RoomScreenController : MonoBehaviourPunCallbacks
     {
         GameManager.Instance.ChangeState(Constants.GameStates.Lobby);
     }
+
 }
