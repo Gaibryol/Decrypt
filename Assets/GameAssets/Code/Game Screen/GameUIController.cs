@@ -20,8 +20,9 @@ public class GameUIController : MonoBehaviourPunCallbacks
 	[SerializeField] private GameObject abilityPrefab;
 	[SerializeField] private GameObject abilityParent;
 	[SerializeField] private List<GameObject> displayHacks;
-	[SerializeField] private Image baseLine;
+	[SerializeField] public Image baseLine;
 	[SerializeField] private GameObject tutorial;
+    [SerializeField] public GameObject maxLine;
 
 	[SerializeField] private float startingBaselineY;
 

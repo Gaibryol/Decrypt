@@ -2725,6 +2725,7 @@ MonoBehaviour:
   - {fileID: 264627628}
   baseLine: {fileID: 460872244}
   tutorial: {fileID: 1473573250}
+  maxLine: {fileID: 741909110}
   startingBaselineY: -520
   score: {fileID: 1583605828}
   stage: {fileID: 680118129}
@@ -2771,6 +2772,8 @@ MonoBehaviour:
   bottomLineY: -340
   spawnY: 440
   MaximumNumLines: 0
+  playableRegionShrinkStartTime: 60
+  playableRegionStrinkInterval: 60
 --- !u!114 &658680615
 MonoBehaviour:
   m_ObjectHideFlags: 0

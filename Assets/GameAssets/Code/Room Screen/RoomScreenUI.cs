@@ -81,6 +81,12 @@ public class RoomScreenUI : MonoBehaviour
         CountDownTimeOption.SetActive(false);   // not supported
     }
 
+    public void BRMode()
+    {
+        WordLengthOption.SetActive(false);
+        TimeLimitOption.SetActive(false);
+    }
+
     public void UpdateMasterButtons()
     {
         StartButton.SetActive(true);
@@ -92,8 +98,16 @@ public class RoomScreenUI : MonoBehaviour
         GameManager.Instance.GamePrefs.Timer = Int32.Parse(TimeLimitInput.text);
         List<int> wordLengths = WordLengthInput.text.Split(',').Select(i => Int32.Parse(i)).ToList();
         GameManager.Instance.GamePrefs.WordLengths = wordLengths;
-        GameManager.Instance.GamePrefs.GameType = DefaultButton.isOn ? Constants.GameType.Default : Constants.GameType.Timed;
-
+        if (DefaultButton.isOn)
+        {
+            GameManager.Instance.GamePrefs.GameType = Constants.GameType.Default;
+        } else if (TimedButton.isOn)
+        {
+            GameManager.Instance.GamePrefs.GameType = Constants.GameType.Timed;
+        } else
+        {
+            GameManager.Instance.GamePrefs.GameType = Constants.GameType.BR;
+        }
     }
 
     private void FillInput()
@@ -106,9 +120,12 @@ public class RoomScreenUI : MonoBehaviour
         {
             DefaultMode();
         }
-        else
+        else if (TimedButton.isOn)
         {
             TimedMode();
+        } else
+        {
+            BRMode();
         }
     }
 }

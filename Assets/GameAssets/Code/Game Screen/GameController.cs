@@ -17,7 +17,7 @@ public abstract class GameController : MonoBehaviourPunCallbacks, IPointerClickH
 
 	protected GameUIController gameUI;
 
-	private List<GameObject> lines;
+	protected List<GameObject> lines;
 
 	private int abilityUsages;
 	public int MaximumNumLines;
@@ -33,9 +33,9 @@ public abstract class GameController : MonoBehaviourPunCallbacks, IPointerClickH
 	private int warningLimit;
 	private float pointsMultiplier;
 
-	private Constants.SubState subState;
+	protected Constants.SubState subState;
 
-	private int currentStage;
+	protected int currentStage;
 	private bool alternateColor;
 
     protected virtual void Start()
@@ -246,7 +246,7 @@ public abstract class GameController : MonoBehaviourPunCallbacks, IPointerClickH
 
     protected virtual void CheckPlayerPoints()
     {
-        if (playerPoints >= 10000 & currentStage == 1)
+        if (playerPoints >= 5000 & currentStage == 1)
         {
             // TODO: Do we keep this if user can customize word lengths
             WordsManager.Instance.ChangeWordLengths(new List<int>() { 3, 4, 5 });

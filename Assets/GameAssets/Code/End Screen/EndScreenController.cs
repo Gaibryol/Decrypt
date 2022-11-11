@@ -17,6 +17,7 @@ public class EndScreenController : MonoBehaviourPunCallbacks
         playerListings = new List<PlayerScoreboardListing>();
         UpdatePlayerList();
         PhotonController.Instance.SetNextScene("RoomScene");
+        PhotonController.Instance.UpdatePlayerState("PlayerState", "Scoreboard");
 
     }
 

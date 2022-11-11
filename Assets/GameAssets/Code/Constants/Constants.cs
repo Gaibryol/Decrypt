@@ -6,7 +6,7 @@ public static class Constants
 
 	public enum SubState{Playing = 0,Pause = 1, Help = 2, Hack = 3,Complete = 4, Loading = 5}
 
-    public enum GameType { Default = 0, Timed = 1}
+    public enum GameType { Default = 0, Timed = 1, BR = 2}
 
     public enum PlayMode { Single = 0, Multi = 1}
 

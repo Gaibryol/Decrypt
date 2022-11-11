@@ -75,7 +75,7 @@ public class PhotonController : MonoBehaviourPunCallbacks
         if (obj != null)
         {
             GameManager.Instance.GamePrefs = (GamePrefs)obj;
-            SendPhotonEvent(Constants.PlayerReadyEventCode, PhotonNetwork.LocalPlayer, ReceiverGroup.MasterClient);
+            SendPhotonEvent(Constants.PlayerReadyEventCode, PhotonNetwork.LocalPlayer, ReceiverGroup.All);
         }
     }
 

@@ -27,7 +27,7 @@ public class HacksManager : MonoBehaviour
     public void InitVariables()
     {
         ShowAmount = 0;
-        PossibleHacks = new List<Hack>(){Constants.Hack0,Constants.Hack1,Constants.Hack2,Constants.Hack3,Constants.Hack4,Constants.Hack5,Constants.Hack6,Constants.Hack7,Constants.Hack7};
+        PossibleHacks = new List<Hack>(){Constants.Hack0,Constants.Hack1,Constants.Hack2,Constants.Hack3,Constants.Hack4,Constants.Hack5,Constants.Hack6,Constants.Hack7,Constants.Hack8};
         foreach(Hack tempHack in PossibleHacks)
         {
             tempHack.Deactivate();
