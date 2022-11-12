@@ -8,7 +8,7 @@ public class Hack2 : Hack
     public Hack2()
     {
         description = "Decrypt the longest words every 25 seconds|Each word has a chance of having a letter obscured";
-        removeHacks = new List<Hack>{Constants.Hack4,Constants.Hack7};
+        removeHacks = new List<Hack>{HM.Hack4, HM.Hack7};
         decryptTime = Constants.DecryptTime;
     }
 

@@ -48,8 +48,6 @@ public class WordsManager : MonoBehaviour
                 break;
         }
         int randomNum = Random.Range(0,aList.Count);
-        Debug.Log(randomNum);
-        Debug.Log(aList.Count);
         string randomWord = aList[randomNum];
 
         while (spawnedList.Contains(randomWord))

@@ -135,9 +135,9 @@ public class Word : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 	{
 		if(eventData.button == PointerEventData.InputButton.Right)
 		{
-			if(Constants.Hack4.activated & IsInteractable)
+			if(HacksManager.Instance.Hack4.activated & IsInteractable)
 			{
-				Constants.Hack4.RightClick(this.gameObject);
+				HacksManager.Instance.Hack4.RightClick(this.gameObject);
 			}
 		}
 	}

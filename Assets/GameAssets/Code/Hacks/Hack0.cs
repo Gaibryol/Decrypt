@@ -7,7 +7,7 @@ public class Hack0 : Hack
     public Hack0()
     {
         description = "The first letter of each word is in the correct position|Only the bottom row can be seen";
-        removeHacks = new List<Hack>{Constants.Hack1,Constants.Hack3};
+        removeHacks = new List<Hack>{HacksManager.Instance.Hack1,HacksManager.Instance.Hack3};
     }
 
     public override void Initialize()

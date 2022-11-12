@@ -8,7 +8,7 @@ public class Hack1 : Hack
     public Hack1()
     {
         description = "The last letter of each word is in the correct position|Only the bottom row can be seen";
-        removeHacks = new List<Hack>{Constants.Hack0,Constants.Hack4};
+        removeHacks = new List<Hack>{HM.Hack0, HM.Hack4};
     }
     public override void Initialize()
         {

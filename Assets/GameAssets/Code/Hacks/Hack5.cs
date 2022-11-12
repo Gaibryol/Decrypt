@@ -7,7 +7,7 @@ public class Hack5 : Hack
     public Hack5()
     {
         description = "Letters can be seen as they’re falling down|See 1 less row";
-        removeHacks = new List<Hack>{Constants.Hack0,Constants.Hack4};
+        removeHacks = new List<Hack>{HM.Hack0, HM.Hack4};
     }
     public override void Initialize()
     {
