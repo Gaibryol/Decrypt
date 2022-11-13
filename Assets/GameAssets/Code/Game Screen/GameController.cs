@@ -94,13 +94,18 @@ public abstract class GameController : MonoBehaviourPunCallbacks, IPointerClickH
 		gameUI = GetComponent<GameUIController>();
 	}
 	
+    public virtual void UpdatePlayerPoints(float points)
+    {
+        playerPoints += points;
+    }
+
 	private IEnumerator CorrectWordAnim(GameObject word)
 	{
 		int i = lines.IndexOf(word);
 		word.GetComponent<Word>().ShowIsCorrect();
 		// wait for 0.75 second
 		yield return new WaitForSeconds(0.75f);
-		playerPoints += word.GetComponent<Word>().realWord.Length * Constants.PointsPerLetter * pointsMultiplier;
+        UpdatePlayerPoints(word.GetComponent<Word>().realWord.Length * Constants.PointsPerLetter * pointsMultiplier);
 		gameUI.OnWordExit();
 		gameUI.OnWordSolved(Mathf.FloorToInt(playerPoints));
 		GameObject tempLetter = GameObject.Find("PickedUp");

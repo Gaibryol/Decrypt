@@ -16,6 +16,7 @@ public class MultiPlayerGameController : GameController, IOnEventCallback
     [Header("Battle Royal Settings")]
     [SerializeField] private float playableRegionShrinkStartTime;
     [SerializeField] private float playableRegionStrinkInterval;
+    [SerializeField] private GameObject BattleRoyalButtons;
 
     protected override void Start()
     {
@@ -24,41 +25,70 @@ public class MultiPlayerGameController : GameController, IOnEventCallback
 
         InitPhotonState();
         playerScores = new Dictionary<Player, int>();
+
+        if (PhotonController.Instance.IsMaster)
+        {
+            StartCoroutine(NotifyGameStart());
+        }
     }
 
 
     public override void OnEnable()
     {
         base.OnEnable();
-        PhotonNetwork.AddCallbackTarget(this);
+        PhotonController.Instance.AddCallbackTarget(this);
 
     }
 
     public override void OnDisable()
     {
         base.OnDisable();
-        PhotonNetwork.RemoveCallbackTarget(this);
+        PhotonController.Instance.RemoveCallbackTarget(this);
 
     }
 
     protected override void Update()
     {
         base.Update();
-        SyncScores();   // for now, later move to word solved
     }
 
+    public override void UpdatePlayerPoints(float points)
+    {
+        base.UpdatePlayerPoints(points);
+        SyncScores();
+    }
+
+    private IEnumerator NotifyGameStart()
+    {
+        yield return new WaitUntil(() => PhotonController.Instance.AllPlayersInState("GameWaiting"));
+
+        // Here if all players are GameWaiting
+        while (!PhotonController.Instance.AllPlayersInState("Game"))
+        {
+            SendGameStartEvent();
+            yield return new WaitForSeconds(1f);
+        }
+    }
+
+    private void SendGameStartEvent()
+    {
+        PhotonController.Instance.SendPhotonEvent(Constants.GameStartEventCode, PhotonController.Instance.Time, ReceiverGroup.All);
+    }
 
     private void InitPhotonState()
     {
         loadedPlayers.Clear();
         // Update player state to be in game. Updates player custom property.
-        PhotonController.Instance.UpdatePlayerState("PlayerState", "Game");
+        PhotonController.Instance.UpdatePlayerState("PlayerState", "GameWaiting");
 
         // Clients automatically sync with master. Conventional method of ChangeState doesn't work
         GameManager.Instance.GameState = Constants.GameStates.Game;
 
         // Stop syncing scenes and set next scene to room scene. Allows navigation to room scene without sync.
-        PhotonNetwork.AutomaticallySyncScene = false;
+        PhotonController.Instance.AutoSyncScene = false;
+
+        //SendPhotonEvent(Constants.PlayerReadyEventCode, PhotonNetwork.LocalPlayer, ReceiverGroup.All);
+
     }
 
     public override void StartGame()
@@ -108,11 +138,10 @@ public class MultiPlayerGameController : GameController, IOnEventCallback
 
     private bool CheckPlayerLastStanding()
     {
-        foreach (Player player in loadedPlayers)
+        foreach (Player player in PhotonController.Instance.Players)
         {
-            if (player != PhotonNetwork.LocalPlayer)
+            if (player != PhotonController.Instance.Me)
             {
-                Debug.Log(player.CustomProperties["PlayerState"].ToString());
                 if (player.CustomProperties["PlayerState"].ToString() == "Game")
                 {
                     return false;
@@ -164,22 +193,10 @@ public class MultiPlayerGameController : GameController, IOnEventCallback
 
     public void OnEvent(EventData photonEvent)
     {
-        // Start game when all players have loaded into the scene
-        if (photonEvent.Code == Constants.PlayerReadyEventCode)
-        {
-            if (!loadedPlayers.Contains((Player)photonEvent.CustomData))
-            {
-                loadedPlayers.Add((Player)photonEvent.CustomData);
-                if (PhotonNetwork.IsMasterClient && loadedPlayers.Count == PhotonNetwork.CurrentRoom.PlayerCount)
-                {
-                    // All players loaded, send start code
-                    PhotonController.Instance.SendPhotonEvent(Constants.GameStartEventCode, PhotonNetwork.Time, ReceiverGroup.All);
-                }
-            }
-        }
-        else if (photonEvent.Code == Constants.GameStartEventCode)
+        if (photonEvent.Code == Constants.GameStartEventCode && subState == Constants.SubState.Loading)
         {
             StartGame();
+            PhotonController.Instance.UpdatePlayerState("PlayerState", "Game");
             PhotonController.Instance.SetNextScene("EndScene");
         }
 
@@ -193,4 +210,6 @@ public class MultiPlayerGameController : GameController, IOnEventCallback
             playerScores[targetPlayer] = Int32.Parse(score);
         }
     }
+
+    
 }

@@ -24,26 +24,32 @@ public class RoomScreenController : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        UI.UpdateRoomName($"Room Name: {PhotonNetwork.CurrentRoom.Name}");
+        UI.UpdateRoomName($"Room Name: {PhotonController.Instance.RoomName}");
 
         // Set scene sync to true for when master clicks start
-        
-        PhotonNetwork.AutomaticallySyncScene = true;
+
+        //PhotonController.Instance.AutoSyncScene = true;
+
+        GameManager.Instance.GamePrefs.Seed = System.Environment.TickCount;
+        StartCoroutine(WaitForMaster());
+
+    }
+
+    private IEnumerator WaitForMaster()
+    {
+        yield return new WaitUntil(() => PhotonController.Instance.AllPlayersInState("Room"));
+        PhotonController.Instance.AutoSyncScene = true;
+
     }
 
     public void StartGame()
     {
-        if (!PhotonNetwork.IsMasterClient) return;
-        if (!PlayersReady()) return;
+        if (!PhotonController.Instance.IsMaster) return;
+        if (!PhotonController.Instance.AllPlayersInState("Room")) return;
 
         SetPreferences();
         GameManager.Instance.ChangeState(Constants.GameStates.Game);
         
-    }
-
-    private bool PlayersReady()
-    {
-        return listings.Find(x => x.state.text != "Room") == null ? true : false;
     }
     
     public void SetPreferences()
@@ -56,9 +62,9 @@ public class RoomScreenController : MonoBehaviourPunCallbacks
 
     public void GetRoomPlayers()
     {
-        foreach (KeyValuePair<int, Player> playerInfo in PhotonNetwork.CurrentRoom.Players)
+        foreach (Player player in PhotonController.Instance.Players)
         {
-            AddPlayerListing(playerInfo.Value);
+            AddPlayerListing(player);
         }
     }
 
@@ -88,10 +94,13 @@ public class RoomScreenController : MonoBehaviourPunCallbacks
             Destroy(listings[idx].gameObject);
             listings.RemoveAt(idx);
         }
-        
+    }
+
+    public override void OnMasterClientSwitched(Player newMasterClient)
+    {
         // Update UI indicators and enable UI buttons for master client
-        listings.Find(x => x.Player == PhotonNetwork.MasterClient).UpdateUIIndicators();
-        if (PhotonNetwork.LocalPlayer == PhotonNetwork.MasterClient)
+        listings.Find(x => x.Player == newMasterClient).UpdateUIIndicators();
+        if (PhotonController.Instance.Me == newMasterClient)
         {
             UI.UpdateMasterButtons();
         }
@@ -105,6 +114,14 @@ public class RoomScreenController : MonoBehaviourPunCallbacks
     public override void OnLeftRoom()
     {
         GameManager.Instance.ChangeState(Constants.GameStates.Lobby);
+    }
+    public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable propertiesThatChanged)
+    {
+        var obj = propertiesThatChanged["GamePrefs"];
+        if (obj != null)
+        {
+            GameManager.Instance.GamePrefs = (GamePrefs)obj;
+        }
     }
 
 }

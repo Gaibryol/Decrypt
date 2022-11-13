@@ -61,10 +61,6 @@ public class RoomScreenUI : MonoBehaviour
     public void LeaveRoom()
     {
         PhotonNetwork.LeaveRoom();
-        if (PhotonNetwork.IsMasterClient)
-        {
-            Player newMaster = PhotonController.Instance.UpdateMasterClient();
-        }
     }
 
     public void DefaultMode()
@@ -108,6 +104,8 @@ public class RoomScreenUI : MonoBehaviour
         {
             GameManager.Instance.GamePrefs.GameType = Constants.GameType.BR;
         }
+        PhotonController.Instance.UpdateRoomProperties("GamePrefs", GameManager.Instance.GamePrefs);
+
     }
 
     private void FillInput()

@@ -28,54 +28,49 @@ public class LobbyScreenController : MonoBehaviourPunCallbacks
 
     private int roomCodeLength = 4;
 
-    private bool isConnecting = false;
+    private void Awake()
+    {
+        StartCoroutine(JoinLobby());
+    }
 
     private void Start()
     {
         roomListings = new List<LobbyRoomListing>();
-        roomListings.Clear();
-        //UpdateRooms();
-        
+        roomListings.Clear();       
     }
-    private void Update()
+    
+
+    private IEnumerator JoinLobby()
     {
-        if (!PhotonNetwork.InLobby && PhotonNetwork.IsConnectedAndReady && !isConnecting)
-        {
-            isConnecting = PhotonServerManager.Instance.JoinLobby();
-        }
-        //UpdateRooms();
+        yield return new WaitUntil(() => PhotonController.Instance.IsConnectedAndReady);
+        PhotonController.Instance.JoinLobby();
     }
+
+    
 
     public void CreateRoom()
     {
-        RoomOptions roomOptions = new RoomOptions();
-        roomOptions.PublishUserId = true;
-        roomOptions.IsVisible = true;
-        roomOptions.MaxPlayers = 10;
-        roomOptions.EmptyRoomTtl = 0;
-        PhotonNetwork.NickName = nicknameInput.text;
+        PhotonController.Instance.NickName = nicknameInput.text;
+        PhotonController.Instance.CreateRoom();
 
-        //string roomName = GenerateRoomName(roomCodeLength);
-        string roomName = $"{nicknameInput.text}'s Room";
-        PhotonNetwork.CreateRoom(roomName, roomOptions);
         createButton.gameObject.SetActive(false);
     }
 
     public void JoinRoom()
     {
-        PhotonNetwork.NickName = nicknameInput.text;
-        PhotonNetwork.JoinRoom(joinInput.text);
+        PhotonController.Instance.NickName = nicknameInput.text;
+        PhotonController.Instance.JoinRoom(joinInput.text);
     }
 
     public void JoinRoom(string roomName)
     {
-        PhotonNetwork.NickName = nicknameInput.text;
-        PhotonNetwork.JoinRoom(roomName);
+        PhotonController.Instance.NickName = nicknameInput.text;
+        PhotonController.Instance.JoinRoom(roomName);
     }
 
     public void LeaveLobby()
     {
-        PhotonNetwork.LeaveLobby();
+        PhotonController.Instance.LeaveLobby();
         GameManager.Instance.ChangeState(Constants.GameStates.MainMenu);
     }
 
@@ -90,8 +85,14 @@ public class LobbyScreenController : MonoBehaviourPunCallbacks
         }
         return res.ToString();
     }
-    
+
     // <-------       Callbacks       ------->
+
+    public override void OnJoinedLobby()
+    {
+        PhotonController.Instance.HideLoading();
+    }
+
     public override void OnCreatedRoom()
     {
         

@@ -8,6 +8,17 @@ using System.Linq;
 
 public class PhotonController : MonoBehaviourPunCallbacks
 {
+    public bool IsMaster { get { return PhotonNetwork.IsMasterClient; } }
+    public bool InLobby { get { return PhotonNetwork.InLobby && PhotonNetwork.IsConnectedAndReady; } }
+    public bool IsConnectedAndReady { get { return PhotonNetwork.IsConnectedAndReady; } }
+    public string NickName { get { return PhotonNetwork.NickName; } set { PhotonNetwork.NickName = value; } }
+    public string RoomName { get { return PhotonNetwork.CurrentRoom.Name; } }
+    public bool AutoSyncScene { get { return PhotonNetwork.AutomaticallySyncScene; } set { PhotonNetwork.AutomaticallySyncScene = value; } }
+    public Player[] Players { get { return PhotonNetwork.PlayerList; } }
+    public Player Master { get { return PhotonNetwork.MasterClient; } private set { PhotonNetwork.SetMasterClient(value); } }
+    public Player Me { get { return PhotonNetwork.LocalPlayer; } }
+    public double Time { get { return PhotonNetwork.Time; } }
+
     [SerializeField] GameObject LoadingScreen;
 
     private GameObject activeLoadingScreen;
@@ -48,19 +59,19 @@ public class PhotonController : MonoBehaviourPunCallbacks
         activeLoadingScreen.SetActive(false);
     }
 
-    public Player UpdateMasterClient()
-    {
-        if (!PhotonNetwork.IsMasterClient) return null;
+    //public Player UpdateMasterClient()
+    //{
+    //    if (!PhotonNetwork.IsMasterClient) return null;
 
-        Player[] players = PhotonNetwork.PlayerList;
+    //    Player[] players = PhotonNetwork.PlayerList;
 
-        if (players.Length < 2) return null;
+    //    if (players.Length < 2) return null;
 
-        Player newMaster = players.First(x => x != PhotonNetwork.LocalPlayer);
+    //    Player newMaster = players.First(x => x != PhotonNetwork.LocalPlayer);
 
-        PhotonNetwork.SetMasterClient(newMaster);
-        return newMaster;
-    }
+    //    PhotonNetwork.SetMasterClient(newMaster);
+    //    return newMaster;
+    //}
 
     public void SetNextScene(string scene)
     {
@@ -69,14 +80,43 @@ public class PhotonController : MonoBehaviourPunCallbacks
         PhotonNetwork.CurrentRoom.SetCustomProperties(setScene);
     }
 
-    public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable propertiesThatChanged)
+    public void AddCallbackTarget(object target)
     {
-        var obj = propertiesThatChanged["GamePrefs"];
-        if (obj != null)
-        {
-            GameManager.Instance.GamePrefs = (GamePrefs)obj;
-            SendPhotonEvent(Constants.PlayerReadyEventCode, PhotonNetwork.LocalPlayer, ReceiverGroup.All);
-        }
+        PhotonNetwork.AddCallbackTarget(this);
+    }
+
+    public void RemoveCallbackTarget(object target)
+    {
+        PhotonNetwork.RemoveCallbackTarget(this);
+    }
+
+    public void JoinLobby()
+    {
+        ShowLoading();
+        PhotonNetwork.JoinLobby();
+    }
+
+    public void LeaveLobby()
+    {
+        PhotonNetwork.LeaveLobby();
+    }
+
+    public void CreateRoom()
+    {
+        RoomOptions roomOptions = new RoomOptions();
+        roomOptions.PublishUserId = true;
+        roomOptions.IsVisible = true;
+        roomOptions.MaxPlayers = 10;
+        roomOptions.EmptyRoomTtl = 0;
+        roomOptions.PlayerTtl = 1000;
+
+        string roomName = $"{NickName}'s Room";
+        PhotonNetwork.CreateRoom(roomName, roomOptions);
+    }
+
+    public void JoinRoom(string roomName)
+    {
+        PhotonNetwork.JoinRoom(roomName);
     }
 
     public void SendPhotonEvent(byte eventCode, object content, ReceiverGroup receiverGroup)
@@ -85,10 +125,29 @@ public class PhotonController : MonoBehaviourPunCallbacks
         PhotonNetwork.RaiseEvent(eventCode, content, raiseEventOptions, SendOptions.SendReliable);
     }
 
+    public void SendPhotonEvent(byte eventCode, object content, int[] target)
+    {
+        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All, TargetActors = target };
+        PhotonNetwork.RaiseEvent(eventCode, content, raiseEventOptions, SendOptions.SendReliable);
+    }
+
+    public bool AllPlayersInState(string state)
+    {
+        foreach (Player player in PhotonNetwork.PlayerList)
+        {
+            string playerState = player.CustomProperties["PlayerState"]?.ToString();
+            if (playerState != state)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public void UpdatePlayerState(string key, object state)
     {
         if (!PhotonNetwork.IsConnectedAndReady) return;
-        ExitGames.Client.Photon.Hashtable props = PhotonNetwork.LocalPlayer.CustomProperties;
+        ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable();
         if (props.ContainsKey(key))
         {
             props[key] = state;
@@ -103,7 +162,7 @@ public class PhotonController : MonoBehaviourPunCallbacks
     {
         if (!PhotonNetwork.IsConnected || !PhotonNetwork.InRoom) return;
 
-        ExitGames.Client.Photon.Hashtable props = PhotonNetwork.CurrentRoom.CustomProperties;
+        ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable();
         if (props.ContainsKey(key))
         {
             props[key] = state;

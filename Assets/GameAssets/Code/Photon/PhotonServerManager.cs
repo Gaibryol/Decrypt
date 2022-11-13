@@ -5,9 +5,14 @@ using Photon.Pun;
 using Photon.Realtime;
 using ExitGames.Client.Photon;
 
-public class PhotonServerManager : MonoBehaviourPunCallbacks
+public class PhotonServerManager : MonoBehaviourPunCallbacks, IConnectionCallbacks
 {
     public static PhotonServerManager Instance { get; private set; }
+
+    public Constants.PhotonState PhotonState;
+
+    private LoadBalancingClient loadBalancingClient;
+    private AppSettings appSettings;
 
     private void Awake()
     {
@@ -21,10 +26,14 @@ public class PhotonServerManager : MonoBehaviourPunCallbacks
             Instance = this;
             DontDestroyOnLoad(this.gameObject);
         }
+        PhotonState = Constants.PhotonState.Disconected;
 
         PhotonNetwork.ConnectUsingSettings();
         PhotonNetwork.AutomaticallySyncScene = false;
         PhotonPeer.RegisterType(typeof(GamePrefs), (byte)'M', GamePrefs.Serialize, GamePrefs.Deserialize);
+        loadBalancingClient = PhotonNetwork.NetworkingClient;
+        appSettings = PhotonNetwork.PhotonServerSettings.AppSettings;
+        loadBalancingClient.AddCallbackTarget(this);
     }
 
     private void Start()
@@ -35,19 +44,51 @@ public class PhotonServerManager : MonoBehaviourPunCallbacks
     public override void OnConnectedToMaster()
     {
         PhotonController.Instance.HideLoading();
+        PhotonState = Constants.PhotonState.Connected;
     }
 
-    public bool JoinLobby()
+    /// <summary>
+    /// WIP
+    /// </summary>
+    /// <param name="cause"></param>
+    public override void OnDisconnected(DisconnectCause cause)
     {
-        if (!PhotonNetwork.IsConnectedAndReady || PhotonNetwork.InLobby) return false;
-
-        PhotonController.Instance.ShowLoading();
-        PhotonNetwork.JoinLobby();
-        return true;
+        if (CanRecoverFromDisconnect(cause))
+        {
+            TryReconnect();
+        }
     }
 
-    public override void OnJoinedLobby()
+    private bool CanRecoverFromDisconnect(DisconnectCause cause)
     {
-        PhotonController.Instance.HideLoading();
+        switch (cause)
+        {
+            // the list here may be non exhaustive and is subject to review
+            case DisconnectCause.Exception:
+            case DisconnectCause.ServerTimeout:
+            case DisconnectCause.ClientTimeout:
+            case DisconnectCause.DisconnectByServerLogic:
+            case DisconnectCause.DisconnectByServerReasonUnknown:
+                return true;
+        }
+        return false;
     }
+
+    private void TryReconnect()
+    {
+        if (!loadBalancingClient.ReconnectAndRejoin())
+        {
+            Debug.LogError("ReconnectAndRejoin failed, trying Reconnect");
+            if (!loadBalancingClient.ReconnectToMaster())
+            {
+                Debug.LogError("Reconnect failed, trying ConnectUsingSettings");
+                if (!loadBalancingClient.ConnectUsingSettings(appSettings))
+                {
+                    Debug.LogError("ConnectUsingSettings failed");
+                }
+            }
+        }
+    }
+
+
 }
