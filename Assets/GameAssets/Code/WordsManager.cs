@@ -36,22 +36,22 @@ public class WordsManager : MonoBehaviour
         switch(numLetters)
 		{
             case 3:
-                aList = Constants.ThreeLetterList;
+                aList = WordsList.Instance.GetThreeLetterWords();
                 break;
             case 4:
-                aList = Constants.FourLetterList;
+                aList = WordsList.Instance.GetFourLetterWords();
                 break;
             case 5:
-                aList = Constants.FiveLetterList;
+                aList = WordsList.Instance.GetFiveLetterWords();
                 break;
             case 6:
-                aList = Constants.SixLetterList;
+                aList = WordsList.Instance.GetSixLetterWords();
                 break;
             case 7:
-                aList = Constants.SevenLetterList;
+                aList = WordsList.Instance.GetSevenLetterWords();
                 break;
             default:
-                aList = Constants.EightLetterList;
+                aList = WordsList.Instance.GetEightLetterWords();
                 break;
         }
         int randomNum = Random.Range(0,aList.Count);
@@ -94,7 +94,7 @@ public class WordsManager : MonoBehaviour
             {
                 running = false;
             }
-            if(Contains.Instance.IfContains(shuffledWord))
+            if(WordsList.Instance.IfContains(shuffledWord))
             {
                 running = true;
             }
@@ -114,7 +114,7 @@ public class WordsManager : MonoBehaviour
             {
                 running = false;
             }
-            if(Contains.Instance.IfContains(shuffledWord))
+            if(WordsList.Instance.IfContains(shuffledWord))
             {
                 running = true;
             }

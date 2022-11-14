@@ -7,7 +7,7 @@ public class Hack8 : Hack
     public Hack8()
     {
         description = "Decrypt all words (One use per game)|See 2 less lines";
-        removeHacks = new List<Hack>{Constants.Hack4,Constants.Hack6};
+        removeHacks = new List<Hack>{HM.Hack4, HM.Hack6};
     }
     public override void Initialize()
     {

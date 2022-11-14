@@ -7262,7 +7262,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1921005799}
   - component: {fileID: 1921005800}
-  - component: {fileID: 1921005801}
   m_Layer: 0
   m_Name: WordManager
   m_TagString: Untagged
@@ -7295,18 +7294,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 56514af7fc3501e49bf371042ee98bea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1921005801
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1921005798}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 225b9e33d51ccec479e836e39c36e757, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1927353632

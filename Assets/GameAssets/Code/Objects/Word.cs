@@ -98,7 +98,7 @@ public class Word : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 			letters += obj.GetComponent<Letter>().Character;
 		}
 
-		if (Contains.Instance.IfContains(letters) || letters == realWord)
+		if (WordsList.Instance.IfContains(letters) || letters == realWord)
 		{
 			gameController.CorrectWord(this.gameObject);
 		}
@@ -135,9 +135,9 @@ public class Word : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 	{
 		if(eventData.button == PointerEventData.InputButton.Right)
 		{
-			if(Constants.Hack4.activated & IsInteractable)
+			if(HacksManager.Instance.Hack4.activated & IsInteractable)
 			{
-				Constants.Hack4.RightClick(this.gameObject);
+				HacksManager.Instance.Hack4.RightClick(this.gameObject);
 			}
 		}
 	}

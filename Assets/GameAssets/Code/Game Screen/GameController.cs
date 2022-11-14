@@ -383,12 +383,12 @@ public abstract class GameController : MonoBehaviourPunCallbacks, IPointerClickH
 	{
 		if(eventData.button == PointerEventData.InputButton.Right)
 		{
-			if(Constants.Hack6.activated)
+			if(HacksManager.Instance.Hack6.activated)
 			{
-				Constants.Hack6.RightClick();
+				HacksManager.Instance.Hack6.RightClick();
 			}
-			else if(Constants.Hack8.activated){
-				Constants.Hack8.RightClick();
+			else if(HacksManager.Instance.Hack8.activated){
+				HacksManager.Instance.Hack8.RightClick();
 			}
 		}
 

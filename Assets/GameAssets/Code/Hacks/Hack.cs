@@ -9,9 +9,12 @@ public class Hack:IHack
     protected GameController gameController;
     protected GameUIController gameUIController;
 
+    protected HacksManager HM;
+
     public bool activated;
     public Hack()
     {
+        HM = HacksManager.Instance;
         description = "";
         removeHacks = new List<Hack>{};
         gameController = GameObject.Find("GameScreen").GetComponent<GameController>();

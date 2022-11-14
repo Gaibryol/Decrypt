@@ -6,7 +6,7 @@ public class Hack4 : Hack
     public Hack4()
     {
         description = "Right-click to decrypt a word instantly (Up to 4 uses in a game)|Letters only appear when hovering over the letter tile";
-        removeHacks = new List<Hack>{Constants.Hack2,Constants.Hack5,Constants.Hack6,Constants.Hack8};
+        removeHacks = new List<Hack>{HM.Hack2, HM.Hack5, HM.Hack6, HM.Hack8};
     }
     public override void Initialize()
     {
