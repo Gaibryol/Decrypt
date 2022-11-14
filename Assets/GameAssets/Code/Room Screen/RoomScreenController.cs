@@ -15,6 +15,8 @@ public class RoomScreenController : MonoBehaviourPunCallbacks
     private List<PlayerListing> listings = new List<PlayerListing>();
     private RoomScreenUI UI;
 
+    private int battleRoyalMinPlayers = 2;
+
     private void Awake()
     {
         UI = GetComponent<RoomScreenUI>();
@@ -46,6 +48,7 @@ public class RoomScreenController : MonoBehaviourPunCallbacks
     {
         if (!PhotonController.Instance.IsMaster) return;
         if (!PhotonController.Instance.AllPlayersInState("Room")) return;
+        if ((GameManager.Instance.GamePrefs.GameType == Constants.GameType.BR) && (PhotonController.Instance.Players.Length < battleRoyalMinPlayers)) return;
 
         SetPreferences();
         GameManager.Instance.ChangeState(Constants.GameStates.Game);

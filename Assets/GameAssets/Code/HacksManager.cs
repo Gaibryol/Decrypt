@@ -19,18 +19,14 @@ public class HacksManager : MonoBehaviour
 	public Hack7 Hack7; // "Decrypt a random word every 25 seconds|See 3 less row";
 	public Hack8 Hack8; //"Decrypt all words (One use per game)|See 2 less lines";
 
-	[SerializeField] private GameController gameController;
-	[SerializeField] private GameUIController gameUIController;
-
-    public virtual void Awake()
+    protected virtual void Awake()
     {
-        if (GameManager.Instance.PlayMode == Constants.PlayMode.Multi)
+        if (Instance != null && Instance != this)
         {
             Destroy(this);
             return;
         }
-
-        if (Instance == null)
+        else
         {
             Instance = this;
         }
@@ -58,7 +54,7 @@ public class HacksManager : MonoBehaviour
         ActivatedHacks = new List<Hack>();
     }
 
-    private void Update(){
+    protected virtual void Update(){
         Hack2.Update();
         Hack7.Update();
     }

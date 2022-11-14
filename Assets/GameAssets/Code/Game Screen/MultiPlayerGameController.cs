@@ -17,7 +17,7 @@ public class MultiPlayerGameController : GameController, IOnEventCallback
     [SerializeField] private float playableRegionShrinkStartTime;
     [SerializeField] private float playableRegionStrinkInterval;
     [SerializeField] private GameObject BattleRoyalButtons;
-    [SerializeField] private int numberHackActivations;
+    public int numberHackActivations;
 
     protected override void Start()
     {
@@ -51,6 +51,16 @@ public class MultiPlayerGameController : GameController, IOnEventCallback
     protected override void Update()
     {
         base.Update();
+        if (GameManager.Instance.GamePrefs.GameType == Constants.GameType.BR)
+        {
+            if (numberHackActivations <= 0)
+            {
+                gameUI.SetBattleRoyalHackButtons(false);
+            } else
+            {
+                gameUI.SetBattleRoyalHackButtons(true);
+            }
+        }
     }
 
     public override void UpdatePlayerPoints(float points)
@@ -87,8 +97,6 @@ public class MultiPlayerGameController : GameController, IOnEventCallback
 
         // Stop syncing scenes and set next scene to room scene. Allows navigation to room scene without sync.
         PhotonController.Instance.AutoSyncScene = false;
-
-        //SendPhotonEvent(Constants.PlayerReadyEventCode, PhotonNetwork.LocalPlayer, ReceiverGroup.All);
 
     }
 
@@ -143,7 +151,8 @@ public class MultiPlayerGameController : GameController, IOnEventCallback
         {
             if (player != PhotonController.Instance.Me)
             {
-                if (player.CustomProperties["PlayerState"].ToString() == "Game")
+                string state = player.CustomProperties["PlayerState"].ToString();
+                if (state == "Game" || state == "GameWaiting")
                 {
                     return false;
                 }
@@ -165,18 +174,20 @@ public class MultiPlayerGameController : GameController, IOnEventCallback
 
     private void BRCheckPlayerPoints()
     {
-        if (playerPoints >= 10000 & currentStage == 1)
+        if (playerPoints >= 5000 & currentStage == 1)
         {
             WordsManager.Instance.ChangeWordLengths(new List<int>() { 3, 4, 5 });
             currentStage += 1;
             numberHackActivations += 1;
+            gameUI.SetBattleRoyalHackButtons(true);
             gameUI.OnStageComplete(currentStage);
         }
-        else if (playerPoints >= 25000 & currentStage == 2)
+        else if (playerPoints >= 10000 & currentStage == 2)
         {
             WordsManager.Instance.ChangeWordLengths(new List<int>() { 4, 5, 6 });
             currentStage += 1;
             numberHackActivations += 1;
+            gameUI.SetBattleRoyalHackButtons(true);
             gameUI.OnStageComplete(currentStage);
         }
     }

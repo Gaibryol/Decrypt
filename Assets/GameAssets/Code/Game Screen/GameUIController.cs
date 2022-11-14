@@ -16,7 +16,6 @@ public class GameUIController : MonoBehaviourPunCallbacks
 	[SerializeField] private GameObject pause;
 	[SerializeField] private GameObject hack;
 	[SerializeField] private GameObject complete;
-    [SerializeField] private GameObject room;
 	[SerializeField] private GameObject abilityPrefab;
 	[SerializeField] private GameObject abilityParent;
 	[SerializeField] private List<GameObject> displayHacks;
@@ -43,8 +42,8 @@ public class GameUIController : MonoBehaviourPunCallbacks
 	[SerializeField] private Toggle secondHelpToggle;
 
     [Header("Battle Royal")]
-    [SerializeField] private Button negativeButton;
-    [SerializeField] private Button positiveButton;
+    [SerializeField] protected Button negativeButton;
+    [SerializeField] protected Button positiveButton;
 
 	private GameController gameController;
 	private List<GameObject> abilityUses;
@@ -151,10 +150,7 @@ public class GameUIController : MonoBehaviourPunCallbacks
 		gameController.ChangeSubState(Constants.SubState.Complete);
 		complete.transform.SetAsLastSibling();
 		complete.SetActive(true);
-        if (GameManager.Instance.PlayMode == Constants.PlayMode.Multi)
-        {
-            room.SetActive(true);
-        }
+
 		pointsCompleted.text = score.text;
 		stageCompleted.text = stage.text;
 		List<Hack> hacks = HacksManager.Instance.ActivatedHacks;
@@ -274,6 +270,7 @@ public class GameUIController : MonoBehaviourPunCallbacks
 
     public void ActivateNegativeHack()
     {
+        if (!ActivateHackButtons()) return;
         string hack = HacksManager.Instance.GenerateHacks()[0].GetType().ToString();
         Debug.Log(HacksManager.Instance.GetInstanceID());
         PhotonController.Instance.SendPhotonEvent(Constants.HackSelectedEventCode, hack, Photon.Realtime.ReceiverGroup.All);
@@ -281,13 +278,23 @@ public class GameUIController : MonoBehaviourPunCallbacks
 
     public void ActivatePositiveHack()
     {
+        if (!ActivateHackButtons()) return;
         HacksManager.Instance.AddHack(HacksManager.Instance.GenerateHacks()[1]);
     }
 
-    // Moved to End controller
-    public void ToRoom()
+    private bool ActivateHackButtons()
     {
-        GameManager.Instance.ChangeState(Constants.GameStates.Room);
+        if (GameManager.Instance.GamePrefs.GameType != Constants.GameType.BR) return false;
+        MultiPlayerGameController c = (MultiPlayerGameController)gameController;
+        if (c.numberHackActivations <= 0) return false;
+        c.numberHackActivations--;
+        return true;
+    }
+
+    public void SetBattleRoyalHackButtons(bool active)
+    {
+        negativeButton.gameObject.SetActive(active);
+        positiveButton.gameObject.SetActive(active);
     }
 
     public override void OnLeftRoom()

@@ -14,9 +14,15 @@ public class WordsList : MonoBehaviour
     private List<string> EightWordList = new List<string>();
 
     private void Awake() {
-        if (Instance == null)
-		{
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this);
+            return;
+        }
+        else
+        {
             Instance = this;
+            DontDestroyOnLoad(this.gameObject);
         }
         var textFile = Resources.Load<TextAsset>("new_english");
         foreach(string tempWord in textFile.text.Split("\n"))

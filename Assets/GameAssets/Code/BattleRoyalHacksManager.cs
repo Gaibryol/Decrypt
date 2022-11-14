@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-public class MultiplayerHacksManager : HacksManager
+public class BattleRoyalHacksManager : HacksManager
 {
     public List<Hack> PossibleNegativeHacks;
     public List<Hack> PossiblePositiveHacks;
 
-    public override void Awake()
+    public Hack20 Hack20;
+    public Hack30 Hack30;
+
+    protected override void Awake()
     {
         if (GameManager.Instance.PlayMode == Constants.PlayMode.Single)
         {
@@ -24,15 +27,21 @@ public class MultiplayerHacksManager : HacksManager
 
     public override void InitVariables()
     {
+        Hack20 = new Hack20();
+        Hack30 = new Hack30();
         ShowAmount = 0;
-        PossiblePositiveHacks = new List<Hack>() { Constants.Hack20 };
-        PossibleNegativeHacks = new List<Hack>() { Constants.Hack30 };
+        PossiblePositiveHacks = new List<Hack>() { Hack20 };
+        PossibleNegativeHacks = new List<Hack>() { Hack30 };
         ActivatedHacks = new List<Hack>();
         PossibleHacks = new List<Hack>();
         PossibleHacks.AddRange(PossiblePositiveHacks);
         PossibleHacks.AddRange(PossibleNegativeHacks);
     }
 
+    protected override void Update()
+    {
+        
+    }
     public override void AddHack(string hack)
     {
         Hack h = PossibleHacks.Find(x => x.GetType().Name == hack);

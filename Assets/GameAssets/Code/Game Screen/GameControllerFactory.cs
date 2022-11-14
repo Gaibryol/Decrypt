@@ -5,8 +5,9 @@ public class GameControllerFactory : MonoBehaviour
 {
     [SerializeField] private SinglePlayerGameController singleController;
     [SerializeField] private MultiPlayerGameController multiController;
-    [SerializeField] private HacksManager singleHacksManager;
-    [SerializeField] private MultiplayerHacksManager multiHacksManager;
+
+    [SerializeField] private GameObject HacksParent;
+    [SerializeField] private HacksManager HacksManager;
 
     private void Awake()
     {
@@ -25,9 +26,13 @@ public class GameControllerFactory : MonoBehaviour
         } else if (GameManager.Instance.PlayMode == Constants.PlayMode.Multi)
         {
             Destroy(singleController);
-            //Destroy(singleHacksManager);
+            if (GameManager.Instance.GamePrefs.GameType == Constants.GameType.BR)
+            {
+                Destroy(HacksManager);
+            }
             yield return 0;
             GenerateMulti();
+
         }
     }
 
@@ -40,6 +45,10 @@ public class GameControllerFactory : MonoBehaviour
     private void GenerateMulti()
     {
         multiController.enabled = true;
+        if (GameManager.Instance.GamePrefs.GameType == Constants.GameType.BR)
+        {
+            HacksParent.AddComponent<BattleRoyalHacksManager>();
+        }
         //multiHacksManager.enabled = true;
     }
 
