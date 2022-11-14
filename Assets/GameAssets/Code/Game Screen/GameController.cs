@@ -148,7 +148,7 @@ public abstract class GameController : MonoBehaviourPunCallbacks, IPointerClickH
 		countDownTime = Constants.MaxTime;
 	}
 
-	private void SpawnWord()
+	public void SpawnWord()
 	{
 		SoundEffectsManager.Instance.PlayOneShotSFX("WordSpawned");
 		List<string> words = WordsManager.Instance.GetScrambledWord();

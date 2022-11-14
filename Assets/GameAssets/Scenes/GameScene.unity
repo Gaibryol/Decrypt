@@ -2773,7 +2773,7 @@ RectTransform:
   - {fileID: 1513201553}
   - {fileID: 239555367}
   m_Father: {fileID: 658680610}
-  m_RootOrder: 14
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -2940,11 +2940,11 @@ RectTransform:
   - {fileID: 460872243}
   - {fileID: 19274369}
   - {fileID: 1927353633}
+  - {fileID: 749717114}
   - {fileID: 1575070497}
   - {fileID: 624833916}
   - {fileID: 1473573251}
   - {fileID: 968839110}
-  - {fileID: 749717114}
   m_Father: {fileID: 826842867}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2996,6 +2996,8 @@ MonoBehaviour:
   pauseButton: {fileID: 959281391}
   timer: {fileID: 1927353636}
   secondHelpToggle: {fileID: 1341507536}
+  negativeButton: {fileID: 0}
+  positiveButton: {fileID: 0}
 --- !u!114 &658680613
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3010,6 +3012,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   singleController: {fileID: 658680615}
   multiController: {fileID: 658680614}
+  singleHacksManager: {fileID: 1027605221}
+  multiHacksManager: {fileID: 1027605223}
 --- !u!114 &658680614
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3032,6 +3036,7 @@ MonoBehaviour:
   MaximumNumLines: 0
   playableRegionShrinkStartTime: 60
   playableRegionStrinkInterval: 60
+  BattleRoyalButtons: {fileID: 0}
 --- !u!114 &658680615
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3391,7 +3396,7 @@ RectTransform:
   - {fileID: 904125735}
   - {fileID: 570859414}
   m_Father: {fileID: 658680610}
-  m_RootOrder: 17
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -4137,7 +4142,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 904125737}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 658680612}
+        m_TargetAssemblyTypeName: GameUIController, Assembly-CSharp
+        m_MethodName: ActivateNegativeHack
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &904125737
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4448,7 +4465,7 @@ RectTransform:
   - {fileID: 433760047}
   - {fileID: 264627629}
   m_Father: {fileID: 658680610}
-  m_RootOrder: 16
+  m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -4714,6 +4731,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1027605222}
   - component: {fileID: 1027605221}
+  - component: {fileID: 1027605223}
   m_Layer: 0
   m_Name: HacksManager
   m_TagString: Untagged
@@ -4750,6 +4768,20 @@ Transform:
   m_Father: {fileID: 482065231}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1027605223
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1027605220}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e041ce3a5041c24b8ef2a21c2eb8de6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowAmount: 0
+  gameUIController: {fileID: 658680612}
 --- !u!1 &1054429356
 GameObject:
   m_ObjectHideFlags: 0
@@ -6260,7 +6292,7 @@ RectTransform:
   - {fileID: 1401684055}
   - {fileID: 1341507537}
   m_Father: {fileID: 658680610}
-  m_RootOrder: 15
+  m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -6549,7 +6581,7 @@ RectTransform:
   - {fileID: 402058143}
   - {fileID: 886511951}
   m_Father: {fileID: 658680610}
-  m_RootOrder: 13
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}

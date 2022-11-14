@@ -17,6 +17,7 @@ public class MultiPlayerGameController : GameController, IOnEventCallback
     [SerializeField] private float playableRegionShrinkStartTime;
     [SerializeField] private float playableRegionStrinkInterval;
     [SerializeField] private GameObject BattleRoyalButtons;
+    [SerializeField] private int numberHackActivations;
 
     protected override void Start()
     {
@@ -168,12 +169,14 @@ public class MultiPlayerGameController : GameController, IOnEventCallback
         {
             WordsManager.Instance.ChangeWordLengths(new List<int>() { 3, 4, 5 });
             currentStage += 1;
+            numberHackActivations += 1;
             gameUI.OnStageComplete(currentStage);
         }
         else if (playerPoints >= 25000 & currentStage == 2)
         {
             WordsManager.Instance.ChangeWordLengths(new List<int>() { 4, 5, 6 });
             currentStage += 1;
+            numberHackActivations += 1;
             gameUI.OnStageComplete(currentStage);
         }
     }
@@ -198,6 +201,13 @@ public class MultiPlayerGameController : GameController, IOnEventCallback
             StartGame();
             PhotonController.Instance.UpdatePlayerState("PlayerState", "Game");
             PhotonController.Instance.SetNextScene("EndScene");
+        } else if (photonEvent.Code == Constants.HackSelectedEventCode)
+        {
+            if (PhotonController.Instance.GetPlayer(photonEvent.Sender) != PhotonController.Instance.Me)
+            {
+                HacksManager.Instance.AddHack(photonEvent.CustomData.ToString());
+            }
+            Debug.Log(photonEvent.CustomData);
         }
 
     }

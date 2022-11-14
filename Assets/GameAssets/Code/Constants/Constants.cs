@@ -49,8 +49,15 @@ public static class Constants
 	public static Hack7 Hack7= new Hack7(); // "Decrypt a random word every 25 seconds|See 3 less row";
 	public static Hack8 Hack8= new Hack8(); //"Decrypt all words (One use per game)|See 2 less lines";
 
+    // Battle Royal Positive Hack
+    public static Hack20 Hack20 = new Hack20();
 
-	public const float MaxTime = 10f;
+    // Battle Royal Negative Hack
+    public static Hack30 Hack30 = new Hack30();
+
+    //public enum NegativeHacks { Hack30 = 0}
+
+    public const float MaxTime = 10f;
 	public const float PointsPerLetter = 200;
 
 	public const float DecryptTime = 25f;
@@ -58,9 +65,7 @@ public static class Constants
 	public const int WarningLimit = 1;
 
     public const byte GameStartEventCode = 1;
-    public const byte PlayerReadyEventCode = 2;
-    public const byte PlayerEndEventCode = 3;
-    public const byte EventRecievedCode = 4;
+    public const byte HackSelectedEventCode = 2;
 
     //H(Destroy a word every 25 seconds - Two words come down every 10 seconds)
     //I(2x the Points - Lose 2 Lines)

@@ -23,7 +23,7 @@ public class EndScreenController : MonoBehaviourPunCallbacks
 
     private void UpdatePlayerList()
     {
-        Player[] players = PhotonNetwork.PlayerList;
+        Player[] players = PhotonController.Instance.Players;
         for (int i = 0; i < players.Length; i++)
         {
             PlayerScoreboardListing listing = Instantiate(playerListingPrefab, playerListingMenu);
@@ -45,7 +45,7 @@ public class EndScreenController : MonoBehaviourPunCallbacks
     {
         SoundEffectsManager.Instance.PlayOneShotSFX("ClickSound");
 
-        PhotonNetwork.LeaveRoom();
+        PhotonController.Instance.LeaveRoom();
 
     }
 

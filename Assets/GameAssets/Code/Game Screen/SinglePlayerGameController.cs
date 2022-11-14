@@ -7,6 +7,8 @@ public class SinglePlayerGameController : GameController
     // Use this for initialization
     protected override void Start()
     {
+        Hack1 = GameObject.Find("Hack1");
+        Hack2 = GameObject.Find("Hack2");
         base.Start();
         StartGame();
     }

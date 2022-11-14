@@ -42,6 +42,10 @@ public class GameUIController : MonoBehaviourPunCallbacks
 	[SerializeField] private Animator timer;
 	[SerializeField] private Toggle secondHelpToggle;
 
+    [Header("Battle Royal")]
+    [SerializeField] private Button negativeButton;
+    [SerializeField] private Button positiveButton;
+
 	private GameController gameController;
 	private List<GameObject> abilityUses;
 
@@ -259,7 +263,7 @@ public class GameUIController : MonoBehaviourPunCallbacks
         if (GameManager.Instance.PlayMode == Constants.PlayMode.Multi)
         {
             
-            PhotonNetwork.LeaveRoom();
+            PhotonController.Instance.LeaveRoom();
         } else
         {
             GameManager.Instance.ChangeState(Constants.GameStates.MainMenu);
@@ -267,6 +271,19 @@ public class GameUIController : MonoBehaviourPunCallbacks
         }
 
     }
+
+    public void ActivateNegativeHack()
+    {
+        string hack = HacksManager.Instance.GenerateHacks()[0].GetType().ToString();
+        Debug.Log(HacksManager.Instance.GetInstanceID());
+        PhotonController.Instance.SendPhotonEvent(Constants.HackSelectedEventCode, hack, Photon.Realtime.ReceiverGroup.All);
+    }
+
+    public void ActivatePositiveHack()
+    {
+        HacksManager.Instance.AddHack(HacksManager.Instance.GenerateHacks()[1]);
+    }
+
     // Moved to End controller
     public void ToRoom()
     {

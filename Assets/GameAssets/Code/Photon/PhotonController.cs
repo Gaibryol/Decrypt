@@ -59,20 +59,6 @@ public class PhotonController : MonoBehaviourPunCallbacks
         activeLoadingScreen.SetActive(false);
     }
 
-    //public Player UpdateMasterClient()
-    //{
-    //    if (!PhotonNetwork.IsMasterClient) return null;
-
-    //    Player[] players = PhotonNetwork.PlayerList;
-
-    //    if (players.Length < 2) return null;
-
-    //    Player newMaster = players.First(x => x != PhotonNetwork.LocalPlayer);
-
-    //    PhotonNetwork.SetMasterClient(newMaster);
-    //    return newMaster;
-    //}
-
     public void SetNextScene(string scene)
     {
         ExitGames.Client.Photon.Hashtable setScene = new ExitGames.Client.Photon.Hashtable();
@@ -117,6 +103,11 @@ public class PhotonController : MonoBehaviourPunCallbacks
     public void JoinRoom(string roomName)
     {
         PhotonNetwork.JoinRoom(roomName);
+    }
+
+    public void LeaveRoom()
+    {
+        PhotonNetwork.LeaveRoom();
     }
 
     public void SendPhotonEvent(byte eventCode, object content, ReceiverGroup receiverGroup)
@@ -173,5 +164,10 @@ public class PhotonController : MonoBehaviourPunCallbacks
         }
 
         PhotonNetwork.CurrentRoom.SetCustomProperties(props);
+    }
+
+    public Player GetPlayer(int playerId)
+    {
+        return PhotonNetwork.CurrentRoom.GetPlayer(playerId);
     }
 }
