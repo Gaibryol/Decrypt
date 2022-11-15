@@ -46,6 +46,7 @@ public class HacksManager : MonoBehaviour
         Hack6= new Hack6();
         Hack7= new Hack7();
         Hack8= new Hack8();
+        
         ShowAmount = 0;
         PossibleHacks = new List<Hack>(){Hack0,Hack1,Hack2,Hack3,Hack4,Hack5,Hack6,Hack7,Hack7};
         foreach(Hack tempHack in PossibleHacks)

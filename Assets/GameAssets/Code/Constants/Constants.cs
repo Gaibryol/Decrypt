@@ -8,17 +8,6 @@ public static class Constants
 
 	public enum LetterColors { Blue = 0, Green = 1, Orange = 2, Pink = 3, Purple = 4, Red = 5, Yellow = 6 }
 
-	public static Hack0 Hack0= new Hack0(); //  "The first letter of each word is in the correct position|Only the bottom row can be seen";
-	public static Hack1 Hack1= new Hack1(); //  "The last letter of each word is in the correct position|Only the bottom row can be seen";
-	public static Hack2 Hack2= new Hack2(); //"Decrypt the longest words every 25 seconds|Each word has a chance of having a letter obscured";
-	public static Hack3 Hack3= new Hack3(); // "Increase the maximum amount of rows by 2|Only the bottom three rows can be seen";
-	public static Hack4 Hack4= new Hack4(); // "Right-click to decrypt a word instantly (Up to 4 uses in a game)|Letters only appear when hovering over the letter tile";
-	public static Hack5 Hack5= new Hack5(); //"Letters can be seen as they’re falling down|See 1 less row";
-	public static Hack6 Hack6= new Hack6(); // "Right-click instantly drops the falling word|See 1 less row";
-	public static Hack7 Hack7= new Hack7(); // "Decrypt a random word every 25 seconds|See 3 less row";
-	public static Hack8 Hack8= new Hack8(); //"Decrypt all words (One use per game)|See 2 less lines";
-
-
 	public const float MaxTime = 10f;
 	public const float PointsPerLetter = 200;
 

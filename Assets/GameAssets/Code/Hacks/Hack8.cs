@@ -16,6 +16,11 @@ public class Hack8 : Hack
         gameController.SetDecryptAmount(1);
         base.Initialize();
     }
+
+    public override void Apply(GameObject wordGameObject)
+    {
+        
+    }
     public void RightClick()
     {
         gameController.DecryptList();

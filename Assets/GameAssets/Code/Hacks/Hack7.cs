@@ -8,7 +8,7 @@ public class Hack7 : Hack
     public Hack7()
     {
         description = "Decrypt a random word every 25 seconds|See 3 less row";
-        removeHacks = new List<Hack>{ HM.Hack3};
+        removeHacks = new List<Hack>{HM.Hack3};
         decryptTime = Constants.DecryptTime;
     }
     public override void Initialize()
