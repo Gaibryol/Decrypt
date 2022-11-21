@@ -44,11 +44,17 @@ public class GameManager : MonoBehaviour
 		{
             SoundEffectsManager.Instance.PlayMainMenuMusic();
             SceneManager.LoadScene("TitleScene");
-		} else if (GameState == Constants.GameStates.Credits)
+		}
+		else if (GameState == Constants.GameStates.Credits)
         {
             SoundEffectsManager.Instance.PlayMainMenuMusic();
             SceneManager.LoadScene("CreditScene");
         }
+		else if (GameState == Constants.GameStates.Tutorial)
+		{
+			SoundEffectsManager.Instance.PlayGameMusic();
+			SceneManager.LoadScene("TutorialScene");
+		}
     }
 
     private void OnLevelWasLoaded(int level)
