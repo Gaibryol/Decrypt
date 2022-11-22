@@ -7,8 +7,8 @@ public class DisplayHack : MonoBehaviour
     [SerializeField] private TMP_Text positive;
     [SerializeField] private TMP_Text negative;
 
-    public void SetDiplayHack(Hack hack){
-        string[] description = hack.GetDescription().Split("|");
+    public void SetDiplayHack(CombinedHack combinedHack){
+        string[] description = combinedHack.GetDescription().Split("|");
         positive.text = description[0];
         negative.text = description[1];
     }

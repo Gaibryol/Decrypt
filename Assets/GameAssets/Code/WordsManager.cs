@@ -21,9 +21,13 @@ public class WordsManager : MonoBehaviour
         spawnedList = new List<string>();
     }
 
-    private string GetRandomWord()
+    private string GetRandomWord(int length = 0)
     {
-        int numLetters = possibleWordLengths[Random.Range(0,possibleWordLengths.Count)];
+        int numLetters;
+        if(length == 0)
+            numLetters = possibleWordLengths[Random.Range(0,possibleWordLengths.Count)];
+        else
+            numLetters = length;
 
         List<string> aList;
         switch(numLetters)
@@ -95,10 +99,14 @@ public class WordsManager : MonoBehaviour
         }
         return shuffledWord;
     }
-    public List<string> GetScrambledWord()
+    public List<string> GetScrambledWord(int length = 0)
     {
         bool running = true;
-        string randomWord = GetRandomWord();
+        string randomWord;
+        if(length == 0)
+            randomWord = GetRandomWord();
+        else
+            randomWord = GetRandomWord(length);
         string shuffledWord = null;
         while (running)
         {

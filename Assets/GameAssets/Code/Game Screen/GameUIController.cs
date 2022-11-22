@@ -146,12 +146,12 @@ public class GameUIController : MonoBehaviour
 		complete.SetActive(true);
 		pointsCompleted.text = score.text;
 		stageCompleted.text = stage.text;
-		List<Hack> hacks = HacksManager.Instance.ActivatedHacks;
+		List<CombinedHack> combinedHacks = HacksManager.Instance.ActivatedHacks;
 
-		for(int i = 0; i < hacks.Count; i++)
+		for(int i = 0; i < combinedHacks.Count; i++)
 		{
 			displayHacks[i].GetComponent<Image>().sprite = hackCompleted;
-			displayHacks[i].GetComponent<DisplayHack>().SetDiplayHack(hacks[i]);
+			displayHacks[i].GetComponent<DisplayHack>().SetDiplayHack(combinedHacks[i]);
 		}
 	}
 

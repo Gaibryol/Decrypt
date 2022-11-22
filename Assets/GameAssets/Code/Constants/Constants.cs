@@ -8,6 +8,14 @@ public static class Constants
 
 	public enum LetterColors { Blue = 0, Green = 1, Orange = 2, Pink = 3, Purple = 4, Red = 5, Yellow = 6 }
 
+	public enum HackFunction {None = 0, Apply = 1, Update = 2, RightClick = 3, GetLength = 4}
+
+	public enum EffectType {Falling = 0, Obscure = 1, DecryptTime = 2, RightClick = 3, Lines = 4, Reveal = 5}
+	
+	public enum GameMode {SinglePlayer= 0, Multiplayer = 1, Both = 2} 
+
+	public enum RightClickTarget {None = 0, Word = 1, All = 2}
+
 	public const float MaxTime = 10f;
 	public const float PointsPerLetter = 200;
 

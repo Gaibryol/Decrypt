@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class GameController : MonoBehaviour, IPointerClickHandler
+public class GameController : MonoBehaviour
 {
 	[SerializeField] public GameObject WordPrefab;
     [SerializeField] public Canvas Canvas;
@@ -80,18 +80,28 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 
 	private void SpawnWord()
 	{
+		
 		SoundEffectsManager.Instance.PlayOneShotSFX("WordSpawned");
-		List<string> words = WordsManager.Instance.GetScrambledWord();
+		List<string> words;
+		Hack tempHack = HacksManager.Instance.DequeueHack();
+		
+		if(tempHack != null && tempHack.GetHackFunction() == Constants.HackFunction.GetLength)
+			words = WordsManager.Instance.GetScrambledWord(tempHack.GetWordLength());
+		else
+			words = WordsManager.Instance.GetScrambledWord();
+
 		GameObject newWord = Instantiate(WordPrefab, Canvas.transform);
 		newWord.transform.SetParent(Canvas.transform.Find("GameScreen").transform);
 		newWord.transform.localPosition = new Vector3(newWord.transform.localPosition.x, spawnY);
-
 		newWord.GetComponent<Word>().SpawnWord(this, words[0], words[1], currentStage, alternateColor);
-
 		alternateColor = !alternateColor;
-
 		lines.Add(newWord);
-		HacksManager.Instance.Apply(newWord);
+
+		if(tempHack != null && tempHack.GetHackFunction() == Constants.HackFunction.Apply)
+			tempHack.Apply(newWord);
+		else
+			HacksManager.Instance.ApplyCombinedHack(newWord);
+
 		StartCoroutine(MoveWord(newWord));
 
 		gameUI.OnSpawnWord();
@@ -154,17 +164,17 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 		{
 			gameUI.DisplayWarning(false);
 		}
-		if (playerPoints >= 10000 & currentStage == 1)
+		if (playerPoints >= 800 & currentStage == 1)
 		{
-			WordsManager.Instance.ChangeWordLengths(new List<int>(){3,4,5});
+			WordsManager.Instance.ChangeWordLengths(new List<int>(){4,5,6});
 			SoundEffectsManager.Instance.PlayOneShotSFX("StageEnded");
 			ChangeSubState(Constants.SubState.Hack);
 			currentStage += 1;
 			gameUI.OnStageComplete(currentStage);
 		}
-		else if (playerPoints >= 25000 & currentStage == 2)
+		else if (playerPoints >= 2000 & currentStage == 2)
 		{
-			WordsManager.Instance.ChangeWordLengths(new List<int>(){4,5,6});
+			WordsManager.Instance.ChangeWordLengths(new List<int>(){5,6,7});
 			SoundEffectsManager.Instance.PlayOneShotSFX("StageEnded");
 			ChangeSubState(Constants.SubState.Hack);
 			currentStage += 1;
@@ -250,9 +260,9 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 			case(Constants.SubState.Hack):
 				SoundEffectsManager.Instance.PlayEverythingElseMusic();
 				ResetList();
-				List<Hack> hacks = HacksManager.Instance.GenerateHacks();
-				Hack1.GetComponent<ChooseHack>().SetHack(hacks[0],this);
-				Hack2.GetComponent<ChooseHack>().SetHack(hacks[1],this);
+				List<CombinedHack> combinedHacks = HacksManager.Instance.GenerateCombinedHacks();
+				Hack1.GetComponent<ChooseHack>().SetHack(combinedHacks[0],this);
+				Hack2.GetComponent<ChooseHack>().SetHack(combinedHacks[1],this);
 				gameUI.DisplayHacks();
 				break;
 		}
@@ -340,18 +350,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 		randomWord.GetComponent<Word>().SolveWord();
 		CorrectWord(randomWord);
 	}
-
-	public void OnPointerClick(PointerEventData eventData)
-	{
-		if(eventData.button == PointerEventData.InputButton.Right)
-		{
-			if(HacksManager.Instance.Hack6.activated)
-			{
-				HacksManager.Instance.Hack6.RightClick();
-			}
-			else if(HacksManager.Instance.Hack8.activated){
-				HacksManager.Instance.Hack8.RightClick();
-			}
-		}
+	public Constants.SubState GetSubState(){
+		return subState;
 	}
 }

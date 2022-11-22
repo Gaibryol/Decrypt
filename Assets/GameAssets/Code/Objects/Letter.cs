@@ -108,7 +108,7 @@ public class Letter : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 
 	public void RevealLetter()
 	{
-		if(!isCorrect && !neverReveal &&!isHover)
+		if(!isCorrect && !neverReveal && !isHover)
 		{
 			isCovered = false;
 			image.sprite = LettersManager.Instance.GetSprite(characterColor, Character);

@@ -133,13 +133,7 @@ public class Word : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
 	public void OnPointerClick(PointerEventData eventData)
 	{
-		if(eventData.button == PointerEventData.InputButton.Right)
-		{
-			if(HacksManager.Instance.Hack4.activated & IsInteractable)
-			{
-				HacksManager.Instance.Hack4.RightClick(this.gameObject);
-			}
-		}
+
 	}
 
 	public void SolveWord(){

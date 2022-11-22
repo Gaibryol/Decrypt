@@ -1,19 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-//"The first letter of each word is in the correct position|Only the bottom row can be seen";
-public class Hack0 : Hack
+//"The first letter of each word is in the correct position;
+public class PositiveHack0 : Hack
 {
-    public Hack0()
+    public PositiveHack0()
     {
-        description = "The first letter of each word is in the correct position|Only the bottom row can be seen";
-        removeHacks = new List<Hack>{HM.Hack1, HM.Hack3};
-    }
-
-    public override void Initialize()
-    {
-        HacksManager.Instance.ShowAmount = 1;
-        base.Initialize();
+        description = "The first letter of each word is in the correct position";
+        hackFunction = Constants.HackFunction.Apply;
+        effectType =  Constants.EffectType.Reveal;
+        rightClickTarget = Constants.RightClickTarget.None;
+        gameMode = Constants.GameMode.Both;
     }
     public override void Apply(GameObject wordGameObject)
     {

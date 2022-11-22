@@ -1,19 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-//"The last letter of each word is in the correct position|Only the bottom row can be seen";
-
-public class Hack1 : Hack
+public class PositiveHack1 : Hack
 {
-    public Hack1()
+    public PositiveHack1()
     {
-        description = "The last letter of each word is in the correct position|Only the bottom row can be seen";
-        removeHacks = new List<Hack>{HM.Hack0, HM.Hack4};
-    }
-    public override void Initialize()
-        {
-        HacksManager.Instance.ShowAmount = 1;
-        base.Initialize();
+        description = "The last letter of each word is in the correct position";
+        hackFunction = Constants.HackFunction.Apply;
+        effectType =  Constants.EffectType.Reveal;
+        rightClickTarget = Constants.RightClickTarget.None;
+        gameMode = Constants.GameMode.Both;
     }
     public override void Apply(GameObject wordGameObject)
     {
@@ -33,4 +29,5 @@ public class Hack1 : Hack
 		}
         
     }
+
 }
