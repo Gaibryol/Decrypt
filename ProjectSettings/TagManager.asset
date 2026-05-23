@@ -6,6 +6,7 @@ TagManager:
   tags:
   - MusicToggle
   - SoundToggle
+  - MainCanvas
   layers:
   - Default
   - TransparentFX

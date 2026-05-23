@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Photon.Pun;
 
-public class GameUIController : MonoBehaviour
+public class GameUIController : MonoBehaviourPunCallbacks
 {
 	[SerializeField, Header("Objects")] private GameObject brackets;
 	[SerializeField] private GameObject topBanner;
@@ -18,8 +19,9 @@ public class GameUIController : MonoBehaviour
 	[SerializeField] private GameObject abilityPrefab;
 	[SerializeField] private GameObject abilityParent;
 	[SerializeField] private List<GameObject> displayHacks;
-	[SerializeField] private Image baseLine;
+	[SerializeField] public Image baseLine;
 	[SerializeField] private GameObject tutorial;
+    [SerializeField] public GameObject maxLine;
 
 	[SerializeField] private float startingBaselineY;
 
@@ -39,10 +41,14 @@ public class GameUIController : MonoBehaviour
 	[SerializeField] private Animator timer;
 	[SerializeField] private Toggle secondHelpToggle;
 
+    [Header("Battle Royal")]
+    [SerializeField] protected Button negativeButton;
+    [SerializeField] protected Button positiveButton;
+
 	private GameController gameController;
 	private List<GameObject> abilityUses;
 
-	public void StartGame()
+    public void StartGame()
 	{
 		InitVariables();
 		DisplayBaseline();
@@ -109,10 +115,10 @@ public class GameUIController : MonoBehaviour
 
 	public void DisplayBaseline()
 	{
-		float newYAddition = ((gameController.WordPrefab.GetComponent<RectTransform>().rect.height + gameController.WordsYOffset) * (8 - gameController.MaximumNumLines));
+        float newYAddition = ((gameController.WordPrefab.GetComponent<RectTransform>().rect.height + gameController.WordsYOffset) * (8 - gameController.MaximumNumLines));
 
-		baseLine.transform.localPosition = new Vector3(baseLine.transform.localPosition.x, startingBaselineY + newYAddition);
-	}
+        baseLine.transform.localPosition = new Vector3(baseLine.transform.localPosition.x, startingBaselineY + newYAddition);
+    }
 
 	public void DisplayHacks()
 	{
@@ -144,6 +150,7 @@ public class GameUIController : MonoBehaviour
 		gameController.ChangeSubState(Constants.SubState.Complete);
 		complete.transform.SetAsLastSibling();
 		complete.SetActive(true);
+
 		pointsCompleted.text = score.text;
 		stageCompleted.text = stage.text;
 		List<Hack> hacks = HacksManager.Instance.ActivatedHacks;
@@ -242,11 +249,59 @@ public class GameUIController : MonoBehaviour
 		gameController.NewGame();
 	}
 
+
 	public void ToMainMenu()
 	{
 		SoundEffectsManager.Instance.PlayOneShotSFX("ClickSound");
 		pauseButton.isOn = false;
 		gameController.NewGame();
-		GameManager.Instance.ChangeState(Constants.GameStates.MainMenu);
-	}
+
+        if (GameManager.Instance.PlayMode == Constants.PlayMode.Multi)
+        {
+            
+            PhotonController.Instance.LeaveRoom();
+        } else
+        {
+            GameManager.Instance.ChangeState(Constants.GameStates.MainMenu);
+
+        }
+
+    }
+
+    public void ActivateNegativeHack()
+    {
+        if (!ActivateHackButtons()) return;
+        string hack = HacksManager.Instance.GenerateHacks()[0].GetType().ToString();
+        Debug.Log(HacksManager.Instance.GetInstanceID());
+        PhotonController.Instance.SendPhotonEvent(Constants.HackSelectedEventCode, hack, Photon.Realtime.ReceiverGroup.All);
+    }
+
+    public void ActivatePositiveHack()
+    {
+        if (!ActivateHackButtons()) return;
+        HacksManager.Instance.AddHack(HacksManager.Instance.GenerateHacks()[1]);
+    }
+
+    private bool ActivateHackButtons()
+    {
+        if (GameManager.Instance.GamePrefs.GameType != Constants.GameType.BR) return false;
+        MultiPlayerGameController c = (MultiPlayerGameController)gameController;
+        if (c.numberHackActivations <= 0) return false;
+        c.numberHackActivations--;
+        return true;
+    }
+
+    public void SetBattleRoyalHackButtons(bool active)
+    {
+        negativeButton.gameObject.SetActive(active);
+        positiveButton.gameObject.SetActive(active);
+    }
+
+    public override void OnLeftRoom()
+    {
+        Debug.Log("left room");
+        GameManager.Instance.ChangeState(Constants.GameStates.MainMenu);
+
+
+    }
 }

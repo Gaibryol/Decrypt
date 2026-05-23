@@ -2,61 +2,76 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Photon.Pun;
 
-public class GameController : MonoBehaviour, IPointerClickHandler
+public abstract class GameController : MonoBehaviourPunCallbacks, IPointerClickHandler
 {
 	[SerializeField] public GameObject WordPrefab;
     [SerializeField] public Canvas Canvas;
-	[SerializeField] private GameObject Hack1;
-	[SerializeField] private GameObject Hack2;
+	[SerializeField] protected GameObject Hack1;
+	[SerializeField] protected GameObject Hack2;
 
 	[SerializeField] public float WordsYOffset;
 	[SerializeField] private float bottomLineY;
 	[SerializeField] private float spawnY;
 
-	private GameUIController gameUI;
+	protected GameUIController gameUI;
 
-	private List<GameObject> lines;
+	protected List<GameObject> lines;
 
 	private int abilityUsages;
 	public int MaximumNumLines;
 	private int defaultMaxLines;
-	private float playerPoints;
+	protected float playerPoints;
 	private float countDownTime;
+
+	private float decryptTime;
+    protected float gameTime;
+
+    private int seed;
 
 	private int warningLimit;
 	private float pointsMultiplier;
 
-	private Constants.SubState subState;
+	protected Constants.SubState subState;
 
-	private int currentStage;
+	protected int currentStage;
 	private bool alternateColor;
 
-    private void Start()
+    protected virtual void Start()
     {
-        StartGame();
+        subState = Constants.SubState.Loading;
     }
-	private void Update()
+
+    protected virtual void Update()
 	{
 		if(subState != Constants.SubState.Playing) return;
-		
-		countDownTime -= Time.deltaTime;
 
-		if (countDownTime <= 0 || lines.Count == 0)
+        GamePrefs prefs = GameManager.Instance.GamePrefs;
+
+
+        countDownTime -= Time.deltaTime;
+        decryptTime -= Time.deltaTime;
+        gameTime += Time.deltaTime;
+
+        if (countDownTime <= 0 || lines.Count == 0)
 		{
 			countDownTime = Constants.MaxTime;
 			SpawnWord();
 			gameUI.ResetTimer();
 		}
-	}
 
-    public void StartGame()
-	{
-		InitVariables();
-		gameUI.StartGame();
-	}
+        if (EndCondition())
+        {
+            EndGame();
+        }
+        CheckPlayerPoints();
 
-	private void InitVariables()
+    }
+
+    public abstract void StartGame();
+
+	protected virtual void InitVariables()
 	{
 		lines = new List<GameObject>();
 
@@ -65,6 +80,8 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 		defaultMaxLines = 6;
 		playerPoints = 0f;
 		countDownTime = Constants.MaxTime;
+		decryptTime = Constants.DecryptTime;
+        gameTime = 0f;
 
 		currentStage = 1;
 		alternateColor = false;
@@ -72,62 +89,23 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 		warningLimit = Constants.WarningLimit;
 		pointsMultiplier = 1f;
 
-		ChangeSubState(Constants.SubState.Playing);
+        ChangeSubState(Constants.SubState.Playing);
 
 		gameUI = GetComponent<GameUIController>();
 	}
 	
+    public virtual void UpdatePlayerPoints(float points)
+    {
+        playerPoints += points;
+    }
 
-	private void SpawnWord()
-	{
-		SoundEffectsManager.Instance.PlayOneShotSFX("WordSpawned");
-		List<string> words = WordsManager.Instance.GetScrambledWord();
-		GameObject newWord = Instantiate(WordPrefab, Canvas.transform);
-		newWord.transform.SetParent(Canvas.transform.Find("GameScreen").transform);
-		newWord.transform.localPosition = new Vector3(newWord.transform.localPosition.x, spawnY);
-
-		newWord.GetComponent<Word>().SpawnWord(this, words[0], words[1], currentStage, alternateColor);
-
-		alternateColor = !alternateColor;
-
-		lines.Add(newWord);
-		HacksManager.Instance.Apply(newWord);
-		StartCoroutine(MoveWord(newWord));
-
-		gameUI.OnSpawnWord();
-
-		if (lines.Count > MaximumNumLines)
-		{
-			StopAllCoroutines();
-			gameUI.CompleteGame();
-		}
-		else if (lines.Count > MaximumNumLines - warningLimit)
-		{
-			SoundEffectsManager.Instance.PlayOneShotSFX("Warning");
-			gameUI.DisplayWarning(true);
-		}
-	}
-
-	private void ResetList()
-	{
-		StopAllCoroutines();
-		if (lines != null)
-		{
-			for(int i = lines.Count-1; i>=0; i--){
-				GameObject tempObj = lines[i];
-				lines.Remove(lines[i]);
-				Destroy(tempObj);
-			}
-		}
-		countDownTime = Constants.MaxTime;
-	}
 	private IEnumerator CorrectWordAnim(GameObject word)
 	{
 		int i = lines.IndexOf(word);
 		word.GetComponent<Word>().ShowIsCorrect();
 		// wait for 0.75 second
 		yield return new WaitForSeconds(0.75f);
-		playerPoints += word.GetComponent<Word>().realWord.Length * Constants.PointsPerLetter * pointsMultiplier;
+        UpdatePlayerPoints(word.GetComponent<Word>().realWord.Length * Constants.PointsPerLetter * pointsMultiplier);
 		gameUI.OnWordExit();
 		gameUI.OnWordSolved(Mathf.FloorToInt(playerPoints));
 		GameObject tempLetter = GameObject.Find("PickedUp");
@@ -154,38 +132,45 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 		{
 			gameUI.DisplayWarning(false);
 		}
-		if (playerPoints >= 10000 & currentStage == 1)
-		{
-			WordsManager.Instance.ChangeWordLengths(new List<int>(){3,4,5});
-			SoundEffectsManager.Instance.PlayOneShotSFX("StageEnded");
-			ChangeSubState(Constants.SubState.Hack);
-			currentStage += 1;
-			gameUI.OnStageComplete(currentStage);
-		}
-		else if (playerPoints >= 25000 & currentStage == 2)
-		{
-			WordsManager.Instance.ChangeWordLengths(new List<int>(){4,5,6});
-			SoundEffectsManager.Instance.PlayOneShotSFX("StageEnded");
-			ChangeSubState(Constants.SubState.Hack);
-			currentStage += 1;
-			gameUI.OnStageComplete(currentStage);
-		}
-		// else if (playerPoints >= 50000 & currentStage == 3)
-		// {
-		// 	WordsManager.Instance.ChangeWordLengths(new List<int>(){5,6,7});
-		// 	SoundEffectsManager.Instance.PlayOneShotSFX("StageEnded");
-		// 	currentStage += 1;
-		// 	gameUI.OnStageComplete(currentStage);
-		// }
 	}
 
-	public void NewGame()
+    private void ResetList()
 	{
-		ResetList();
-		InitVariables();
-		gameUI.StartGame();
-		HacksManager.Instance.InitVariables();
-		WordsManager.Instance.InitVariables();
+		StopAllCoroutines();
+		if (lines != null)
+		{
+			for(int i = lines.Count-1; i>=0; i--){
+				GameObject tempObj = lines[i];
+				lines.Remove(lines[i]);
+				Destroy(tempObj);
+			}
+		}
+		countDownTime = Constants.MaxTime;
+	}
+
+	public void SpawnWord()
+	{
+		SoundEffectsManager.Instance.PlayOneShotSFX("WordSpawned");
+		List<string> words = WordsManager.Instance.GetScrambledWord();
+		GameObject newWord = Instantiate(WordPrefab, Canvas.transform);
+		newWord.transform.SetParent(Canvas.transform.Find("GameScreen").transform);
+		newWord.transform.localPosition = new Vector3(newWord.transform.localPosition.x, spawnY);
+
+		newWord.GetComponent<Word>().SpawnWord(this, words[0], words[1], currentStage, alternateColor);
+
+		alternateColor = !alternateColor;
+
+		lines.Add(newWord);
+		HacksManager.Instance.Apply(newWord);
+		StartCoroutine(MoveWord(newWord));
+
+		gameUI.OnSpawnWord();
+
+		if (lines.Count > MaximumNumLines - warningLimit)
+		{
+			SoundEffectsManager.Instance.PlayOneShotSFX("Warning");
+			gameUI.DisplayWarning(true);
+		}
 	}
 
 	public IEnumerator MoveWord(GameObject newWord)
@@ -258,27 +243,73 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 		}
 	}
 	
-	public void OnWordHover(float y)
-	{
-		gameUI.OnWordHover(y);
-	}
-
-	public void OnWordExit()
-	{
-		gameUI.OnWordExit();
-	}
-
 	public void CorrectWord(GameObject word)
 	{
 		StartCoroutine(CorrectWordAnim(word));
 	}
 
-	public void SetMultiplier(float multiplier)
+
+    protected virtual void CheckPlayerPoints()
+    {
+        if (playerPoints >= 5000 & currentStage == 1)
+        {
+            // TODO: Do we keep this if user can customize word lengths
+            WordsManager.Instance.ChangeWordLengths(new List<int>() { 3, 4, 5 });
+            SoundEffectsManager.Instance.PlayOneShotSFX("StageEnded");
+            ChangeSubState(Constants.SubState.Hack);
+            currentStage += 1;
+            gameUI.OnStageComplete(currentStage);
+        }
+        else if (playerPoints >= 25000 & currentStage == 2)
+        {
+            WordsManager.Instance.ChangeWordLengths(new List<int>() { 4, 5, 6 });
+            SoundEffectsManager.Instance.PlayOneShotSFX("StageEnded");
+            ChangeSubState(Constants.SubState.Hack);
+            currentStage += 1;
+            gameUI.OnStageComplete(currentStage);
+        }
+        // else if (playerPoints >= 50000 & currentStage == 3)
+        // {
+        // 	WordsManager.Instance.ChangeWordLengths(new List<int>(){5,6,7});
+        // 	SoundEffectsManager.Instance.PlayOneShotSFX("StageEnded");
+        // 	currentStage += 1;
+        // 	gameUI.OnStageComplete(currentStage);
+        // }
+    }
+
+    protected virtual bool EndCondition()
+    {
+        return lines.Count > MaximumNumLines;
+    }
+
+    protected virtual void EndGame()
+    {
+        StopAllCoroutines();
+        gameUI.CompleteGame();
+    }
+
+    public void NewGame()
 	{
-		pointsMultiplier = multiplier;
+		ResetList();
+		InitVariables();
+		gameUI.StartGame();
+		HacksManager.Instance.InitVariables();
+		WordsManager.Instance.InitVariables();
 	}
 
-	public void DecryptWord(GameObject word)
+
+    public void ChangeMaxLife(int num)
+	{
+		MaximumNumLines += num;
+	}
+
+	public void TeleportWord(){
+		GameObject wordGameObject = lines[lines.Count-1];
+		wordGameObject.transform.localPosition = new Vector3(0, bottomLineY + ((wordGameObject.GetComponent<RectTransform>().rect.height + WordsYOffset) * lines.Count) + ((wordGameObject.GetComponent<RectTransform>().rect.height + WordsYOffset) * Mathf.Abs(MaximumNumLines - defaultMaxLines)));
+	}
+
+
+    public void DecryptWord(GameObject word)
 	{
 		if (abilityUsages > 0)
 		{
@@ -289,7 +320,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 		}
 	}
 
-	public void DecryptList()
+    public void DecryptList()
 	{
 		if (abilityUsages > 0)
 		{
@@ -303,17 +334,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 		}
 	}
 
-	public void SetDecryptAmount(int amount)
-	{
-		abilityUsages = amount;
-	}
-
-	public void ChangeMaxLife(int num)
-	{
-		MaximumNumLines += num;
-	}
-
-	public void DecryptLongestWord()
+    public void DecryptLongestWord()
 	{
 		int maxLength = 0;
 		GameObject longestWord = null;
@@ -330,18 +351,35 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 		CorrectWord(longestWord);
 	}
 
-	public void TeleportWord(){
-		GameObject wordGameObject = lines[lines.Count-1];
-		wordGameObject.transform.localPosition = new Vector3(0, bottomLineY + ((wordGameObject.GetComponent<RectTransform>().rect.height + WordsYOffset) * lines.Count) + ((wordGameObject.GetComponent<RectTransform>().rect.height + WordsYOffset) * Mathf.Abs(MaximumNumLines - defaultMaxLines)));
-	}
-
 	public void DecryptRandomWord(){
 		GameObject randomWord = lines[Random.Range(0, lines.Count)];
 		randomWord.GetComponent<Word>().SolveWord();
 		CorrectWord(randomWord);
 	}
 
-	public void OnPointerClick(PointerEventData eventData)
+
+    public void SetDecryptAmount(int amount)
+	{
+		abilityUsages = amount;
+	}
+
+	public void SetMultiplier(float multiplier)
+	{
+		pointsMultiplier = multiplier;
+	}
+
+
+    public void OnWordHover(float y)
+	{
+		gameUI.OnWordHover(y);
+	}
+
+    public void OnWordExit()
+	{
+		gameUI.OnWordExit();
+	}
+
+    public void OnPointerClick(PointerEventData eventData)
 	{
 		if(eventData.button == PointerEventData.InputButton.Right)
 		{
@@ -353,5 +391,7 @@ public class GameController : MonoBehaviour, IPointerClickHandler
 				HacksManager.Instance.Hack8.RightClick();
 			}
 		}
+
 	}
+
 }

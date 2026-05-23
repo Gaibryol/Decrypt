@@ -24,8 +24,9 @@ public class SettingsManager : MonoBehaviour
 		if (Instance != null && Instance != this)
 		{
 			Destroy(this.gameObject);
-		}
-		else
+            return;
+        }
+        else
 		{
 			Instance = this;
             DontDestroyOnLoad(this.gameObject);
@@ -49,8 +50,11 @@ public class SettingsManager : MonoBehaviour
 
 	private void AdjustUI()
 	{
-		MusicToggle.isOn = musicState;
-		SoundToggle.isOn = soundState;
+        if (MusicToggle != null)
+		    MusicToggle.isOn = musicState;
+
+        if (SoundToggle != null)
+		    SoundToggle.isOn = soundState;
 	}
 
 	public void ToggleMusic(bool isOn)
@@ -75,10 +79,10 @@ public class SettingsManager : MonoBehaviour
 
     private void OnLevelWasLoaded(int level)
     {
-        SoundToggle = GameObject.FindGameObjectWithTag("SoundToggle").GetComponent<Toggle>();
-        MusicToggle = GameObject.FindGameObjectWithTag("MusicToggle").GetComponent<Toggle>();
-        MusicToggle.onValueChanged.AddListener((isOn) => ToggleMusic(isOn));
-        SoundToggle.onValueChanged.AddListener((isOn) => ToggleSound(isOn));
+        SoundToggle = GameObject.FindGameObjectWithTag("SoundToggle")?.GetComponent<Toggle>();
+        MusicToggle = GameObject.FindGameObjectWithTag("MusicToggle")?.GetComponent<Toggle>();
+        MusicToggle?.onValueChanged.AddListener((isOn) => ToggleMusic(isOn));
+        SoundToggle?.onValueChanged.AddListener((isOn) => ToggleSound(isOn));
         AdjustUI();
     }
 }

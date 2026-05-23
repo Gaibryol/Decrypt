@@ -16,6 +16,13 @@ public class WordsManager : MonoBehaviour
         }
         InitVariables();
     }
+
+    public void UpdatePrefs()
+    {
+        Random.InitState(GameManager.Instance.GamePrefs.Seed);
+        possibleWordLengths = GameManager.Instance.GamePrefs.WordLengths;
+    }
+
     public void InitVariables(){
         possibleWordLengths = new List<int>(){3,4,5};
         spawnedList = new List<string>();

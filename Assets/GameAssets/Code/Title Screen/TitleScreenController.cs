@@ -8,6 +8,7 @@ public class TitleScreenController : MonoBehaviour
 	[SerializeField] private Button startButton;
 	[SerializeField] private Button creditsButton;
 	[SerializeField] private Button quitButton;
+    [SerializeField] private Button multiplayerButton;
 
 	[SerializeField] private GameObject selector;
 
@@ -15,14 +16,25 @@ public class TitleScreenController : MonoBehaviour
 
 	private void StartGame()
 	{
+        GameManager.Instance.ChangePlayMode(Constants.PlayMode.Single);
 		GameManager.Instance.ChangeState(Constants.GameStates.Game);
 
 		SoundEffectsManager.Instance.PlayOneShotSFX("StartGame");
 	}
 
-	private void OpenCredits()
+    private void EnterLobby()
+    {
+        GameManager.Instance.ChangePlayMode(Constants.PlayMode.Multi);
+        GameManager.Instance.ChangeState(Constants.GameStates.Lobby);
+
+        SoundEffectsManager.Instance.PlayOneShotSFX("ClickSound");
+
+    }
+
+    private void OpenCredits()
 	{
-		GameManager.Instance.ChangeState(Constants.GameStates.Credits);
+        GameManager.Instance.ChangePlayMode(Constants.PlayMode.Single);
+        GameManager.Instance.ChangeState(Constants.GameStates.Credits);
 
 		SoundEffectsManager.Instance.PlayOneShotSFX("ClickSound");
 	}
@@ -50,8 +62,9 @@ public class TitleScreenController : MonoBehaviour
 		startButton.onClick.AddListener(StartGame);
 		creditsButton.onClick.AddListener(OpenCredits);
 		quitButton.onClick.AddListener(ExitGame);
+        multiplayerButton.onClick.AddListener(EnterLobby);
 
-		selector.SetActive(false);
+        selector.SetActive(false);
 	}
 
 	private void OnDisable()
@@ -59,7 +72,8 @@ public class TitleScreenController : MonoBehaviour
 		startButton.onClick.RemoveListener(StartGame);
 		creditsButton.onClick.RemoveListener(OpenCredits);
 		quitButton.onClick.RemoveListener(ExitGame);
+        multiplayerButton.onClick.RemoveListener(EnterLobby);
 
-		selector.SetActive(false);
+        selector.SetActive(false);
 	}
 }

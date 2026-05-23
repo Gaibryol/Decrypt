@@ -7,8 +7,7 @@ public class HacksManager : MonoBehaviour
     public List<Hack> PossibleHacks;
     public List<Hack> ActivatedHacks;
     public int ShowAmount;
-    public static HacksManager Instance { get; private set; }
-
+    public static HacksManager Instance { get; protected set; }
     
 	public Hack0 Hack0; //  "The first letter of each word is in the correct position|Only the bottom row can be seen";
 	public Hack1 Hack1; //  "The last letter of each word is in the correct position|Only the bottom row can be seen";
@@ -20,22 +19,21 @@ public class HacksManager : MonoBehaviour
 	public Hack7 Hack7; // "Decrypt a random word every 25 seconds|See 3 less row";
 	public Hack8 Hack8; //"Decrypt all words (One use per game)|See 2 less lines";
 
-	[SerializeField] private GameController gameController;
-	[SerializeField] private GameUIController gameUIController;
-
-
-
-
-    private void Awake()
+    protected virtual void Awake()
     {
-        if (Instance == null)
-		{
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this);
+            return;
+        }
+        else
+        {
             Instance = this;
         }
         InitVariables();
     }
 
-    public void InitVariables()
+    public virtual void InitVariables()
     {
         Hack0= new Hack0();
         Hack1= new Hack1();
@@ -48,6 +46,7 @@ public class HacksManager : MonoBehaviour
         Hack8= new Hack8();
         
         ShowAmount = 0;
+
         PossibleHacks = new List<Hack>(){Hack0,Hack1,Hack2,Hack3,Hack4,Hack5,Hack6,Hack7,Hack7};
         foreach(Hack tempHack in PossibleHacks)
         {
@@ -55,23 +54,26 @@ public class HacksManager : MonoBehaviour
         }
         ActivatedHacks = new List<Hack>();
     }
-    private void Update(){
+
+    protected virtual void Update(){
         Hack2.Update();
         Hack7.Update();
     }
 
-    public void AddHack(Hack hack)
+    public virtual void AddHack(Hack hack)
     {
         PossibleHacks.Remove(hack);
         ActivatedHacks.Add(hack);
-        foreach(Hack tempHack in hack.GetRemoveHacks())
+        foreach (Hack tempHack in hack.GetRemoveHacks())
         {
             PossibleHacks.Remove(tempHack);
         }
         hack.Initialize();
-	}
+    }
 
-    public List<Hack> GenerateHacks()
+    public virtual void AddHack(string hack) { }
+
+    public virtual List<Hack> GenerateHacks()
     {
         bool running = true;
         Hack hack1 = null;
